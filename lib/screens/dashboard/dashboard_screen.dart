@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/components/app_drawer.dart';
 import 'package:iasd_myadmin/components/grid_departaments.dart';
+import 'package:iasd_myadmin/themes/app_theme.dart';
 import 'package:iasd_myadmin/util/app_routes.dart';
 import 'package:iasd_myadmin/util/controller_theme.dart';
+import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -48,7 +50,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: const [
                           Icon(
                             Icons.brightness_5_outlined,
-                            color: Colors.white,
                           ),
                           Text(' Modo Claro')
                         ],
@@ -57,7 +58,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: const [
                           Icon(
                             Icons.brightness_3,
-                            color: Colors.black,
                           ),
                           Text(' Modo Escuro  ')
                         ],
@@ -76,7 +76,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 value: 3,
                 child: Row(
                   children: const [
-                    Icon(Icons.settings),
+                    Icon(
+                      Icons.settings,
+                    ),
                     Text(' Configuações'),
                   ],
                 ),
@@ -94,7 +96,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onSelected: (value) {
               setState(() {
                 if (value == 1) {
-                  changeBrightness();
+                  Provider.of<AppTheme>(context, listen: false).chandMode();
                   ControllerTheme.instance.changeTheme();
                 } else if (value == 4) {
                   Navigator.of(context).pushNamedAndRemoveUntil(

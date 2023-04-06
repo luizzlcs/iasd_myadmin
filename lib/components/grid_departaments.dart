@@ -55,7 +55,7 @@ class GridDepartaments extends StatelessWidget {
               ),
               Center(
                 child: Padding(
-                  padding: EdgeInsets.only(top: isDesktop ? 220 : 92),
+                  padding: EdgeInsets.only(top: isDesktop ? 220 : 82),
                   child: Container(
                     height: isDesktop ? 40 : 40,
                     width: isDesktop ? 180 : 90,
