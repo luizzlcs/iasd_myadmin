@@ -1,6 +1,8 @@
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
+import 'package:iasd_myadmin/util/constantes_icons.dart';
 import 'package:iasd_myadmin/util/constants.dart';
+
 class SignUpScreenTopImage extends StatelessWidget {
   const SignUpScreenTopImage({
     Key? key,
@@ -14,20 +16,20 @@ class SignUpScreenTopImage extends StatelessWidget {
         ),
         Text(
           "Criando uma conta".toUpperCase(),
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: defaultPadding),
+        const SizedBox(height: defaultPadding),
         Row(
           children: [
             const Spacer(),
             Expanded(
               flex: 3,
-              child: SvgPicture.asset("assets/icons/signup.svg"),
+              child: SvgPicture.asset(ImagesIasd.signup),
             ),
             const Spacer(),
           ],
         ),
-        SizedBox(height: defaultPadding),
+        const SizedBox(height: defaultPadding),
       ],
     );
   }

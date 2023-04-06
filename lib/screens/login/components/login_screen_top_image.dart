@@ -1,5 +1,6 @@
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
+import 'package:iasd_myadmin/util/constantes_icons.dart';
 import 'package:iasd_myadmin/util/constants.dart';
 
 
@@ -23,7 +24,7 @@ class LoginScreenTopImage extends StatelessWidget {
             const Spacer(),
             Expanded(
               flex: 8,
-              child: SvgPicture.asset("assets/icons/login.svg",),
+              child: SvgPicture.asset(ImagesIasd.login),
             ),
             const Spacer(),
           ],
