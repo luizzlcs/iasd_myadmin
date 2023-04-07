@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/app/model/departaments/departaments_controller.dart';
+import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
 import 'package:iasd_myadmin/app/themes/app_theme.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:iasd_myadmin/app/util/responsive.dart';
@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 class GridDepartaments extends StatelessWidget {
   
-  const GridDepartaments({Key? key});
+  const GridDepartaments({super.key});
 
   @override
   Widget build(BuildContext context) {

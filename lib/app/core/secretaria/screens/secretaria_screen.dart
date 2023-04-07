@@ -8,7 +8,7 @@ class SecretariaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Departamento aqui'),
+        title: const Text('Departamento aqui'),
       ),
       drawer: const AppDrawer(),
       body: Center(

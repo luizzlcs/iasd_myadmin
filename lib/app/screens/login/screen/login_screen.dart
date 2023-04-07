@@ -4,8 +4,8 @@ import 'package:iasd_myadmin/app/screens/login/components/sing_up_top_image.dart
 import 'package:iasd_myadmin/app/screens/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/util/responsive.dart';
 import 'package:provider/provider.dart';
-import 'components/login_form.dart';
-import 'components/login_screen_top_image.dart';
+import '../components/login_form.dart';
+import '../components/login_screen_top_image.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
