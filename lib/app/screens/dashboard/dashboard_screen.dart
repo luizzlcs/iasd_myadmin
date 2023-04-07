@@ -28,6 +28,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Provider.of<AppTheme>(context, listen: false).isDark();
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -47,48 +48,57 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 value: 1,
                 child: brightness == 1
                     ? Row(
-                        children: const [
+                        children: [
                           Icon(
                             Icons.brightness_5_outlined,
+                            color: isDark ? Colors.white : Colors.black,
                           ),
-                          Text(' Modo Claro')
+                          const Text(' Modo Claro'),
                         ],
                       )
                     : Row(
-                        children: const [
+                        children: [
                           Icon(
                             Icons.brightness_3,
+                            color: isDark ? Colors.white : Colors.black,
                           ),
-                          Text(' Modo Escuro  ')
+                          const Text(' Modo Escuro  '),
                         ],
                       ),
               ),
               PopupMenuItem(
                 value: 2,
                 child: Row(
-                  children: const [
-                    Icon(Icons.person),
-                    Text(' Perfil do usuário'),
+                  children: [
+                    Icon(
+                      Icons.person,
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
+                    const Text(' Perfil do usuário'),
                   ],
                 ),
               ),
               PopupMenuItem(
                 value: 3,
                 child: Row(
-                  children: const [
+                  children: [
                     Icon(
                       Icons.settings,
+                      color: isDark ? Colors.white : Colors.black,
                     ),
-                    Text(' Configuações'),
+                    const Text(' Configuações'),
                   ],
                 ),
               ),
               PopupMenuItem(
                 value: 4,
                 child: Row(
-                  children: const [
-                    Icon(Icons.exit_to_app),
-                    Text(' Sair'),
+                  children: [
+                    Icon(
+                      Icons.exit_to_app,
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
+                    const Text(' Sair'),
                   ],
                 ),
               ),
