@@ -7,6 +7,15 @@ class AppTheme with ChangeNotifier {
     return _myTheme;
   }
 
+  
+  bool isDark() {
+    if (_myTheme == _darkTheme) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   final _darkTheme = ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.green,
