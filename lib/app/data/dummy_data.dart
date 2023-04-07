@@ -1,4 +1,4 @@
-import 'package:iasd_myadmin/app/model/departaments/departaments.dart';
+import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
 
 final dummyData = {
   Departaments(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/app/model/departaments/departaments_controller.dart';
-import 'package:iasd_myadmin/app/screens/departaments/secretaria/secretaria_screen.dart';
+import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
+import 'package:iasd_myadmin/app/core/secretaria/screens/secretaria_screen.dart';
 import 'package:iasd_myadmin/app/screens/login/controller/controller_alth_login.dart';
-import 'package:iasd_myadmin/app/screens/login/login_screen.dart';
+import 'package:iasd_myadmin/app/screens/login/screen/login_screen.dart';
 import 'package:iasd_myadmin/app/themes/app_theme.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:provider/provider.dart';

@@ -11,7 +11,7 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _isLogin =
+    final isLogin =
         Provider.of<ControllerAlthLogin>(context, listen: true).isLogin();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -25,10 +25,10 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            return Provider.of<ControllerAlthLogin>(context, listen: false)
+            Provider.of<ControllerAlthLogin>(context, listen: false)
                 .swichAlthMode();
           },
-          child: Text(_isLogin ? 'CRIAR CONTA' : 'FAZER LOGIN'),
+          child: Text(isLogin ? 'CRIAR CONTA' : 'FAZER LOGIN'),
         ),
       ],
     );
