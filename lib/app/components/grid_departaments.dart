@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/model/departaments/departaments_controller.dart';
+import 'package:iasd_myadmin/app/themes/app_theme.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:iasd_myadmin/app/util/responsive.dart';
 import 'package:provider/provider.dart';
 
 class GridDepartaments extends StatelessWidget {
+  
   const GridDepartaments({Key? key});
 
   @override
   Widget build(BuildContext context) {
     final departament = Provider.of<DepartamentsController>(context);
     final isDesktop = Responsive.isDesktop(context);
-    print(isDesktop);
 
     return GridView.builder(
       padding: const EdgeInsets.all(10),
@@ -20,14 +21,19 @@ class GridDepartaments extends StatelessWidget {
         final listDepartament = departament.departament[index];
         return Ink(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
-            borderRadius: const BorderRadius.all(
-              Radius.circular(100),
+            color: Provider.of<AppTheme>(context).isDark()
+                ? Colors.white.withOpacity(0.2)
+                : Colors.black.withOpacity(0.5),
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(200),
+              topLeft: Radius.circular(200),
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(200),
             ),
           ),
           child: InkWell(
-            
-            splashColor: Colors.white.withOpacity(0.5),
+            focusColor: Colors.purple,
+            splashColor: Colors.pink.withOpacity(0.5),
             highlightColor: Colors.blue,
             borderRadius: BorderRadius.circular(100),
             onTap: () {
@@ -68,6 +74,10 @@ class GridDepartaments extends StatelessWidget {
                       child: Text(
                         overflow: TextOverflow.ellipsis,
                         listDepartament.name,
+                        style: Provider.of<AppTheme>(context, listen: false)
+                                .isDark()
+                            ? const TextStyle(color: Colors.white)
+                            : const TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
                       ),
                     ),
