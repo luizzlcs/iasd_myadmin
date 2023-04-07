@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/model/departaments/departaments_controller.dart';
-import 'package:iasd_myadmin/screens/dashboard/dashboard_screen.dart';
-import 'package:iasd_myadmin/screens/departaments/secretaria/secretaria_screen.dart';
-import 'package:iasd_myadmin/screens/login/controller/controller_alth_login.dart';
-import 'package:iasd_myadmin/screens/login/login_screen.dart';
-import 'package:iasd_myadmin/themes/app_theme.dart';
-import 'package:iasd_myadmin/util/app_routes.dart';
-import 'package:iasd_myadmin/util/controller_theme.dart';
+import 'package:iasd_myadmin/app/model/departaments/departaments_controller.dart';
+import 'package:iasd_myadmin/app/screens/departaments/secretaria/secretaria_screen.dart';
+import 'package:iasd_myadmin/app/screens/login/controller/controller_alth_login.dart';
+import 'package:iasd_myadmin/app/screens/login/login_screen.dart';
+import 'package:iasd_myadmin/app/themes/app_theme.dart';
+import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:provider/provider.dart';
+
+import 'app/screens/dashboard/dashboard_screen.dart';
 
 void main() {
   runApp(
