@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/components/app_drawer.dart';
-import 'package:iasd_myadmin/model/departaments/departaments.dart';
+import 'package:iasd_myadmin/app/components/app_drawer.dart';
 
 class SecretariaScreen extends StatelessWidget {
   const SecretariaScreen({Key? key}) : super(key: key);

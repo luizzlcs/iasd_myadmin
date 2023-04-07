@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/model/departaments/departaments_controller.dart';
-import 'package:iasd_myadmin/util/app_routes.dart';
-import 'package:iasd_myadmin/util/responsive.dart';
+import 'package:iasd_myadmin/app/model/departaments/departaments_controller.dart';
+import 'package:iasd_myadmin/app/util/app_routes.dart';
+import 'package:iasd_myadmin/app/util/responsive.dart';
 import 'package:provider/provider.dart';
 
 class GridDepartaments extends StatelessWidget {
