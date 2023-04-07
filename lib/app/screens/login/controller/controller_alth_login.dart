@@ -16,7 +16,7 @@ class ControllerAlthLogin with ChangeNotifier {
       authMode = AuthMode.login;
       notifyListeners();
     }
-    print('FLUTTER 4.5: $authMode');
+    debugPrint('FLUTTER 4.5: $authMode');
     notifyListeners();
   }
 }

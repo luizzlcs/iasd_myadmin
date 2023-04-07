@@ -12,7 +12,7 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
+    final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
     return Form(
       child: Column(
         children: [
@@ -70,7 +70,7 @@ class LoginForm extends StatelessWidget {
                     AppRoutes.dashBoard, (route) => false);
               },
               child: Text(
-                _isLogin ? "Login".toUpperCase() : 'Criar conta'.toUpperCase(),
+                isLogin ? "Login".toUpperCase() : 'Criar conta'.toUpperCase(),
               ),
             ),
           ),
