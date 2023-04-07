@@ -7,7 +7,6 @@ class AppTheme with ChangeNotifier {
     return _myTheme;
   }
 
-  
   bool isDark() {
     if (_myTheme == _darkTheme) {
       return true;
@@ -33,7 +32,7 @@ class AppTheme with ChangeNotifier {
 
   final _lightTheme = ThemeData(
     brightness: Brightness.light,
-    primarySwatch: Colors.brown,
+    primarySwatch: Colors.deepPurple,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     iconTheme: const IconThemeData(size: 25, color: Colors.blue),
     textTheme: const TextTheme(
