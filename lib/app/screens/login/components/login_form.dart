@@ -1,22 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/components/already_have_an_account_acheck.dart';
 import 'package:iasd_myadmin/app/screens/login/controller/controller_alth_login.dart';
+import 'package:iasd_myadmin/app/screens/login/controller/validation_form_login.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:iasd_myadmin/app/util/constants.dart';
 import 'package:provider/provider.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
   const LoginForm({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
+  final _formKey = GlobalKey<FormState>();
+  final emailEC = TextEditingController();
+  final passwordEC = TextEditingController();
+  @override
   Widget build(BuildContext context) {
     final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
+
     return Form(
+      key: _formKey,
       child: Column(
         children: [
           TextFormField(
+            controller: emailEC,
+            validator: (value) {
+              if (isValidEmail(value)) {
+                return null;
+              }
+              return 'O email não é válido';
+            },
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             cursorColor: kPrimaryColor,
@@ -32,6 +50,13 @@ class LoginForm extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding),
             child: TextFormField(
+              controller: passwordEC,
+              validator: (value) {
+                if (isValidPassword(value)) {
+                  return null;
+                }
+                return 'Você precisa digitar no minimo 6 caracteres';
+              },
               textInputAction: TextInputAction.done,
               obscureText: true,
               cursorColor: kPrimaryColor,
@@ -66,8 +91,10 @@ class LoginForm extends StatelessWidget {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(fixedSize: const Size(250, 40)),
               onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    AppRoutes.dashBoard, (route) => false);
+                if (_formKey.currentState!.validate()) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      AppRoutes.dashBoard, (route) => false);
+                }
               },
               child: Text(
                 isLogin ? "Login".toUpperCase() : 'Criar conta'.toUpperCase(),
