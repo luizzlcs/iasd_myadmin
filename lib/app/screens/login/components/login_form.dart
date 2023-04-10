@@ -16,10 +16,27 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
+  bool _passwordsMatch = false;
+  bool _obscureText = true;
+
   final _formKey = GlobalKey<FormState>();
-  final emailEC = TextEditingController();
-  final passwordEC = TextEditingController();
-  final confirmPasswordEC = TextEditingController();
+  final _emailEC = TextEditingController();
+  final _passwordEC = TextEditingController();
+  final _confirmPasswordEC = TextEditingController();
+
+  @override
+  void initState() {
+    _passwordEC.addListener(_checkPasswordsMatch);
+    _confirmPasswordEC.addListener(_checkPasswordsMatch);
+    super.initState();
+  }
+
+  void _checkPasswordsMatch() {
+    setState(() {
+      _passwordsMatch = _passwordEC.text == _confirmPasswordEC.text;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
@@ -29,7 +46,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
       child: Column(
         children: [
           TextFormField(
-            controller: emailEC,
+            controller: _emailEC,
             validator: (value) {
               if (isValidEmail(value)) {
                 return null;
@@ -47,7 +64,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                 child: Icon(Icons.person),
               ),
               suffixIcon: IconButton(
-                onPressed: () => emailEC.clear(),
+                onPressed: () => _emailEC.clear(),
                 icon: const Icon(Icons.backspace),
               ),
             ),
@@ -55,7 +72,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding),
             child: TextFormField(
-              controller: passwordEC,
+              controller: _passwordEC,
               validator: (value) {
                 if (isValidPassword(value)) {
                   return null;
@@ -63,7 +80,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                 return 'Você precisa digitar no minimo 6 caracteres';
               },
               textInputAction: TextInputAction.done,
-              obscureText: true,
+              obscureText: _obscureText,
               cursorColor: kPrimaryColor,
               decoration: InputDecoration(
                 hintText: "Sua senha",
@@ -72,8 +89,14 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                   child: Icon(Icons.lock),
                 ),
                 suffixIcon: IconButton(
-                  onPressed: () => passwordEC.clear(),
-                  icon: const Icon(Icons.cleaning_services),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                  icon: _obscureText
+                      ? const Icon(Icons.visibility_off)
+                      : const Icon(Icons.visibility),
                 ),
               ),
             ),
@@ -82,9 +105,10 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: defaultPadding),
               child: TextFormField(
-                controller: confirmPasswordEC,
+                controller: _confirmPasswordEC,
                 validator: (value) {
-                  if (isValidPasswordCofirmation(value, confirmPasswordEC)) {
+                  if (isValidPasswordCofirmation(
+                      value, _confirmPasswordEC.text)) {
                     return null;
                   }
                   return 'As senhas são diferentes';
@@ -98,10 +122,11 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                     padding: EdgeInsets.all(defaultPadding),
                     child: Icon(Icons.lock),
                   ),
-                  suffixIcon: IconButton(
-                    onPressed: () => passwordEC.clear(),
-                    icon: const Icon(Icons.cleaning_services),
-                  ),
+                  suffixIcon: _passwordsMatch
+                      ? const Icon(Icons.check, color: Colors.green)
+                      : IconButton(
+                          onPressed: () => _confirmPasswordEC.clear(),
+                          icon: const Icon(Icons.close, color: Colors.red)),
                 ),
               ),
             ),
