@@ -19,6 +19,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
   final _formKey = GlobalKey<FormState>();
   final emailEC = TextEditingController();
   final passwordEC = TextEditingController();
+  final confirmPasswordEC = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
@@ -39,11 +40,15 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
             textInputAction: TextInputAction.next,
             cursorColor: kPrimaryColor,
             onSaved: (email) {},
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: "Seu e-mail",
-              prefixIcon: Padding(
+              prefixIcon: const Padding(
                 padding: EdgeInsets.all(defaultPadding),
                 child: Icon(Icons.person),
+              ),
+              suffixIcon: IconButton(
+                onPressed: () => emailEC.clear(),
+                icon: const Icon(Icons.backspace),
               ),
             ),
           ),
@@ -60,11 +65,15 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
               textInputAction: TextInputAction.done,
               obscureText: true,
               cursorColor: kPrimaryColor,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: "Sua senha",
-                prefixIcon: Padding(
+                prefixIcon: const Padding(
                   padding: EdgeInsets.all(defaultPadding),
                   child: Icon(Icons.lock),
+                ),
+                suffixIcon: IconButton(
+                  onPressed: () => passwordEC.clear(),
+                  icon: const Icon(Icons.cleaning_services),
                 ),
               ),
             ),
@@ -73,14 +82,25 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: defaultPadding),
               child: TextFormField(
+                controller: confirmPasswordEC,
+                validator: (value) {
+                  if (isValidPasswordCofirmation(value, confirmPasswordEC)) {
+                    return null;
+                  }
+                  return 'As senhas são diferentes';
+                },
                 textInputAction: TextInputAction.done,
                 obscureText: true,
                 cursorColor: kPrimaryColor,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: "Confirme sua senha",
-                  prefixIcon: Padding(
+                  prefixIcon: const Padding(
                     padding: EdgeInsets.all(defaultPadding),
                     child: Icon(Icons.lock),
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () => passwordEC.clear(),
+                    icon: const Icon(Icons.cleaning_services),
                   ),
                 ),
               ),
