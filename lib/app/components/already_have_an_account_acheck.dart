@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/app/screens/login/controller/controller_alth_login.dart';
+import 'package:iasd_myadmin/app/core/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/util/constants.dart';
 import 'package:provider/provider.dart';
 
