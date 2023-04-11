@@ -16,6 +16,8 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _buttonLoginFocus = FocusNode();
   bool _passwordsMatch = false;
   bool _obscureText = true;
 
@@ -57,6 +59,9 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
             textInputAction: TextInputAction.next,
             cursorColor: kPrimaryColor,
             onSaved: (email) {},
+            onFieldSubmitted: (_) {
+              FocusScope.of(context).requestFocus(_emailFocus);
+            },
             decoration: InputDecoration(
               hintText: "Seu e-mail",
               prefixIcon: const Padding(
@@ -73,6 +78,10 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
             padding: const EdgeInsets.symmetric(vertical: defaultPadding),
             child: TextFormField(
               controller: _passwordEC,
+              focusNode: _emailFocus,
+              onFieldSubmitted: (_) {
+                FocusScope.of(context).requestFocus(_buttonLoginFocus);
+              },
               validator: (value) {
                 if (isValidPassword(value)) {
                   return null;
@@ -134,6 +143,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
           Hero(
             tag: "login_btn",
             child: ElevatedButton(
+              focusNode: _buttonLoginFocus,
               style: ElevatedButton.styleFrom(fixedSize: const Size(250, 40)),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
