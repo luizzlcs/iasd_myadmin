@@ -2,11 +2,10 @@
 
 import 'package:iasd_myadmin/app/util/email_validator_util.dart' as email_valid;
 
-mixin ValidationFormLogin{
+mixin ValidationFormLogin {
   bool isValidPassword(String? value) => value != null && value.length >= 6;
 
-  bool isValidPasswordCofirmation(
-      String? value, String confirmPassword) {
+  bool isValidPasswordCofirmation(String? value, String confirmPassword) {
     if (value == confirmPassword) {
       return true;
     }
