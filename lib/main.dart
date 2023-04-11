@@ -38,14 +38,18 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: Provider.of<AppTheme>(context).myTheme,
-      debugShowCheckedModeBanner: false,
-      routes: {
-        AppRoutes.login: (_) => const LoginScreen(),
-        AppRoutes.dashBoard: (_) => const DashboardScreen(),
-        AppRoutes.secretaria: (_) => const SecretariaScreen(),
-      },
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: MaterialApp(
+        theme: Provider.of<AppTheme>(context).myTheme,
+        debugShowCheckedModeBanner: false,
+        routes: {
+          AppRoutes.login: (_) => const LoginScreen(),
+          AppRoutes.dashBoard: (_) => const DashboardScreen(),
+          AppRoutes.secretaria: (_) => const SecretariaScreen(),
+        },
+      ),
     );
   }
 }
