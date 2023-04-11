@@ -1,7 +1,6 @@
 // import 'package:iasd_myadmin/app/util/email_validator_util.dart' as EmailValid;
 
-import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/app/util/email_validator_util.dart' as EmailValid;
+import 'package:iasd_myadmin/app/util/email_validator_util.dart' as email_valid;
 
 mixin ValidationFormLogin{
   bool isValidPassword(String? value) => value != null && value.length >= 6;
@@ -15,7 +14,7 @@ mixin ValidationFormLogin{
   }
 
   bool isValidEmail(String? email) {
-    if (EmailValid.isValid(email)) {
+    if (email_valid.isValid(email)) {
       return true;
     }
     return false;
