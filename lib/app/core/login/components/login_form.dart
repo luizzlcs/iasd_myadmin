@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/components/already_have_an_account_acheck.dart';
-import 'package:iasd_myadmin/app/screens/login/controller/controller_alth_login.dart';
-import 'package:iasd_myadmin/app/screens/login/controller/validation_form_login.dart';
+import 'package:iasd_myadmin/app/core/login/controller/controller_alth_login.dart';
+import 'package:iasd_myadmin/app/core/login/controller/validation_form_login.dart';
+import 'package:iasd_myadmin/app/core/login/model/auth.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:iasd_myadmin/app/util/constants.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
   @override
   Widget build(BuildContext context) {
     final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
+    final Auth auth = Provider.of(context,listen: false);
 
     return Form(
       key: _formKey,
@@ -135,10 +137,9 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
             tag: "login_btn",
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(fixedSize: const Size(250, 40)),
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      AppRoutes.dashBoard, (route) => false);
+                  await auth.singUp(_emailEC.text, _passwordEC.text);
                 }
               },
               child: Text(
