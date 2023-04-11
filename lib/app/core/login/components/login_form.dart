@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/components/already_have_an_account_acheck.dart';
-import 'package:iasd_myadmin/app/screens/login/controller/controller_alth_login.dart';
-import 'package:iasd_myadmin/app/screens/login/controller/validation_form_login.dart';
+import 'package:iasd_myadmin/app/core/login/controller/controller_alth_login.dart';
+import 'package:iasd_myadmin/app/core/login/controller/validation_form_login.dart';
+import 'package:iasd_myadmin/app/core/login/model/auth.dart';
+import 'package:iasd_myadmin/app/exceptions/auth_exception.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:iasd_myadmin/app/util/constants.dart';
 import 'package:provider/provider.dart';
@@ -39,9 +41,26 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
     });
   }
 
+  void _showErrorDialog(String msg) {
+    showDialog(
+        context: context, 
+        builder: (ctx) => AlertDialog(
+          title: const Text('Ocorreu um erro!'),
+          content: Text(msg),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).maybePop(),
+              child: const Text('Fechar'),
+            )
+          ],   
+        ),
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
+    final Auth auth = Provider.of(context,listen: false);
 
     return Form(
       key: _formKey,
@@ -116,10 +135,13 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
               child: TextFormField(
                 controller: _confirmPasswordEC,
                 validator: (value) {
-                  if (isValidPasswordCofirmation(
-                      value, _confirmPasswordEC.text)) {
+                  if (isValidPasswordCofirmation(value, _passwordEC.text)) {
+                    debugPrint('PASSWORD: ${_passwordEC.text}');
+                    debugPrint('CONFIRMAÇÃO: $value');
                     return null;
                   }
+                  debugPrint('PASSWORD: ${_passwordEC.text}');
+                  debugPrint('CONFIRMAÇÃO: $value');
                   return 'As senhas são diferentes';
                 },
                 textInputAction: TextInputAction.done,
@@ -145,10 +167,21 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
             child: ElevatedButton(
               focusNode: _buttonLoginFocus,
               style: ElevatedButton.styleFrom(fixedSize: const Size(250, 40)),
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      AppRoutes.dashBoard, (route) => false);
+                  try {
+                    if (isLogin != true) {
+                    await auth.singUp(_emailEC.text, _passwordEC.text);
+                  } else {
+                     await auth.login(_emailEC.text, _passwordEC.text);
+                  }
+                    if (!mounted) return;
+                    Navigator.of(context).pushReplacementNamed(AppRoutes.dashBoard);
+                  } on AuthException catch (error) {
+                    _showErrorDialog(error.toString());
+                  } catch (error) {
+                    _showErrorDialog('ocorreu um erro inesperado');
+                  }
                 }
               },
               child: Text(
