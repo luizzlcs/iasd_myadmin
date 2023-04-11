@@ -3,6 +3,7 @@ import 'package:iasd_myadmin/app/components/already_have_an_account_acheck.dart'
 import 'package:iasd_myadmin/app/core/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/core/login/controller/validation_form_login.dart';
 import 'package:iasd_myadmin/app/core/login/model/auth.dart';
+import 'package:iasd_myadmin/app/exceptions/auth_exception.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:iasd_myadmin/app/util/constants.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,22 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
     setState(() {
       _passwordsMatch = _passwordEC.text == _confirmPasswordEC.text;
     });
+  }
+
+  void _showErrorDialog(String msg) {
+    showDialog(
+        context: context, 
+        builder: (ctx) => AlertDialog(
+          title: const Text('Ocorreu um erro!'),
+          content: Text(msg),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).maybePop(),
+              child: const Text('Fechar'),
+            )
+          ],   
+        ),
+      );
   }
 
   @override
@@ -139,7 +156,19 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
               style: ElevatedButton.styleFrom(fixedSize: const Size(250, 40)),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  await auth.singUp(_emailEC.text, _passwordEC.text);
+                  try {
+                    if (isLogin != true) {
+                    await auth.singUp(_emailEC.text, _passwordEC.text);
+                  } else {
+                     await auth.login(_emailEC.text, _passwordEC.text);
+                  }
+                    if (!mounted) return;
+                    Navigator.of(context).pushReplacementNamed(AppRoutes.dashBoard);
+                  } on AuthException catch (error) {
+                    _showErrorDialog(error.toString());
+                  } catch (error) {
+                    _showErrorDialog('ocorreu um erro inesperado');
+                  }
                 }
               },
               child: Text(
