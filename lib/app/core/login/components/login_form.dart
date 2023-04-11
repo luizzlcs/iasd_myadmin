@@ -126,10 +126,13 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
               child: TextFormField(
                 controller: _confirmPasswordEC,
                 validator: (value) {
-                  if (isValidPasswordCofirmation(
-                      value, _confirmPasswordEC.text)) {
+                  if (isValidPasswordCofirmation(value, _passwordEC.text)) {
+                    debugPrint('PASSWORD: ${_passwordEC.text}');
+                    debugPrint('CONFIRMAÇÃO: $value');
                     return null;
                   }
+                  debugPrint('PASSWORD: ${_passwordEC.text}');
+                  debugPrint('CONFIRMAÇÃO: $value');
                   return 'As senhas são diferentes';
                 },
                 textInputAction: TextInputAction.done,
