@@ -18,11 +18,12 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
+ 
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _buttonLoginFocus = FocusNode();
   bool _passwordsMatch = false;
   bool _obscureText = true;
-
+   final FocusNode _loginFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
   final _emailEC = TextEditingController();
   final _passwordEC = TextEditingController();
@@ -30,6 +31,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
 
   @override
   void initState() {
+    _loginFocus.requestFocus();
     _passwordEC.addListener(_checkPasswordsMatch);
     _confirmPasswordEC.addListener(_checkPasswordsMatch);
     super.initState();
@@ -68,6 +70,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
         children: [
           TextFormField(
             controller: _emailEC,
+            focusNode: _loginFocus,
             validator: (value) {
               if (isValidEmail(value)) {
                 return null;
