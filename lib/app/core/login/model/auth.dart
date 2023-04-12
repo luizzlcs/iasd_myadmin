@@ -13,7 +13,7 @@ class Auth with ChangeNotifier {
       Uri.parse(url),
       body: jsonEncode(
         {
-          'email': email,
+          'email': email.trim(),
           'password': senha,
           'returnSecureToken': true
         }
