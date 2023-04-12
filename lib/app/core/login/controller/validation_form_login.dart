@@ -13,7 +13,7 @@ mixin ValidationFormLogin {
   }
 
   bool isValidEmail(String? email) {
-    if (email_valid.isValid(email)) {
+    if (email_valid.isValid(email!.trim())) {
       return true;
     }
     return false;
