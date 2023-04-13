@@ -29,12 +29,25 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
   final _passwordEC = TextEditingController();
   final _confirmPasswordEC = TextEditingController();
 
-  @override
-  void initState() {
+   
+   @override
+     void initState() {
+    Future.delayed(const Duration(milliseconds: 100),(){
     _loginFocus.requestFocus();
+
+    });
     _passwordEC.addListener(_checkPasswordsMatch);
     _confirmPasswordEC.addListener(_checkPasswordsMatch);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _loginFocus.dispose();
+    _emailEC.dispose();
+    _passwordEC.dispose();
+    _confirmPasswordEC.dispose();
+    super.dispose();
   }
 
   void _checkPasswordsMatch() {
