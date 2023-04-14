@@ -51,8 +51,8 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         routes: {
           AppRoutes.login: (_) => const LoginScreen(),
-          AppRoutes.dashBoard: (_) => const DashboardScreen(),
-          AppRoutes.secretaria: (_) => const SecretariaScreen(),
+          AppRoutes.dashBoard: (_) =>  DashboardScreen(),
+          AppRoutes.secretaria: (_) =>  SecretariaScreen(),
         },
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
+import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
+import 'package:iasd_myadmin/app/data/dummy_data.dart';
 import 'package:iasd_myadmin/app/themes/app_theme.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:iasd_myadmin/app/util/responsive.dart';
@@ -12,6 +14,9 @@ class GridDepartaments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final departament = Provider.of<DepartamentsController>(context);
+    final  departamento2 = Departaments;
+    
+    
     final isDesktop = Responsive.isDesktop(context);
 
     return GridView.builder(
@@ -37,8 +42,8 @@ class GridDepartaments extends StatelessWidget {
             highlightColor: Colors.blue,
             borderRadius: BorderRadius.circular(100),
             onTap: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  AppRoutes.secretaria, (route) => false);
+              Navigator.of(context).pushNamed(
+                  AppRoutes.secretaria, arguments: departament);                 
             },
             child: Stack(children: [
               Column(

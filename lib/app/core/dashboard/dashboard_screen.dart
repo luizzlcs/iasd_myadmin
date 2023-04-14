@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/components/app_drawer.dart';
 import 'package:iasd_myadmin/app/components/grid_departaments.dart';
+import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
 import 'package:iasd_myadmin/app/themes/app_theme.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:iasd_myadmin/app/util/controller_theme.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
+
   const DashboardScreen({Key? key}) : super(key: key);
 
   @override

@@ -6,10 +6,12 @@ class Departaments with ChangeNotifier {
   final String description;
   final String imageUrl;
 
+
   Departaments({
     required this.id,
     required this.name,
     required this.description,
     required this.imageUrl,
+    
   });
 }
