@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
+import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
 import 'package:iasd_myadmin/app/themes/app_theme.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
+import 'package:iasd_myadmin/app/util/constants.dart';
 import 'package:iasd_myadmin/app/util/responsive.dart';
 import 'package:provider/provider.dart';
 
@@ -11,14 +13,15 @@ class GridDepartaments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final departament = Provider.of<DepartamentsController>(context);
+    final departament = Provider.of<DepartamentsController>(context);    
+    
     final isDesktop = Responsive.isDesktop(context);
 
     return GridView.builder(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(defaultPadding),
       itemCount: departament.departament.length,
       itemBuilder: (context, index) {
-        final listDepartament = departament.departament[index];
+        Departaments depart = departament.departament[index];
         return Ink(
           decoration: BoxDecoration(
             color: Provider.of<AppTheme>(context).isDark()
@@ -37,8 +40,8 @@ class GridDepartaments extends StatelessWidget {
             highlightColor: Colors.blue,
             borderRadius: BorderRadius.circular(100),
             onTap: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  AppRoutes.secretaria, (route) => false);
+              Navigator.of(context).pushNamed(
+                  AppRoutes.secretaria, arguments: depart);                 
             },
             child: Stack(children: [
               Column(
@@ -50,7 +53,7 @@ class GridDepartaments extends StatelessWidget {
                       child: CircleAvatar(
                         radius: isDesktop ? 120 : 50,
                         backgroundImage: ResizeImage(
-                          NetworkImage(listDepartament.imageUrl),
+                          NetworkImage(depart.imageUrl),
                           width: 180,
                           height: 180,
                         ),
@@ -73,7 +76,7 @@ class GridDepartaments extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 10),
                       child: Text(
                         overflow: TextOverflow.ellipsis,
-                        listDepartament.name,
+                        depart.name,
                         style: Provider.of<AppTheme>(context, listen: false)
                                 .isDark()
                             ? const TextStyle(color: Colors.white)
