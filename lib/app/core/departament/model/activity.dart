@@ -1,16 +1,17 @@
-
-import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
+import 'package:flutter/material.dart';
 
 class Activity {
   String id;
-  final List<Departaments> departaments;
   String name;
+  IconData icon;
   DateTime date;
+  String page;
 
   Activity({
     required this.id,
-    required this.departaments,
     required this.name,
+    required this.icon,
     required this.date,
+    required this.page,
   });
 }

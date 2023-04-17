@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
+import 'package:iasd_myadmin/app/core/secretaria/screens/navegacao.dart';
+import 'package:iasd_myadmin/app/core/secretaria/screens/secretary_screen.dart';
 import 'package:iasd_myadmin/app/core/login/model/auth.dart';
-import 'package:iasd_myadmin/app/core/secretaria/screens/secretaria_screen.dart';
 import 'package:iasd_myadmin/app/core/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/core/login/screen/login_screen.dart';
 import 'package:iasd_myadmin/app/themes/app_theme.dart';
@@ -51,8 +52,9 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         routes: {
           AppRoutes.login: (_) => const LoginScreen(),
-          AppRoutes.dashBoard: (_) =>  DashboardScreen(),
-          AppRoutes.secretaria: (_) =>  SecretariaScreen(),
+          AppRoutes.dashBoard: (_) => const  DashboardScreen(),
+          AppRoutes.secretaria: (_) => const  SecretaryScreen(),
+          AppRoutes.navegacao: (_) => const  Navegacao(),
         },
       ),
     );
