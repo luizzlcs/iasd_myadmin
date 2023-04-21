@@ -1,16 +1,17 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/app/components/app_drawer.dart';
+import 'package:iasd_myadmin/app/components/app_drawe_activities.dart';
+import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
 
-class SecretariaScreen extends StatefulWidget {
+class SecretaryScreen extends StatefulWidget {
  
- const SecretariaScreen({Key? key}) : super(key: key);
+ const SecretaryScreen({Key? key}) : super(key: key);
 
   @override
-  State<SecretariaScreen> createState() => _SecretariaScreenState();
+  State<SecretaryScreen> createState() => _SecretaryScreenState();
   }
 
-class _SecretariaScreenState extends State<SecretariaScreen> {
+class _SecretaryScreenState extends State<SecretaryScreen> {
 
 PlatformFile? file;
 
@@ -23,13 +24,15 @@ setState(() {
 });
 }
 
+
   @override
   Widget build(BuildContext context) {
+    final Departaments departamentOpen = ModalRoute.of(context)?.settings.arguments as Departaments;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Secretaria'),
+        title:  Text(departamentOpen.name),
       ),
-      drawer: const AppDrawer(),
+      drawer: AppDrawerActivities(activities: departamentOpen.activity ?? []),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
