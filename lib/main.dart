@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
+import 'package:iasd_myadmin/app/core/departament/creat_departaments.dart';
 import 'package:iasd_myadmin/app/core/secretaria/screens/navegacao.dart';
 import 'package:iasd_myadmin/app/core/secretaria/screens/secretary_screen.dart';
 import 'package:iasd_myadmin/app/core/login/model/auth.dart';
@@ -55,6 +56,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.dashBoard: (_) => const  DashboardScreen(),
           AppRoutes.secretaria: (_) => const  SecretaryScreen(),
           AppRoutes.navegacao: (_) => const  Navegacao(),
+          AppRoutes.creatDepartaments: (_) => const  CreatDepartaments(),
         },
       ),
     );
