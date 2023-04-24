@@ -12,6 +12,7 @@ class GridDepartaments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dimension = MediaQuery.of(context).size;
     final departament = Provider.of<DepartamentsController>(context);
 
     final isDesktop = Responsive.isDesktop(context);
@@ -26,18 +27,18 @@ class GridDepartaments extends StatelessWidget {
             color: Provider.of<AppTheme>(context).isDark()
                 ? Colors.white.withOpacity(0.2)
                 : Colors.black.withOpacity(0.5),
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(200),
-              topLeft: Radius.circular(200),
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(200),
+            borderRadius:  BorderRadius.only(
+              topRight: Radius.circular(dimension.height * .3),
+              topLeft: Radius.circular(dimension.height * .3),
+              bottomLeft: Radius.circular(dimension.height * .01),
+              bottomRight: Radius.circular(dimension.height * .3),
             ),
           ),
           child: InkWell(
             focusColor: Colors.purple,
             splashColor: Colors.pink.withOpacity(0.5),
             highlightColor: Colors.blue,
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(200),
             onTap: () {
               Navigator.of(context)
                   .pushNamed(AppRoutes.secretaria, arguments: depart);
@@ -50,11 +51,11 @@ class GridDepartaments extends StatelessWidget {
                   Center(
                     child: SizedBox(
                       child: CircleAvatar(
-                        radius: isDesktop ? 120 : 50,
+                        radius: isDesktop ? dimension.height *.17 : 50,
                         backgroundImage: ResizeImage(
                           NetworkImage(depart.imageUrl),
-                          width: 180,
-                          height: 180,
+                          width: (dimension.width * 0.60).toInt() ,
+                          height: (dimension.width * 0.60).toInt() ,
                         ),
                       ),
                     ),
@@ -62,16 +63,22 @@ class GridDepartaments extends StatelessWidget {
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Center(
                     child: Padding(
                       padding: EdgeInsets.only(top: isDesktop ? 220 : 82),
                       child: Container(
-                        height: isDesktop ? 40 : 40,
+                        height: isDesktop ?  40 : 40,
                         width: isDesktop ? 180 : 90,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(50),
+                            topLeft: Radius.circular(5),
+                            bottomLeft: Radius.circular(5),
+                            topRight: Radius.circular(5),
+                          ),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(top: 10),
@@ -94,16 +101,21 @@ class GridDepartaments extends StatelessWidget {
                       child: Container(
                         height: isDesktop ? 40 : 40,
                         width: isDesktop ? 50 : 30,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(50),
+                            bottomLeft: Radius.circular(5),
+                            topRight: Radius.circular(5),
+                            bottomRight: Radius.circular(5),
+                          ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: IconButton(
-                            alignment: Alignment.topCenter,
-                            onPressed: () {},
-                            icon: const Icon(Icons.edit, color: Colors.white,),
+                        child: IconButton(
+                          alignment: Alignment.topCenter,
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.edit_note_sharp,
+                            color: Colors.white,
                           ),
                         ),
                       ),
