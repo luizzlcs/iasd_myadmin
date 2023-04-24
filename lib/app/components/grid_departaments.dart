@@ -90,28 +90,24 @@ class GridDepartaments extends StatelessWidget {
                   ),
                   Center(
                     child: Padding(
-                        padding: EdgeInsets.only(top: isDesktop ? 220 : 82),
-                        child: Container(
-                          height: isDesktop ? 40 : 40,
-                          width: isDesktop ? 50 : 30,
-                          decoration: BoxDecoration(
-                            color: Colors.deepPurple,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Text(
-                              overflow: TextOverflow.ellipsis,
-                              depart.name,
-                              style: Provider.of<AppTheme>(context, listen: false)
-                                      .isDark()
-                                  ? const TextStyle(color: Colors.white)
-                                  : const TextStyle(color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
+                      padding: EdgeInsets.only(top: isDesktop ? 220 : 82),
+                      child: Container(
+                        height: isDesktop ? 40 : 40,
+                        width: isDesktop ? 50 : 30,
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: IconButton(
+                            alignment: Alignment.topCenter,
+                            onPressed: () {},
+                            icon: const Icon(Icons.edit, color: Colors.white,),
                           ),
                         ),
                       ),
+                    ),
                   ),
                 ],
               ),
