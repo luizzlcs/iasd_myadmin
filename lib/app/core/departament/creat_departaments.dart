@@ -24,7 +24,8 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
 
     _formKey.currentState?.save();
 
-    Provider.of<DepartamentsController>(context, listen: false).saveDepartaments(_formData);
+    Provider.of<DepartamentsController>(context, listen: false)
+        .saveDepartaments(_formData);
     Navigator.of(context).pop();
   }
 
@@ -45,6 +46,7 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
               ),
               TextFormField(
                 decoration: const InputDecoration(
+                    isDense: true,
                     labelText: 'Nome',
                     hintText: 'Nome do departamento',
                     border: OutlineInputBorder()),
@@ -62,6 +64,7 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
               ),
               TextFormField(
                 decoration: const InputDecoration(
+                    isDense: true,
                     labelText: 'Decrição',
                     hintText: 'Descrição do departamento',
                     border: OutlineInputBorder()),
@@ -80,6 +83,7 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
               ),
               TextFormField(
                   decoration: const InputDecoration(
+                      isDense: true,
                       labelText: 'Imgaem',
                       hintText: 'Imagem do departamento',
                       border: OutlineInputBorder()),
