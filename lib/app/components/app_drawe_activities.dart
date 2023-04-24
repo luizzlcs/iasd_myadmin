@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/departament/model/activity.dart';
-import 'package:iasd_myadmin/app/util/app_routes.dart';
 
 class AppDrawerActivities extends StatelessWidget {
   final List<Activity> activities;
@@ -29,7 +28,6 @@ class AppDrawerActivities extends StatelessWidget {
       child: ListView.builder(
         itemCount: activities.length ,
         itemBuilder: (context, index){ 
-          final activity = activities[index].id;
           return ListTile(
                 leading: Icon(activities[index].icon),
                 title:   Text(activities[index].name),
