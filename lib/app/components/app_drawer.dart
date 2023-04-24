@@ -24,9 +24,11 @@ class AppDrawer extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.message_rounded),
-            title: const Text(' Envio de Mensagens'),
-            onTap: () {},
+            leading: const Icon(Icons.now_widgets_rounded),
+            title: const Text(' Novo Departamento'),
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoutes.creatDepartaments);
+            },
           ),
           const Divider(),
           ListTile(
