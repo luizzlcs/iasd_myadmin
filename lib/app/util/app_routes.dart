@@ -4,4 +4,5 @@ class AppRoutes {
   static const secretaria = '/secretaria';
   static const navegacao = '/navegacao';
   static const creatDepartaments = '/creatDepartaments';
+  static const activityScreen = '/activityScreen';
 }

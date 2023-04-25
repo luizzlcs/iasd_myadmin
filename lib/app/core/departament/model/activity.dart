@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Activity {
-  String id;
-  String name;
-  IconData icon;
-  DateTime date;
-  String page;
+  final String id;
+  final String name;
+  final IconData? icon;
+  final DateTime date = DateTime.now();
+  final String page;
 
   Activity({
     required this.id,
     required this.name,
-    required this.icon,
-    required this.date,
+    this.icon,
     required this.page,
-  });
+  }
+  
+  );
 }

@@ -1,21 +1,25 @@
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
 import 'package:iasd_myadmin/app/core/departament/model/activity.dart';
-import 'package:iasd_myadmin/app/util/app_routes.dart';
+import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
 import 'package:provider/provider.dart';
 
-class CreatDepartaments extends StatefulWidget {
-  const CreatDepartaments({Key? key}) : super(key: key);
+class ActivityFormScreen extends StatefulWidget {
+  const ActivityFormScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreatDepartaments> createState() => _CreatDepartamentsState();
+  State<ActivityFormScreen> createState() => _ActivityFormScreenState();
 }
 
-class _CreatDepartamentsState extends State<CreatDepartaments> {
+class _ActivityFormScreenState extends State<ActivityFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _formData = <String, dynamic>{};
-  final List<Activity> _formActivity = [];
+
+  TextEditingController nameEC = TextEditingController();
+  TextEditingController descricaoEC = TextEditingController();
+  TextEditingController iconeEC = TextEditingController();
+
   _submitForm() {
     debugPrint('Salvando dados');
     final isValid = _formKey.currentState?.validate() ?? false;
@@ -26,8 +30,7 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
 
     _formKey.currentState?.save();
 
-    Provider.of<DepartamentsController>(context, listen: false)
-        .saveDepartaments(_formData, _formActivity );
+    Provider.of<Departaments>(context, listen: false).saveActivities(_formData);
     Navigator.of(context).pop();
   }
 
@@ -35,7 +38,7 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastro de departamento'),
+        title: const Text('Cadastro de Atividades'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -47,17 +50,18 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
                 height: 20,
               ),
               TextFormField(
+                controller: nameEC,
                 decoration: const InputDecoration(
                     isDense: true,
                     labelText: 'Nome',
-                    hintText: 'Nome do departamento',
+                    hintText: 'Nome da atividade',
                     border: OutlineInputBorder()),
                 textInputAction: TextInputAction.next,
                 onSaved: (name) => _formData['name'] = name ?? '',
                 validator: (_value) {
                   final value = _value ?? '';
                   if (value.trim().isEmpty) {
-                    return 'É necessário informar o nome do departamento';
+                    return 'É necessário informar o nome da atividade';
                   }
                 },
               ),
@@ -65,10 +69,11 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
                 height: 15,
               ),
               TextFormField(
+                controller: descricaoEC,
                 decoration: const InputDecoration(
                     isDense: true,
-                    labelText: 'Decrição',
-                    hintText: 'Descrição do departamento',
+                    labelText: 'Page',
+                    hintText: 'Descrição da atividade',
                     border: OutlineInputBorder()),
                 textInputAction: TextInputAction.next,
                 onSaved: (descricao) =>
@@ -76,7 +81,7 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
                 validator: (_value) {
                   final value = _value ?? '';
                   if (value.trim().isEmpty) {
-                    return 'É necessário fazer uma descrição para o departamento';
+                    return 'É necessário fazer uma descrição para a atividade.';
                   }
                 },
               ),
@@ -84,10 +89,11 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
                 height: 15,
               ),
               TextFormField(
+                  controller: iconeEC,
                   decoration: const InputDecoration(
                       isDense: true,
-                      labelText: 'Imgaem',
-                      hintText: 'Imagem do departamento',
+                      labelText: 'Icone',
+                      hintText: 'icone da atividade',
                       border: OutlineInputBorder()),
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) => _submitForm(),
@@ -98,15 +104,19 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
               ElevatedButton.icon(
                 style:
                     ElevatedButton.styleFrom(minimumSize: const Size(300, 50)),
-                onPressed: () => _submitForm(),
+                onPressed: () {
+                  
+                  Activity activity = Activity(
+                    id: Random().nextDouble().toString(),
+                    name: nameEC.text,
+                    page: descricaoEC.text,
+                  );
+                  print('ATIVIDADE: ${activity.name}');
+                  Navigator.pop(context, activity);
+                },
                 icon: const Icon(Icons.save),
                 label: const Text('Salvar'),
               ),
-              const SizedBox(
-                 height: 15,
-              ),
-              TextButton(onPressed: ()=> Navigator.of(context).pushNamed(AppRoutes.activityScreen)
-              , child: const Text('Criar atividades'),)
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iasd_myadmin/app/core/departament/activity_form_screen.dart';
 import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
 import 'package:iasd_myadmin/app/core/departament/creat_departaments.dart';
 import 'package:iasd_myadmin/app/core/secretaria/screens/navegacao.dart';
@@ -28,7 +29,6 @@ void main() {
         ChangeNotifierProvider(
           create: (context) => Auth(),
         )
-        
       ],
       child: const MyApp(),
     ),
@@ -53,10 +53,11 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         routes: {
           AppRoutes.login: (_) => const LoginScreen(),
-          AppRoutes.dashBoard: (_) => const  DashboardScreen(),
-          AppRoutes.secretaria: (_) => const  SecretaryScreen(),
-          AppRoutes.navegacao: (_) => const  Navegacao(),
-          AppRoutes.creatDepartaments: (_) => const  CreatDepartaments(),
+          AppRoutes.dashBoard: (_) => const DashboardScreen(),
+          AppRoutes.secretaria: (_) => const SecretaryScreen(),
+          AppRoutes.navegacao: (_) => const Navegacao(),
+          AppRoutes.creatDepartaments: (_) => const CreatDepartaments(),
+          AppRoutes.activityScreen: (_) => const ActivityFormScreen(),
         },
       ),
     );
