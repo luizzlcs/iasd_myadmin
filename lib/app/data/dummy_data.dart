@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/departament/model/activity.dart';
 import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
 
-final dummyData = {
+final List<Departaments> dummyData = [
   Departaments(
       id: '1',
       name: 'Jovens',
@@ -233,4 +233,4 @@ final dummyData = {
           page: '/navegacao',
         ),
       ]),
-};
+];
