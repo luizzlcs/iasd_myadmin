@@ -27,7 +27,7 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.now_widgets_rounded),
             title: const Text(' Novo Departamento'),
             onTap: () {
-              Navigator.of(context).pushNamed (AppRoutes.creatDepartaments);
+              Navigator.of(context).pushNamed (AppRoutes.listDepartament);
             },
           ),
           const Divider(),
