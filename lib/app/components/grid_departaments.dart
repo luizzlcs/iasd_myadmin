@@ -126,7 +126,6 @@ class GridDepartaments extends StatelessWidget {
             ]),
           ),
         );
-        // const DepartamentList()
       },
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: isDesktop ? 5 : 3,
