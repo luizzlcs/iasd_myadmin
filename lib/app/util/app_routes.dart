@@ -3,6 +3,6 @@ class AppRoutes {
   static const dashBoard = '/dashBoard';
   static const secretaria = '/secretaria';
   static const navegacao = '/navegacao';
-  static const creatDepartaments = '/creatDepartaments';
+  static const listDepartament = '/listDepartament';
   static const activityScreen = '/activityScreen';
 }
