@@ -1,11 +1,9 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/departament/model/activity.dart';
-import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
-import 'package:provider/provider.dart';
 
 class ActivityFormScreen extends StatefulWidget {
+
   const ActivityFormScreen({Key? key}) : super(key: key);
 
   @override
@@ -14,7 +12,7 @@ class ActivityFormScreen extends StatefulWidget {
 
 class _ActivityFormScreenState extends State<ActivityFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _formData = <String, dynamic>{};
+  // final _formData = <String, dynamic>{};
 
   TextEditingController nameEC = TextEditingController();
   TextEditingController descricaoEC = TextEditingController();
@@ -26,12 +24,7 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
 
     if (!isValid) {
       return;
-    }
-
-    _formKey.currentState?.save();
-
-    Provider.of<Departaments>(context, listen: false).saveActivities(_formData);
-    Navigator.of(context).pop();
+    }   
   }
 
   @override
@@ -57,12 +50,12 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
                     hintText: 'Nome da atividade',
                     border: OutlineInputBorder()),
                 textInputAction: TextInputAction.next,
-                onSaved: (name) => _formData['name'] = name ?? '',
-                validator: (_value) {
-                  final value = _value ?? '';
-                  if (value.trim().isEmpty) {
+                validator: (value){
+                  final values = value ?? '';
+                  if (values.trim().isEmpty) {
                     return 'É necessário informar o nome da atividade';
                   }
+                  return null;
                 },
               ),
               const SizedBox(
@@ -75,14 +68,13 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
                     labelText: 'Page',
                     hintText: 'Descrição da atividade',
                     border: OutlineInputBorder()),
-                textInputAction: TextInputAction.next,
-                onSaved: (descricao) =>
-                    _formData['description'] = descricao ?? '',
-                validator: (_value) {
-                  final value = _value ?? '';
-                  if (value.trim().isEmpty) {
+                textInputAction: TextInputAction.next,                
+                validator: (value) {
+                  final values = value ?? '';
+                  if (values.trim().isEmpty) {
                     return 'É necessário fazer uma descrição para a atividade.';
                   }
+                  return null;
                 },
               ),
               const SizedBox(
@@ -97,7 +89,7 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
                       border: OutlineInputBorder()),
                   textInputAction: TextInputAction.done,
                   onFieldSubmitted: (_) => _submitForm(),
-                  onSaved: (image) => _formData['image'] = image ?? ''),
+                  ),
               const SizedBox(
                 height: 15,
               ),
@@ -106,13 +98,14 @@ class _ActivityFormScreenState extends State<ActivityFormScreen> {
                     ElevatedButton.styleFrom(minimumSize: const Size(300, 50)),
                 onPressed: () {
                   
-                  Activity activity = Activity(
+                  Activity newActivity = Activity(
                     id: Random().nextDouble().toString(),
                     name: nameEC.text,
                     page: descricaoEC.text,
                   );
-                  print('ATIVIDADE: ${activity.name}');
-                  Navigator.pop(context, activity);
+                  
+                  
+                  Navigator.pop(context, newActivity);
                 },
                 icon: const Icon(Icons.save),
                 label: const Text('Salvar'),
