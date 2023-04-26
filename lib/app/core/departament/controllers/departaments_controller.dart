@@ -10,22 +10,16 @@ class DepartamentsController with ChangeNotifier {
 
   List<Departaments> get departament => [..._departament];
 
-  saveDepartaments(Map<String, dynamic> data, List<Activity> activities) {
-    print('LISTA DE ATIVIDADES $activities');
-    bool hasId = data['id'] != null;
-    final departament = Departaments(
-      id: hasId ? data['id'] : Random().nextDouble().toString(),
-      name: data['name'],
-      description: data['description'],
-      imageUrl: data['image'],
-      activity: data['activities']
-    );
-    if (hasId) {
-      updateDepartaments(departament);
-    } else {
-      addDepartaments(departament);
-    }
+
+void addActivity(Activity activities, int index){
+    _departament[index].activity.add(activities);
+    notifyListeners();
   }
+
+   void removActivity(int index){
+    _departament.removeAt(index);
+  }
+
 
   void addDepartaments(Departaments departament) {
     _departament.add(departament);
