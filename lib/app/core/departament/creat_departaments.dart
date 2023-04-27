@@ -132,11 +132,6 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
               const SizedBox(
                 height: 15,
               ),
-              TextButton(
-                onPressed: () =>
-                    Navigator.of(context).pushNamed(AppRoutes.activityScreen),
-                child: const Text('Criar atividades'),
-              )
             ],
           ),
         ),
