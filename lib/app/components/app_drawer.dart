@@ -17,17 +17,28 @@ class AppDrawer extends StatelessWidget {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.dashboard_customize_sharp),
-            title: const Text('Painel'),
+            title: const Text('PAINEL'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(AppRoutes.dashBoard);
+              Navigator.of(context).pushNamed(AppRoutes.dashBoard);
+            },
+          ),
+           const Divider(),
+          ListTile(
+            leading: const Icon(Icons.now_widgets_rounded),
+            title: const Text(' Novo Departamento'),
+            onTap: () {
+              Navigator.of(context).pushNamed (AppRoutes.listDepartament);
             },
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.message_rounded),
-            title: const Text(' Envio de Mensagens'),
-            onTap: () {},
+            leading: const Icon(Icons.dataset_rounded),
+            title: const Text('Atividade sem Página'),
+            onTap: () {
+              
+            },
           ),
+         
           const Divider(),
           ListTile(
             leading: const Icon(Icons.settings),

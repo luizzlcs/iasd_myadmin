@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/departament/model/activity.dart';
 
@@ -6,14 +8,21 @@ class Departaments with ChangeNotifier {
   final String name;
   final String description;
   final String imageUrl;
-  List<Activity>? activity;
-
+  List<Activity> activity = [];
 
   Departaments({
     required this.id,
     required this.name,
     required this.description,
     required this.imageUrl,
-    this.activity,
+    required this.activity,
   });
+
+  void updateActivity(Activity activities) {
+    int index = activity.indexWhere((d) => d.id == activities);
+    if (index >= 0) {
+      activity[index] = activities;
+      notifyListeners();
+    }
+  }
 }

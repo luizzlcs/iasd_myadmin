@@ -8,13 +8,13 @@ import 'package:iasd_myadmin/app/util/responsive.dart';
 import 'package:provider/provider.dart';
 
 class GridDepartaments extends StatelessWidget {
-  
   const GridDepartaments({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final departament = Provider.of<DepartamentsController>(context);    
-    
+    final dimension = MediaQuery.of(context).size;
+    final departament = Provider.of<DepartamentsController>(context);
+
     final isDesktop = Responsive.isDesktop(context);
 
     return GridView.builder(
@@ -27,21 +27,21 @@ class GridDepartaments extends StatelessWidget {
             color: Provider.of<AppTheme>(context).isDark()
                 ? Colors.white.withOpacity(0.2)
                 : Colors.black.withOpacity(0.5),
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(200),
-              topLeft: Radius.circular(200),
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(200),
+            borderRadius:  BorderRadius.only(
+              topRight: Radius.circular(dimension.height * .3),
+              topLeft: Radius.circular(dimension.height * .3),
+              bottomLeft: Radius.circular(dimension.height * .01),
+              bottomRight: Radius.circular(dimension.height * .3),
             ),
           ),
           child: InkWell(
             focusColor: Colors.purple,
             splashColor: Colors.pink.withOpacity(0.5),
             highlightColor: Colors.blue,
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(200),
             onTap: () {
-              Navigator.of(context).pushNamed(
-                  AppRoutes.secretaria, arguments: depart);                 
+              Navigator.of(context)
+                  .pushNamed(AppRoutes.secretaria, arguments: depart);
             },
             child: Stack(children: [
               Column(
@@ -51,46 +51,81 @@ class GridDepartaments extends StatelessWidget {
                   Center(
                     child: SizedBox(
                       child: CircleAvatar(
-                        radius: isDesktop ? 120 : 50,
+                        radius: isDesktop ? dimension.height *.17 : 50,
                         backgroundImage: ResizeImage(
                           NetworkImage(depart.imageUrl),
-                          width: 180,
-                          height: 180,
+                          width: (dimension.width * 0.60).toInt() ,
+                          height: (dimension.width * 0.60).toInt() ,
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: isDesktop ? 220 : 82),
-                  child: Container(
-                    height: isDesktop ? 40 : 40,
-                    width: isDesktop ? 180 : 90,
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        overflow: TextOverflow.ellipsis,
-                        depart.name,
-                        style: Provider.of<AppTheme>(context, listen: false)
-                                .isDark()
-                            ? const TextStyle(color: Colors.white)
-                            : const TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
+                      padding: EdgeInsets.only(top: isDesktop ? 220 : 82),
+                      child: Container(
+                        height: isDesktop ?  40 : 40,
+                        width: isDesktop ? 180 : 90,
+                        decoration: const BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(50),
+                            topLeft: Radius.circular(5),
+                            bottomLeft: Radius.circular(5),
+                            topRight: Radius.circular(5),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            overflow: TextOverflow.ellipsis,
+                            depart.name,
+                            style: Provider.of<AppTheme>(context, listen: false)
+                                    .isDark()
+                                ? const TextStyle(color: Colors.white)
+                                : const TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: isDesktop ? 220 : 82),
+                      child: Container(
+                        height: isDesktop ? 40 : 40,
+                        width: isDesktop ? 50 : 30,
+                        decoration: const BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(50),
+                            bottomLeft: Radius.circular(5),
+                            topRight: Radius.circular(5),
+                            bottomRight: Radius.circular(5),
+                          ),
+                        ),
+                        child: IconButton(
+                          alignment: Alignment.topCenter,
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.edit_note_sharp,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ]),
           ),
         );
-        // const DepartamentList()
       },
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: isDesktop ? 5 : 3,
