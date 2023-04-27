@@ -18,23 +18,20 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
- 
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _buttonLoginFocus = FocusNode();
   bool _passwordsMatch = false;
   bool _obscureText = true;
-   final FocusNode _loginFocus = FocusNode();
+  final FocusNode _loginFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
   final _emailEC = TextEditingController();
   final _passwordEC = TextEditingController();
   final _confirmPasswordEC = TextEditingController();
 
-   
-   @override
-     void initState() {
-    Future.delayed(const Duration(milliseconds: 100),(){
-    _loginFocus.requestFocus();
-
+  @override
+  void initState() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      _loginFocus.requestFocus();
     });
     _passwordEC.addListener(_checkPasswordsMatch);
     _confirmPasswordEC.addListener(_checkPasswordsMatch);
@@ -58,24 +55,24 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
 
   void _showErrorDialog(String msg) {
     showDialog(
-        context: context, 
-        builder: (ctx) => AlertDialog(
-          title: const Text('Ocorreu um erro!'),
-          content: Text(msg),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).maybePop(),
-              child: const Text('Fechar'),
-            )
-          ],   
-        ),
-      );
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Ocorreu um erro!'),
+        content: Text(msg),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).maybePop(),
+            child: const Text('Fechar'),
+          )
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final Auth auth = Provider.of(context, listen: false);
     final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
-    final Auth auth = Provider.of(context,listen: false);
 
     return Form(
       key: _formKey,
@@ -114,7 +111,23 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
             child: TextFormField(
               controller: _passwordEC,
               focusNode: _emailFocus,
-              onFieldSubmitted: (_) {
+              onFieldSubmitted: (_) async {
+                if (_formKey.currentState!.validate()) {
+                  try {
+                    if (isLogin != true) {
+                      await auth.singUp(_emailEC.text, _passwordEC.text);
+                    } else {
+                      await auth.login(_emailEC.text, _passwordEC.text);
+                    }
+                    if (!mounted) return;
+                    Navigator.of(context)
+                        .pushReplacementNamed(AppRoutes.dashBoard);
+                  } on AuthException catch (error) {
+                    _showErrorDialog(error.toString());
+                  } catch (error) {
+                    _showErrorDialog('ocorreu um erro inesperado');
+                  }
+                }
                 FocusScope.of(context).requestFocus(_buttonLoginFocus);
               },
               validator: (value) {
@@ -173,7 +186,8 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                       ? const Icon(Icons.check, color: Colors.green)
                       : IconButton(
                           onPressed: () => _confirmPasswordEC.clear(),
-                          icon: const Icon(Icons.close, color: Colors.red)),
+                          icon: const Icon(Icons.close,
+                              color: Color.fromARGB(255, 117, 40, 34))),
                 ),
               ),
             ),
@@ -187,12 +201,13 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                 if (_formKey.currentState!.validate()) {
                   try {
                     if (isLogin != true) {
-                    await auth.singUp(_emailEC.text, _passwordEC.text);
-                  } else {
-                     await auth.login(_emailEC.text, _passwordEC.text);
-                  }
+                      await auth.singUp(_emailEC.text, _passwordEC.text);
+                    } else {
+                      await auth.login(_emailEC.text, _passwordEC.text);
+                    }
                     if (!mounted) return;
-                    Navigator.of(context).pushReplacementNamed(AppRoutes.dashBoard);
+                    Navigator.of(context)
+                        .pushReplacementNamed(AppRoutes.dashBoard);
                   } on AuthException catch (error) {
                     _showErrorDialog(error.toString());
                   } catch (error) {
