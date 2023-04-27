@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
+import 'package:iasd_myadmin/app/core/departament/model/activity.dart';
 import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -109,7 +110,14 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
                     name: name,
                     description: descricao,
                     imageUrl: image,
-                    activity: [],
+                    activity: [
+                      Activity(
+                        id: Random().nextDouble().toString(),
+                        name: 'Painel',
+                        page: '/dashBoard',
+                        icon: Icons.arrow_circle_left_outlined,
+                      ),
+                    ],
                   );
                   debugPrint(newDepartaments.id);
                   debugPrint(newDepartaments.name);
