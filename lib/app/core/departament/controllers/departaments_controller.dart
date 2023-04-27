@@ -16,8 +16,9 @@ void addActivity(Activity activities, int index){
     notifyListeners();
   }
 
-   void removActivity(int index){
-    _departament.removeAt(index);
+   void removActivity({ required int departamentIndex, required int activityIdex}){
+    _departament[departamentIndex].activity.removeAt(activityIdex);
+    notifyListeners();
   }
 
 
