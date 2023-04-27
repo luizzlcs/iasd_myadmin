@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/app/core/departament/activity_form_screen.dart';
+import 'package:iasd_myadmin/app/core/departament/model/activity.dart';
 import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/icon_picker.dart';
 import '../../themes/app_theme.dart';
 import 'controllers/departaments_controller.dart';
 
@@ -18,6 +21,106 @@ class ListActivityScreen extends StatefulWidget {
 }
 
 class _ListActivityScreenState extends State<ListActivityScreen> {
+  void createType(context) {
+    final isDark = Provider.of<AppTheme>(context, listen: false).isDark();
+    TextEditingController nameActivityEC = TextEditingController();
+    TextEditingController nameRouteEC = TextEditingController();
+    IconData? selectedIcon;
+    FocusNode nameRoute = FocusNode();
+    FocusNode selectIcon = FocusNode();
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            scrollable: true,
+            title: const Text('Cadastra nova página de atividade'),
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TextFormField(
+                      autofocus: true,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(nameRoute);
+                      },
+                      controller: nameActivityEC,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        labelText: 'Nome da atividade',
+                        icon: Icon(Icons.data_exploration),
+                      ),
+                    ),
+                    TextFormField(
+                      focusNode: nameRoute,
+                      controller: nameRouteEC,
+                      decoration: const InputDecoration(
+                        labelText: 'Rota da pagina',
+                        icon: Icon(Icons.apps_outage),
+                      ),
+                      onFieldSubmitted: (_) =>
+                          FocusScope.of(context).requestFocus(selectIcon),
+                    ),
+                    const Padding(padding: EdgeInsets.all(5)),
+                    StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                      return Column(children: [
+                        const Padding(padding: EdgeInsets.all(5)),
+                        selectedIcon != null
+                            ? Icon(selectedIcon, color: Colors.deepOrange)
+                            : const Text('Selecione um ícone'),
+                        const Padding(padding: EdgeInsets.all(5)),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                              focusNode: selectIcon,
+                              onPressed: () async {
+                                final IconData? result = await showIconPicker(
+                                    isDark: isDark,
+                                    context: context,
+                                    defalutIcon: selectedIcon);
+                                setState(() {
+                                  selectedIcon = result;
+                                });
+                              },
+                              child: const Text('Selecionar icone')),
+                        ),
+                      ]);
+                    }),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                  child: const Text("Salvar"),
+                  onPressed: () {
+                    selectedIcon ??= Icons.credit_score;
+                    final newActivities = Activity(
+                      id: Random().nextDouble().toString(),
+                      name: nameActivityEC.text,
+                      page: nameRouteEC.text,
+                      icon: selectedIcon,
+                    );
+
+                    Provider.of<DepartamentsController>(context, listen: false)
+                        .addActivity(newActivities, widget.index);
+                    selectedIcon = null;
+                    Navigator.pop(context);
+                  }),
+              TextButton(
+                  child: const Text("Calcelar"),
+                  onPressed: () async {
+                    selectedIcon = null;
+                    Navigator.pop(context);
+                  })
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     final listActivities =
@@ -96,10 +199,8 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                            color: Colors.amber,
-                            borderRadius: BorderRadius.circular(100)
-
-                            ),
+                                color: Colors.amber,
+                                borderRadius: BorderRadius.circular(100)),
                             child: Icon(listActivities[widget.index]
                                 .activity[index]
                                 .icon),
@@ -112,7 +213,13 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                               .page),
                           hoverColor: Colors.deepOrange,
                           onTap: () {
-                            widget.departaments.removActivity(index);
+                            Provider.of<DepartamentsController>(context,
+                                    listen: false)
+                                .removActivity(
+                                    departamentIndex: widget.index,
+                                    activityIdex: index);
+                            debugPrint('Index Departamento: ${widget.index}');
+                            debugPrint('Index atividade: $index');
                             setState(() {});
                           },
                         ),
@@ -128,18 +235,7 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ActivityFormScreen()),
-          ).then((newActivity) {
-            if (newActivity != null) {
-              Provider.of<DepartamentsController>(context, listen: false)
-                  .addActivity(newActivity, widget.index);
-              /* setState(() {
-                widget.departaments.activity.add(newActivity);
-              }); */
-            }
-          });
+          createType(context);
         },
       ),
     );
