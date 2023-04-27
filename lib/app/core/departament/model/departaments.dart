@@ -10,7 +10,6 @@ class Departaments with ChangeNotifier {
   final String imageUrl;
   List<Activity> activity = [];
 
-
   Departaments({
     required this.id,
     required this.name,
@@ -19,24 +18,11 @@ class Departaments with ChangeNotifier {
     required this.activity,
   });
 
-
-  void addActivity(Activity activities){
-    activity.add(activities);
-    notifyListeners();
-  }
-
-   void removActivity(int index){
-    activity.removeAt(index);
-  }
-
-  void updateActivity(Activity activities){
+  void updateActivity(Activity activities) {
     int index = activity.indexWhere((d) => d.id == activities);
-    if(index >= 0){
+    if (index >= 0) {
       activity[index] = activities;
       notifyListeners();
-    } 
-
+    }
   }
-
- 
 }
