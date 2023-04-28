@@ -51,7 +51,7 @@ class GridDepartaments extends StatelessWidget {
                   Center(
                     child: SizedBox(
                       child: CircleAvatar(
-                        radius: isDesktop ? dimension.height *.17 : 50,
+                        radius: isDesktop ? dimension.height *.17 : 52,
                         backgroundImage: ResizeImage(
                           NetworkImage(depart.imageUrl),
                           width: (dimension.width * 0.60).toInt() ,
@@ -69,8 +69,8 @@ class GridDepartaments extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.only(top: isDesktop ? 220 : 82),
                       child: Container(
-                        height: isDesktop ?  40 : 40,
-                        width: isDesktop ? 180 : 90,
+                        height: isDesktop ?  40 : 35,
+                        width: isDesktop ? 180 : 80,
                         decoration: const BoxDecoration(
                           color: Colors.deepPurple,
                           borderRadius: BorderRadius.only(
