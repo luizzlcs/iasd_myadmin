@@ -16,30 +16,7 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
   
   
  
-  /* List<Departaments> listDepartaments = [
-    Departaments(
-      id: '11',
-      name: 'Desbravadores',
-      description: 'Para Crianças',
-      imageUrl: 'null',
-      activity: [],
-    ),
-    Departaments(
-      id: '12',
-      name: 'Jovens',
-      description: 'Acima de 18 anos',
-      imageUrl: 'null',
-      activity: [],
-    ),
-    Departaments(
-      id: '13',
-      name: 'Aventureiros',
-      description: '6 a 9 anos',
-      imageUrl: 'null',
-      activity: [],
-    ),
-  ]; */
-
+  
   @override
   Widget build(BuildContext context) {
     final listDepartaments = Provider.of<DepartamentsController>(context, listen: true).departament;

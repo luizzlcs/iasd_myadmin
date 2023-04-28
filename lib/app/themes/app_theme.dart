@@ -19,7 +19,7 @@ class AppTheme with ChangeNotifier {
     brightness: Brightness.dark,
     primarySwatch: Colors.green,
     visualDensity: VisualDensity.adaptivePlatformDensity,
-    iconTheme: const IconThemeData(size: 25, color: Colors.red),
+    iconTheme:  const IconThemeData(size: 25, color:  Colors.red),
     textTheme: const TextTheme(
       bodyMedium: TextStyle(
           color: Colors.white, fontStyle: FontStyle.italic, fontSize: 15),

@@ -97,7 +97,7 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
               TextButton(
                   child: const Text("Salvar"),
                   onPressed: () {
-                    selectedIcon ??= Icons.credit_score;
+                    selectedIcon ??= Icons.fact_check;
                     final newActivities = Activity(
                       id: Random().nextDouble().toString(),
                       name: nameActivityEC.text,
@@ -172,7 +172,7 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                             elevation: 3,
                             child: const Padding(
                               padding: EdgeInsets.all(16),
-                              child: Text("Lista de munus das atividades"),
+                              child: Text("Lista de menus das atividades"),
                             )),
                       ),
                     ],

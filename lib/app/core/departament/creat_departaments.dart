@@ -113,9 +113,9 @@ class _CreatDepartamentsState extends State<CreatDepartaments> {
                     activity: [
                       Activity(
                         id: Random().nextDouble().toString(),
-                        name: 'Painel',
+                        name: 'Home',
                         page: '/dashBoard',
-                        icon: Icons.arrow_circle_left_outlined,
+                        icon: Icons.home,
                       ),
                     ],
                   );
