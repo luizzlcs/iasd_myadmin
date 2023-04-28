@@ -5,9 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     
    <application
-        android:label="iasd_myadmin"
+        android:label="MyAdmin7"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
