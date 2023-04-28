@@ -12,8 +12,8 @@ final List<Departaments> dummyData = [
       activity: [
         Activity(
           id: "0",
-          name: "Painel",
-          icon: Icons.arrow_circle_left_outlined,
+          name: "Home",
+          icon: Icons.home,
           page: '/dashBoard',
         ),
         Activity(
@@ -38,8 +38,8 @@ final List<Departaments> dummyData = [
       activity: [
         Activity(
           id: "0",
-          name: "Painel",
-          icon: Icons.arrow_circle_left_outlined,
+          name: "Home",
+          icon: Icons.home,
           page: '/dashBoard',
         ),
         Activity(
@@ -70,8 +70,8 @@ final List<Departaments> dummyData = [
       activity: [
         Activity(
           id: "0",
-          name: "Painel",
-          icon: Icons.arrow_circle_left_outlined,
+          name: "Home",
+          icon: Icons.home,
           page: '/dashBoard',
         ),
         Activity(
@@ -108,8 +108,8 @@ final List<Departaments> dummyData = [
       activity: [
         Activity(
           id: "0",
-          name: "Painel",
-          icon: Icons.arrow_circle_left_outlined,
+          name: "Home",
+          icon: Icons.home,
           page: '/dashBoard',
         ),
         Activity(
