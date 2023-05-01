@@ -38,7 +38,7 @@ class AppDrawerActivities extends StatelessWidget {
               width: 34,
               height: 34,
               decoration: BoxDecoration(
-                  color: isDark ? Colors.yellow : Colors.purple,
+                  color: isDark ? Colors.amber : Colors.purple,
                   borderRadius: BorderRadius.circular(200)),
               child: Icon(activities[index].icon, color: isDark ? Colors.red : Colors.white,),
             ),
