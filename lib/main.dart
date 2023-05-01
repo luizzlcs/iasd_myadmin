@@ -48,6 +48,7 @@ class _MyAppState extends State<MyApp> {
       behavior: HitTestBehavior.opaque,
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: MaterialApp(
+        title: 'MyAdmin7',
         theme: Provider.of<AppTheme>(context).myTheme,
         debugShowCheckedModeBanner: false,
         routes: {
