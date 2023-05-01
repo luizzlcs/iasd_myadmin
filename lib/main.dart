@@ -8,6 +8,7 @@ import 'package:iasd_myadmin/app/core/login/screen/login_screen.dart';
 import 'package:iasd_myadmin/app/themes/app_theme.dart';
 import 'package:iasd_myadmin/app/util/app_routes.dart';
 import 'package:provider/provider.dart';
+import 'app/components/page_constrution.dart';
 import 'app/core/dashboard/dashboard_screen.dart';
 import 'app/core/departament/list_departamets_screen.dart';
 
@@ -57,6 +58,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.secretaria: (_) => const SecretaryScreen(),
           AppRoutes.navegacao: (_) => const Navegacao(),
           AppRoutes.listDepartament: (_) => const ListDepartamentScreen(),
+          AppRoutes.pageConstrution: (_) => const PageConstrution(),
         },
       ),
     );

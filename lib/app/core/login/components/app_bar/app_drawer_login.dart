@@ -19,7 +19,15 @@ class AppDrawerLogin extends StatelessWidget {
             leading: const Icon(Icons.diversity_3),
             title: const Text('QUEM SOMOS'),
             onTap: () {
-              Navigator.of(context).pushNamed(AppRoutes.dashBoard);
+              Navigator.of(context).pushNamed(AppRoutes.pageConstrution);
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.import_contacts),
+            title: const Text('NOSSAS CRENÇAS'),
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoutes.pageConstrution);
             },
           ),
           const Divider(),
@@ -27,33 +35,34 @@ class AppDrawerLogin extends StatelessWidget {
             leading: const Icon(Icons.contacts),
             title: const Text('CONTATENOS'),
             onTap: () {
-              Navigator.of(context).pushNamed(AppRoutes.listDepartament);
+              Navigator.of(context).pushNamed(AppRoutes.pageConstrution);
             },
           ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.location_on),
             title: const Text('ONDE ESTAMOS'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoutes.pageConstrution);
+            },
           ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.event_available),
             title: const Text('NOSSA AGENDA'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoutes.pageConstrution);
+            },
           ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.wb_twilight),
             title: const Text('POR DO SOL'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoutes.pageConstrution);
+            },
           ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.import_contacts),
-            title: const Text('NOSSAS CRENÇAS'),
-            onTap: () {},
-          ),
+          
           
         ],
       ),

@@ -15,45 +15,46 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (_, constraints) {
-
-      return Scaffold(
-        appBar:  PreferredSize(
-          preferredSize: const Size(double.infinity, 56),
-          child: constraints.maxWidth <= 650 ? const AppBarMobile() : const AppBarWeb(),
-        ),
-        endDrawer: const AppDrawerLogin(),
-        body: Background(
-          child: SingleChildScrollView(
-            child: Responsive(
-              mobile: const MobileLoginScreen(),
-              desktop: Row(
-                children: [
-                  Expanded(
-                    child: Provider.of<ControllerAlthLogin>(context).isLogin()
-                        ? const LoginScreenTopImage()
-                        : const SignUpScreenTopImage(),
-                  ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        SizedBox(
-                          width: 450,
-                          child: LoginForm(),
-                        ),
-                      ],
+    return LayoutBuilder(
+      builder: (_, constraints) {
+        return Scaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size(double.infinity, 56),
+            child: constraints.maxWidth <= 650
+                ? const AppBarMobile()
+                : const AppBarWeb(),
+          ),
+          
+          endDrawer: (constraints.maxWidth <650) ?  const AppDrawerLogin(): null,
+          body: Background(
+            child: SingleChildScrollView(
+              child: Responsive(
+                mobile: const MobileLoginScreen(),
+                desktop: Row(
+                  children: [
+                    Expanded(
+                      child: Provider.of<ControllerAlthLogin>(context).isLogin()
+                          ? const LoginScreenTopImage()
+                          : const SignUpScreenTopImage(),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          SizedBox(
+                            width: 450,
+                            child: LoginForm(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      );
-      
-    },
-      
+        );
+      },
     );
   }
 }
