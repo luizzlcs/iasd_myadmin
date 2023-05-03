@@ -41,9 +41,9 @@ Future<void> main() async {
   options: DefaultFirebaseOptions.currentPlatform,
 );
 FirebaseFirestore.instance.collection('client').doc().set({
-  'name': 'Luiz Carlo',
-  'phone': '84988369729',
-  'email': 'luizzlcs@gmail.com'
+  'name': 'Lucicleide',
+  'phone': '84988975886',
+  'email': 'cleidinha_amore@gmail.com'
 });
 }
 
