@@ -66,7 +66,7 @@ final List<Departaments> dummyData = [
       name: 'Aventureiros',
       description: 'meninos e meninas entre 6 e 9 anos',
       imageUrl:
-          'https://s3.amazonaws.com/media.adventistas.org/apps/pt/2015/10/29130137/Aventureiros.png',
+          '',
       activity: [
         Activity(
           id: "0",

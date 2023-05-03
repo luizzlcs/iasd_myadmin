@@ -12,26 +12,32 @@ class GridDepartaments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dimension = MediaQuery.of(context).size;
+    final dimension = MediaQuery.of(context).size.width;
+    final double scaleFactor = dimension / 100;
     final departament = Provider.of<DepartamentsController>(context);
 
     final isDesktop = Responsive.isDesktop(context);
+    final isDark = Provider.of<AppTheme>(context).isDark();
 
     return GridView.builder(
       padding: const EdgeInsets.all(defaultPadding),
       itemCount: departament.departament.length,
       itemBuilder: (context, index) {
         Departaments depart = departament.departament[index];
+        final bool isUrlNull = depart.imageUrl.isEmpty;
         return Ink(
           decoration: BoxDecoration(
             color: Provider.of<AppTheme>(context).isDark()
                 ? Colors.white.withOpacity(0.2)
                 : Colors.black.withOpacity(0.5),
-            borderRadius:  BorderRadius.only(
-              topRight: Radius.circular(dimension.height * .3),
-              topLeft: Radius.circular(dimension.height * .3),
-              bottomLeft: Radius.circular(dimension.height * .01),
-              bottomRight: Radius.circular(dimension.height * .3),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(
+                  isDesktop ? scaleFactor * 10 : scaleFactor * 14),
+              topLeft: Radius.circular(
+                  isDesktop ? scaleFactor * 10 : scaleFactor * 14),
+              bottomLeft: Radius.circular(scaleFactor * 0.5),
+              bottomRight: Radius.circular(
+                  isDesktop ? scaleFactor * 10 : scaleFactor * 14),
             ),
           ),
           child: InkWell(
@@ -50,27 +56,90 @@ class GridDepartaments extends StatelessWidget {
                 children: [
                   Center(
                     child: SizedBox(
-                      child: CircleAvatar(
-                        radius: isDesktop ? dimension.height *.17 : 52,
-                        backgroundImage: ResizeImage(
-                          NetworkImage(depart.imageUrl),
-                          width: (dimension.width * 0.60).toInt() ,
-                          height: (dimension.width * 0.60).toInt() ,
-                        ),
-                      ),
+                      child: isUrlNull
+                          ? CircleAvatar(
+                              backgroundColor: isDark
+                                  ? Colors.black54
+                                  : const Color.fromARGB(255, 247, 245, 248),
+                              radius: isDesktop
+                                  ? scaleFactor * 8.5
+                                  : scaleFactor * 12.5,
+                              child: Text(
+                                'MyAdmin7',
+                                style: TextStyle(
+                                  fontSize: isDesktop
+                                      ? scaleFactor * 2
+                                      : scaleFactor * 5,
+                                ),
+                              ),
+                            )
+                          : CircleAvatar(
+                              radius: isDesktop
+                                  ? scaleFactor * 8.5
+                                  : scaleFactor * 12.5,
+                              backgroundImage: ResizeImage(
+                                NetworkImage(depart.imageUrl),
+                                width: (scaleFactor * 0.60).toInt(),
+                                height: (scaleFactor * 0.60).toInt(),
+                              ),
+                            ),
                     ),
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+              Column(
                 children: [
                   Center(
                     child: Padding(
-                      padding: EdgeInsets.only(top: isDesktop ? 220 : 82),
+                      padding: EdgeInsets.only(
+                        top: isDesktop ? scaleFactor * 13 : scaleFactor * 17.7,
+                        right: isDesktop ? scaleFactor * 15 : scaleFactor * 19,
+                      ),
                       child: Container(
-                        height: isDesktop ?  40 : 35,
-                        width: isDesktop ? 180 : 80,
+                        height: isDesktop ? scaleFactor * 2 : scaleFactor * 4.9,
+                        width: isDesktop ? scaleFactor * 5 : scaleFactor * 10,
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(
+                              isDesktop ? scaleFactor * 5 : scaleFactor * 3,
+                            ),
+                            bottomLeft: Radius.circular(
+                              isDesktop ? scaleFactor * 5 : scaleFactor * 3,
+                            ),
+                            topRight: Radius.circular(
+                              isDesktop ? scaleFactor * 5 : scaleFactor * 3,
+                            ),
+                            bottomRight: Radius.circular(
+                              isDesktop ? scaleFactor * 5 : scaleFactor * 3,
+                            ),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.edit_note_sharp,
+                              color: Colors.white,
+                              size: isDesktop
+                                  ? scaleFactor * 1.9
+                                  : scaleFactor * 3.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: isDesktop ? scaleFactor * 0.35 : scaleFactor * 0.6,
+                        right: isDesktop ? scaleFactor * 6 : scaleFactor * 8.2,
+                      ),
+                      child: Container(
+                        height: isDesktop ? scaleFactor * 3 : scaleFactor * 5,
+                        width: isDesktop ? scaleFactor * 13 : scaleFactor * 20,
                         decoration: const BoxDecoration(
                           color: Colors.deepPurple,
                           borderRadius: BorderRadius.only(
@@ -81,41 +150,17 @@ class GridDepartaments extends StatelessWidget {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: isDesktop
+                              ? const EdgeInsets.only(top: 7)
+                              : const EdgeInsets.only(top: 2),
                           child: Text(
-                            overflow: TextOverflow.ellipsis,
                             depart.name,
-                            style: Provider.of<AppTheme>(context, listen: false)
-                                    .isDark()
-                                ? const TextStyle(color: Colors.white)
-                                : const TextStyle(color: Colors.white),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isDesktop
+                                    ? scaleFactor * 1.3
+                                    : scaleFactor * 2.7),
                             textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: isDesktop ? 220 : 82),
-                      child: Container(
-                        height: isDesktop ? 40 : 40,
-                        width: isDesktop ? 50 : 30,
-                        decoration: const BoxDecoration(
-                          color: Colors.deepPurple,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(50),
-                            bottomLeft: Radius.circular(5),
-                            topRight: Radius.circular(5),
-                            bottomRight: Radius.circular(5),
-                          ),
-                        ),
-                        child: IconButton(
-                          alignment: Alignment.topCenter,
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.edit_note_sharp,
-                            color: Colors.white,
                           ),
                         ),
                       ),
