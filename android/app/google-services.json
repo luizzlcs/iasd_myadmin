@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "845731035159",
+    "firebase_url": "https://iasd-admin-default-rtdb.firebaseio.com",
+    "project_id": "iasd-admin",
+    "storage_bucket": "iasd-admin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845731035159:android:88b25d0b3bcc1c07b00452",
+        "android_client_info": {
+          "package_name": "br.com.myadmin7"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "845731035159-b551egkcsoiso6hlm03hv9vcampct6ct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcqr-PLzFJ8gagplddBvcjlr-J5gM-l_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "845731035159-b551egkcsoiso6hlm03hv9vcampct6ct.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845731035159:android:724fa4e8fd43f367b00452",
+        "android_client_info": {
+          "package_name": "com.example.iasd_myadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "845731035159-b551egkcsoiso6hlm03hv9vcampct6ct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcqr-PLzFJ8gagplddBvcjlr-J5gM-l_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "845731035159-b551egkcsoiso6hlm03hv9vcampct6ct.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

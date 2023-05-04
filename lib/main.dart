@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
 import 'package:iasd_myadmin/app/core/secretaria/screens/navegacao.dart';
@@ -12,7 +15,7 @@ import 'app/components/page_constrution.dart';
 import 'app/core/dashboard/dashboard_screen.dart';
 import 'app/core/departament/list_departamets_screen.dart';
 
-void main() {
+Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
@@ -28,11 +31,20 @@ void main() {
         ChangeNotifierProvider(
           create: (context) => Auth(),
         ),
-        
       ],
       child: const MyApp(),
+      
     ),
   );
+
+  await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
+FirebaseFirestore.instance.collection('client').doc().set({
+  'name': 'Lucicleide',
+  'phone': '84988975886',
+  'email': 'cleidinha_amore@gmail.com'
+});
 }
 
 class MyApp extends StatefulWidget {
