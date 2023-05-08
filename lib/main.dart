@@ -2,18 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/app/core/departament/controllers/departaments_controller.dart';
-import 'package:iasd_myadmin/app/core/secretaria/screens/navegacao.dart';
-import 'package:iasd_myadmin/app/core/secretaria/screens/secretary_screen.dart';
-import 'package:iasd_myadmin/app/core/login/model/auth.dart';
-import 'package:iasd_myadmin/app/core/login/controller/controller_alth_login.dart';
-import 'package:iasd_myadmin/app/core/login/screen/login_screen.dart';
-import 'package:iasd_myadmin/app/themes/app_theme.dart';
-import 'package:iasd_myadmin/app/util/app_routes.dart';
+import 'package:iasd_myadmin/app/pages/departament/controllers/departaments_controller.dart';
+import 'package:iasd_myadmin/app/pages/secretaria/navegacao.dart';
+import 'package:iasd_myadmin/app/pages/secretaria/secretary_screen.dart';
+import 'package:iasd_myadmin/app/model/auth.dart';
+import 'package:iasd_myadmin/app/pages/login/controller/controller_alth_login.dart';
+import 'package:iasd_myadmin/app/pages/login/login_screen.dart';
+import 'package:iasd_myadmin/app/core/ui/themes/app_theme.dart';
+import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 import 'package:provider/provider.dart';
-import 'app/components/page_constrution.dart';
-import 'app/core/dashboard/dashboard_screen.dart';
-import 'app/core/departament/list_departamets_screen.dart';
+import 'app/core/ui/components/page_constrution.dart';
+import 'app/pages/dashboard/dashboard_screen.dart';
+import 'app/pages/departament/list_departamets_screen.dart';
 
 Future<void> main() async {
   runApp(

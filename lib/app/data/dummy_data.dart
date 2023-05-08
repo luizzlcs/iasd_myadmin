@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/app/core/departament/model/activity.dart';
-import 'package:iasd_myadmin/app/core/departament/model/departaments.dart';
+import 'package:iasd_myadmin/app/model/activity.dart';
+import 'package:iasd_myadmin/app/model/departaments.dart';
 
 final List<Departaments> dummyData = [
   Departaments(
