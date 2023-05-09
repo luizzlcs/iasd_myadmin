@@ -4,23 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/model/activity.dart';
 
 class Departaments with ChangeNotifier {
-  final String? id;
+  String? id;
   final String name;
   final String description;
   final String imageUrl;
   List<Activity> activity = [];
 
   Departaments({
-    this.id,
+     this.id,
     required this.name,
     required this.description,
     required this.imageUrl,
     required this.activity,
   });
-
-
-
-  
 
   void updateActivity(Activity activities) {
     int index = activity.indexWhere((d) => d.id == activities);
@@ -33,7 +29,6 @@ class Departaments with ChangeNotifier {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
   
-    result.addAll({'id': id});
     result.addAll({'name': name});
     result.addAll({'description': description});
     result.addAll({'imageUrl': imageUrl});
