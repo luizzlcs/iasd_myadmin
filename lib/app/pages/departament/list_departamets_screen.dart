@@ -1,13 +1,10 @@
-import 'dart:math';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/pages/departament/controllers/departaments_controller.dart';
-import 'package:iasd_myadmin/app/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import '../../model/activity.dart';
 import '../../model/departaments.dart';
 import 'list_activity_screen.dart';
-import 'package:uuid/uuid.dart';
 
 class ListDepartamentScreen extends StatefulWidget {
   const ListDepartamentScreen({Key? key}) : super(key: key);
@@ -17,20 +14,25 @@ class ListDepartamentScreen extends StatefulWidget {
 }
 
 class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
-  var uuid = Uuid();
   TextEditingController nameEC = TextEditingController();
   TextEditingController descricaoEC = TextEditingController();
   TextEditingController imageEC = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
 
-  _submitForm() {
-    debugPrint('Salvando dados');
-    final isValid = _formKey.currentState?.validate() ?? false;
+  FocusNode descricaoFocus = FocusNode();
+  FocusNode nameFocus = FocusNode();
+  FocusNode imageFocus = FocusNode();
+  FocusNode textButtonSaveFocus = FocusNode();
+  bool isLoading = false;
 
-    if (!isValid) {
-      return;
+  List disposable = [];
+
+  @override
+  void dispose() {
+    for (var disposables in disposable) {
+      disposables.dispose();
     }
+    super.dispose();
   }
 
   Widget _buildModal() {
@@ -90,6 +92,10 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
   }
 
   Widget formsDepartaments() {
+    disposable.add(descricaoEC);
+    disposable.add(nameEC);
+    disposable.add(imageEC);
+
     return Form(
       key: _formKey,
       child: Column(
@@ -99,12 +105,16 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
           ),
           TextFormField(
             controller: nameEC,
+            autofocus: true,
             decoration: const InputDecoration(
-                isDense: true,
-                labelText: 'Nome',
-                hintText: 'Nome do departamento',
-                border: OutlineInputBorder()),
+              isDense: true,
+              labelText: 'Nome',
+              hintText: 'Nome do departamento',
+              border: OutlineInputBorder(),
+            ),
             textInputAction: TextInputAction.next,
+            onFieldSubmitted: (value) =>
+                FocusScope.of(context).requestFocus(descricaoFocus),
             validator: (value) {
               final values = value ?? '';
               if (values.trim().isEmpty) {
@@ -124,6 +134,9 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                 hintText: 'Descrição do departamento',
                 border: OutlineInputBorder()),
             textInputAction: TextInputAction.next,
+            focusNode: descricaoFocus,
+            onFieldSubmitted: (value) =>
+                FocusScope.of(context).requestFocus(imageFocus),
             validator: (value) {
               final values = value ?? '';
               if (values.trim().isEmpty) {
@@ -143,53 +156,81 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                 hintText: 'Imagem do departamento',
                 border: OutlineInputBorder()),
             textInputAction: TextInputAction.done,
-            onFieldSubmitted: (_) => _submitForm(),
+            focusNode: imageFocus,
+            onFieldSubmitted: (value) =>
+                FocusScope.of(context).requestFocus(textButtonSaveFocus),
           ),
           const SizedBox(
             height: 15,
           ),
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(minimumSize: const Size(300, 50)),
-            onPressed: () {
-              // if(_submitForm())
-              final isValid = _formKey.currentState?.validate() ?? false;
-              if (isValid) {
-                final name = nameEC.text;
-                final descricao = descricaoEC.text;
-                final image = imageEC.text;
+          StatefulBuilder(
+            builder: (context, setState) {
+              return isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton.icon(
+                      focusNode: textButtonSaveFocus,
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(300, 50)),
+                      onPressed: () async {
+                        final isValid =
+                            _formKey.currentState?.validate() ?? false;
+                        if (isValid) {
+                          final name = nameEC.text;
+                          final descricao = descricaoEC.text;
+                          final image = imageEC.text;
 
-                Departaments newDepartaments = Departaments(
-                  id: uuid.v1(),
-                  name: name,
-                  description: descricao,
-                  imageUrl: image,
-                  activity: [
-                    Activity(
-                      id: Random().nextDouble().toString(),
-                      name: 'Home',
-                      page: '/dashBoard',
-                      icon: Icons.home,
-                    ),
-                  ],
-                );
+                          // Se o formulário for válido HABILITA o CircularProgressIndicator
+                          setState(
+                            () {
+                              if (isValid) {
+                                isLoading = true;
+                              }
+                            },
+                          );
 
-                final firestore = FirestoreService();
+                          Departaments newDepartaments = Departaments(
+                            name: name,
+                            description: descricao,
+                            imageUrl: image,
+                            activity: [
+                              Activity(
+                                name: 'Home',
+                                page: '/dashBoard',
+                                icon: Icons.home,
+                              ),
+                            ],
+                          );
 
-                firestore.insert(
-                  collectionName: 'departaments',
-                  documentName: newDepartaments.id,
-                  data: newDepartaments.toMap(),
-                );
+                          final firestore = FirebaseFirestore.instance;
 
-                Provider.of<DepartamentsController>(context, listen: false)
-                    .addDepartaments(newDepartaments);
-                Navigator.of(context).pop();
+                          var query =
+                              await firestore.collection('departaments').add(
+                                    newDepartaments.toMap(),
+                                  );
+                          newDepartaments.id = query.id;
+                          debugPrint(
+                              'COLLECTION: ${query.parent.path} ID: ${query.id}');
 
-                return;
-              }
+                          // Se o formulário for válido DESABILITA o CircularProgressIndicator
+                          setState(
+                            () {
+                              if (isValid) {
+                                isLoading = false;
+                              }
+                            },
+                          );
+                          Provider.of<DepartamentsController>(context,
+                                  listen: false)
+                              .addDepartaments(newDepartaments);
+                          Navigator.of(context).pop();
+
+                          return;
+                        }
+                      },
+                      icon: const Icon(Icons.save),
+                      label: const Text('Salvar'),
+                    );
             },
-            icon: const Icon(Icons.save),
-            label: const Text('Salvar'),
           ),
           const SizedBox(
             height: 15,
@@ -273,7 +314,11 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                 builder: (context) {
                   return _buildModal();
                 },
-              );
+              ).then((value) {
+                nameEC.text = '';
+                descricaoEC.text = '';
+                imageEC.text = '';
+              });
             },
           ),
         ],
