@@ -21,7 +21,6 @@ class Activity {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
   
-    result.addAll({'id': id});
     result.addAll({'name': name});
     if(icon != null){
       result.addAll({'icon': icon!.codePoint});
