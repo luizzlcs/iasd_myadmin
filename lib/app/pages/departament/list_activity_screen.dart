@@ -1,11 +1,14 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iasd_myadmin/app/model/activity.dart';
 import 'package:iasd_myadmin/app/model/departaments.dart';
 import 'package:iasd_myadmin/app/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import '../../core/ui/components/icon_picker.dart';
 import '../../core/ui/themes/app_theme.dart';
+import '../../core/util/responsive.dart';
 import 'controllers/departaments_controller.dart';
 import 'package:uuid/uuid.dart';
 
@@ -21,15 +24,21 @@ class ListActivityScreen extends StatefulWidget {
 }
 
 class _ListActivityScreenState extends State<ListActivityScreen> {
-  var uuid = Uuid();
+  List disposable = [];
+  bool isLoading = false;
   void createType(context) {
     final isDark = Provider.of<AppTheme>(context, listen: false).isDark();
-    final firestore = FirestoreService();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     TextEditingController nameActivityEC = TextEditingController();
     TextEditingController nameRouteEC = TextEditingController();
     IconData? selectedIcon;
     FocusNode nameRoute = FocusNode();
     FocusNode selectIcon = FocusNode();
+
+    disposable.add(nameActivityEC);
+    disposable.add(nameRouteEC);
+    disposable.add(nameRoute);
+    disposable.add(selectIcon);
 
     showDialog(
         context: context,
@@ -40,6 +49,7 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
             content: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Form(
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -54,6 +64,13 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                         labelText: 'Nome da atividade',
                         icon: Icon(Icons.data_exploration),
                       ),
+                      validator: (values) {
+                        final String value = values ?? '';
+                        if (value.trim().isEmpty) {
+                          return 'O campo deve ser prenchido.';
+                        }
+                        return null;
+                      },
                     ),
                     TextFormField(
                       focusNode: nameRoute,
@@ -62,6 +79,13 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                         labelText: 'Rota da pagina',
                         icon: Icon(Icons.apps_outage),
                       ),
+                      validator: (values) {
+                        final String value = values ?? '';
+                        if (value.trim().isEmpty) {
+                          return 'O campo deve ser prenchido.';
+                        }
+                        return null;
+                      },
                       onFieldSubmitted: (_) =>
                           FocusScope.of(context).requestFocus(selectIcon),
                     ),
@@ -96,30 +120,49 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
               ),
             ),
             actions: [
-              TextButton(
-                  child: const Text("Salvar"),
-                  onPressed: () {
-                    selectedIcon ??= Icons.fact_check;
-                    final newActivities = Activity(
-                      id: uuid.v1(),
-                      name: nameActivityEC.text,
-                      page: nameRouteEC.text,
-                      icon: selectedIcon,
-                    );
+              StatefulBuilder(
+                builder: (context, setState) {
+                  return isLoading
+                      ? const CircularProgressIndicator()
+                      : TextButton(
+                          child: const Text("Salvar"),
+                          onPressed: () async {
+                            final isValid =
+                                formKey.currentState?.validate() ?? false;
+                            if (isValid) {
+                              selectedIcon ??= Icons.fact_check;
+                              final newActivities = Activity(
+                                name: nameActivityEC.text,
+                                page: nameRouteEC.text,
+                                icon: selectedIcon,
+                              );
 
-                    firestore.dbFirestore
-                        .collection('departaments')
-                        .doc(widget.departaments.id)
-                        .collection('activity')
-                        .doc(newActivities.id)
-                        .set(
-                          newActivities.toMap(),
-                        );
-                    Provider.of<DepartamentsController>(context, listen: false)
-                        .addActivity(newActivities, widget.index);
-                    selectedIcon = null;
-                    Navigator.pop(context);
-                  }),
+                              // Se o formulário for válido HABILITA o CircularProgressIndicator
+                              setState(() {
+                                if (isValid) isLoading = true;
+                              });
+                              FirebaseFirestore firestore =
+                                  FirebaseFirestore.instance;
+                              await firestore
+                                  .collection('departaments')
+                                  .doc(widget.departaments.id)
+                                  .collection('activity')
+                                  .add(newActivities.toMap());
+
+                              Provider.of<DepartamentsController>(context,
+                                      listen: false)
+                                  .addActivity(newActivities, widget.index);
+                              selectedIcon = null;
+
+                              // Se o formulário for válido DESABILITA o CircularProgressIndicator
+                              Navigator.pop(context);
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+                          });
+                },
+              ),
               TextButton(
                   child: const Text("Calcelar"),
                   onPressed: () async {
@@ -132,122 +175,166 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    for (var disposables in disposable) {
+      disposables.dispose();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isDesktop = Responsive.isDesktop(context);
     final listActivities =
         Provider.of<DepartamentsController>(context).departament;
     final isDark = Provider.of<AppTheme>(
       context,
     ).isDark();
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Menu de atividades '),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.99,
-              child: Card(
-                shadowColor: Colors.black54,
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          widget.departaments.name.toUpperCase(),
-                          style: const TextStyle(fontSize: 22),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        double scaleFactor = constraints.maxWidth / 100;
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Menu de atividades '),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    constraints: const BoxConstraints(maxWidth: 900),
+                    child: Card(
+                      shadowColor: Colors.black54,
+                      elevation: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Container(
+                                constraints:
+                                    const BoxConstraints(minWidth: 900),
+                                decoration: BoxDecoration(
+                                    color: Colors.blue.withOpacity(0.2),
+                                    borderRadius: const BorderRadius.only(
+                                      topRight: Radius.circular(100),
+                                      bottomRight: Radius.circular(100),
+                                    )),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 5, right: 40, top: 5, bottom: 5),
+                                  child: Text(
+                                    widget.departaments.name.toUpperCase(),
+                                    style: const TextStyle(fontSize: 22),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                widget.departaments.description,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.99,
+                              child: Card(
+                                  color: isDark
+                                      ? const Color.fromARGB(255, 87, 85, 85)
+                                      : Colors.white,
+                                  shadowColor: Colors.black,
+                                  elevation: 3,
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child:
+                                        Text("Lista de menus das atividades"),
+                                  )),
+                            ),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          widget.departaments.description,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.99,
-                        child: Card(
-                            color: isDark
-                                ? const Color.fromARGB(255, 87, 85, 85)
-                                : Colors.white,
-                            shadowColor: Colors.black,
-                            elevation: 3,
-                            child: const Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Text("Lista de menus das atividades"),
-                            )),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Card(
-                shadowColor: Colors.black,
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    itemCount: widget.departaments.activity.length,
-                    itemBuilder: (context, index) {
-                      return Card(
+                  Expanded(
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 900),
+                      child: Card(
                         shadowColor: Colors.black,
-                        elevation: 9,
-                        color: const Color.fromARGB(255, 130, 131, 134),
-                        surfaceTintColor: Colors.amber[200],
-                        child: ListTile(
-                          leading: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: Colors.amber,
-                                borderRadius: BorderRadius.circular(100)),
-                            child: Icon(listActivities[widget.index]
-                                .activity[index]
-                                .icon),
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                            itemCount: widget.departaments.activity.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                shadowColor: Colors.black,
+                                elevation: 9,
+                                color: const Color.fromARGB(255, 130, 131, 134),
+                                surfaceTintColor: Colors.amber[200],
+                                child: ListTile(
+                                  leading: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        color: Colors.amber,
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    child: Icon(listActivities[widget.index]
+                                        .activity[index]
+                                        .icon),
+                                  ),
+                                  title: Text(listActivities[widget.index]
+                                      .activity[index]
+                                      .name),
+                                  subtitle: Text(listActivities[widget.index]
+                                      .activity[index]
+                                      .page),
+                                  hoverColor: Colors.deepOrange,
+                                  onTap: () {
+                                    Provider.of<DepartamentsController>(context,
+                                            listen: false)
+                                        .removActivity(
+                                            departamentIndex: widget.index,
+                                            activityIdex: index);
+                                    debugPrint(
+                                        'Index Departamento: ${widget.index}');
+                                    debugPrint('Index atividade: $index');
+                                    setState(() {});
+                                  },
+                                ),
+                              );
+                            },
                           ),
-                          title: Text(listActivities[widget.index]
-                              .activity[index]
-                              .name),
-                          subtitle: Text(listActivities[widget.index]
-                              .activity[index]
-                              .page),
-                          hoverColor: Colors.deepOrange,
-                          onTap: () {
-                            Provider.of<DepartamentsController>(context,
-                                    listen: false)
-                                .removActivity(
-                                    departamentIndex: widget.index,
-                                    activityIdex: index);
-                            debugPrint('Index Departamento: ${widget.index}');
-                            debugPrint('Index atividade: $index');
-                            setState(() {});
-                          },
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          createType(context);
-        },
-      ),
+          ),
+          floatingActionButton: Padding(
+            padding: EdgeInsets.only(
+              right: isDesktop ? scaleFactor * 25 : scaleFactor * 5.5,
+              bottom: isDesktop ? scaleFactor * 1.3 : scaleFactor * 5,
+            ),
+            child: SizedBox(
+              child: FloatingActionButton(
+                child: const Icon(Icons.add),
+                onPressed: () {
+                  createType(context);
+                },
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
