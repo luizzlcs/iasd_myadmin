@@ -22,6 +22,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
   final FocusNode _buttonLoginFocus = FocusNode();
   bool _passwordsMatch = false;
   bool _obscureText = true;
+  bool _isLoading = false;
   final FocusNode _loginFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
   final _emailEC = TextEditingController();
@@ -194,31 +195,39 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
           const SizedBox(height: defaultPadding),
           Hero(
             tag: "login_btn",
-            child: ElevatedButton(
-              focusNode: _buttonLoginFocus,
-              style: ElevatedButton.styleFrom(fixedSize: const Size(250, 40)),
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  try {
-                    if (isLogin != true) {
-                      await auth.singUp(_emailEC.text, _passwordEC.text);
-                    } else {
-                      await auth.login(_emailEC.text, _passwordEC.text);
-                    }
-                    if (!mounted) return;
-                    Navigator.of(context)
-                        .pushReplacementNamed(AppRoutes.dashBoard);
-                  } on AuthException catch (error) {
-                    _showErrorDialog(error.toString());
-                  } catch (error) {
-                    _showErrorDialog('ocorreu um erro inesperado');
-                  }
-                }
-              },
-              child: Text(
-                isLogin ? "Login".toUpperCase() : 'Criar conta'.toUpperCase(),
-              ),
-            ),
+            child: _isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    focusNode: _buttonLoginFocus,
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(250, 40)),
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          if (isLogin != true) {
+                            await auth.singUp(_emailEC.text, _passwordEC.text);
+                          } else {
+                            await auth.login(_emailEC.text, _passwordEC.text);
+                          }
+                          if (!mounted) return;
+                          Navigator.of(context)
+                              .pushReplacementNamed(AppRoutes.dashBoard);
+                        } on AuthException catch (error) {
+                          _showErrorDialog(error.toString());
+                        } catch (error) {
+                          _showErrorDialog('ocorreu um erro inesperado');
+                        }
+                      }
+                    },
+                    child: Text(
+                      isLogin
+                          ? "Login".toUpperCase()
+                          : 'Criar conta'.toUpperCase(),
+                    ),
+                  ),
           ),
           const SizedBox(height: defaultPadding),
           AlreadyHaveAnAccountCheck(
