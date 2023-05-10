@@ -14,6 +14,9 @@ class ListDepartamentScreen extends StatefulWidget {
 }
 
 class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
+
+ 
+
   TextEditingController nameEC = TextEditingController();
   TextEditingController descricaoEC = TextEditingController();
   TextEditingController imageEC = TextEditingController();
@@ -161,7 +164,7 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                 FocusScope.of(context).requestFocus(textButtonSaveFocus),
           ),
           const SizedBox(
-            height: 15,
+            height: 30,
           ),
           StatefulBuilder(
             builder: (context, setState) {
@@ -242,6 +245,7 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double scaleFactor = MediaQuery.of(context).size.height / 100;
     final listDepartaments =
         Provider.of<DepartamentsController>(context, listen: true).departament;
 
@@ -304,14 +308,16 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
             child: const Icon(Icons.add),
             onPressed: () {
               showModalBottomSheet(
-                constraints: const BoxConstraints(
+                backgroundColor: Colors.amber.withOpacity(0.0),
+                barrierColor: Colors.black.withOpacity(0.8),
+                isScrollControlled: true,
+                constraints:  BoxConstraints(
                   minWidth: 900,
                   maxWidth: 950,
-                  minHeight: 200,
-                  maxHeight: 400,
+                  maxHeight: scaleFactor * 72,
                 ),
                 context: context,
-                builder: (context) {
+                builder: (BuildContext context) {
                   return _buildModal();
                 },
               ).then((value) {
