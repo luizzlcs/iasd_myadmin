@@ -1,16 +1,12 @@
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:iasd_myadmin/app/model/activity.dart';
 import 'package:iasd_myadmin/app/model/departaments.dart';
-import 'package:iasd_myadmin/app/services/firestore_service.dart';
 import 'package:provider/provider.dart';
 import '../../core/ui/components/icon_picker.dart';
 import '../../core/ui/themes/app_theme.dart';
 import '../../core/util/responsive.dart';
 import 'controllers/departaments_controller.dart';
-import 'package:uuid/uuid.dart';
 
 class ListActivityScreen extends StatefulWidget {
   final Departaments departaments;
@@ -24,6 +20,9 @@ class ListActivityScreen extends StatefulWidget {
 }
 
 class _ListActivityScreenState extends State<ListActivityScreen> {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  List<Activity> activities = [];
+
   List disposable = [];
   bool isLoading = false;
   void createType(context) {
@@ -39,6 +38,22 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
     disposable.add(nameRouteEC);
     disposable.add(nameRoute);
     disposable.add(selectIcon);
+
+    void refresh() async {
+      List<Activity> temp = [];
+      QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
+          .collection('departaments')
+          .doc(widget.departaments.id)
+          .collection('activity')
+          .get();
+
+      for (var doc in snapshot.docs) {
+        temp.add(Activity.fromMap(doc.data()));
+      }
+      setState(() {
+        activities = temp;
+      });
+    }
 
     showDialog(
         context: context,
@@ -270,7 +285,7 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListView.builder(
-                            itemCount: widget.departaments.activity.length,
+                            itemCount: activities.length,
                             itemBuilder: (context, index) {
                               return Card(
                                 shadowColor: Colors.black,
@@ -285,16 +300,10 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                                         color: Colors.amber,
                                         borderRadius:
                                             BorderRadius.circular(100)),
-                                    child: Icon(listActivities[widget.index]
-                                        .activity[index]
-                                        .icon),
+                                    child: Icon(activities[index].icon),
                                   ),
-                                  title: Text(listActivities[widget.index]
-                                      .activity[index]
-                                      .name),
-                                  subtitle: Text(listActivities[widget.index]
-                                      .activity[index]
-                                      .page),
+                                  title: Text(activities[index].name),
+                                  subtitle: Text(activities[index].page),
                                   hoverColor: Colors.deepOrange,
                                   onTap: () {
                                     Provider.of<DepartamentsController>(context,

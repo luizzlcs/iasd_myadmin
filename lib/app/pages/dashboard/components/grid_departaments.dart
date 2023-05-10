@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/pages/departament/controllers/departaments_controller.dart';
 import 'package:iasd_myadmin/app/model/departaments.dart';
@@ -7,23 +8,49 @@ import 'package:iasd_myadmin/app/core/global/constants.dart';
 import 'package:iasd_myadmin/app/core/util/responsive.dart';
 import 'package:provider/provider.dart';
 
-class GridDepartaments extends StatelessWidget {
+class GridDepartaments extends StatefulWidget {
   const GridDepartaments({super.key});
+
+  @override
+  State<GridDepartaments> createState() => _GridDepartamentsState();
+}
+
+class _GridDepartamentsState extends State<GridDepartaments> {
+  final FirebaseFirestore  firestore = FirebaseFirestore.instance;
+  List<Departaments> departaments = [];
+
+  @override
+  void initState() {
+    refresh();
+    super.initState();
+  }
+
+  refresh() async {
+    List<Departaments> temp = [];
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await firestore.collection('departaments').get();
+
+    for (var doc in snapshot.docs) {
+      temp.add(Departaments.fromMap(doc.data()));
+    }
+    setState(() {
+      departaments = temp;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final dimension = MediaQuery.of(context).size.width;
     final double scaleFactor = dimension / 100;
-    final departament = Provider.of<DepartamentsController>(context);
+    // final departament = Provider.of<DepartamentsController>(context);
 
     final isDesktop = Responsive.isDesktop(context);
     final isDark = Provider.of<AppTheme>(context).isDark();
-
     return GridView.builder(
       padding: const EdgeInsets.all(defaultPadding),
-      itemCount: departament.departament.length,
+      itemCount: departaments.length,
       itemBuilder: (context, index) {
-        Departaments depart = departament.departament[index];
+        Departaments depart = departaments[index];
         final bool isUrlNull = depart.imageUrl.isEmpty;
         return Ink(
           decoration: BoxDecoration(
@@ -180,4 +207,7 @@ class GridDepartaments extends StatelessWidget {
       ),
     );
   }
+
+   
+
 }

@@ -14,8 +14,8 @@ class ListDepartamentScreen extends StatefulWidget {
 }
 
 class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
-
- 
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  List<Departaments> departaments = [];
 
   TextEditingController nameEC = TextEditingController();
   TextEditingController descricaoEC = TextEditingController();
@@ -31,12 +31,31 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
   List disposable = [];
 
   @override
+  void initState() {
+    refresh();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     for (var disposables in disposable) {
       disposables.dispose();
     }
     super.dispose();
   }
+
+  void refresh() async {
+    List<Departaments> temp = [];
+    QuerySnapshot<Map<String, dynamic>> sanpshot =
+        await firestore.collection('departaments').get();
+    for (var doc in sanpshot.docs) {
+      temp.add(Departaments.fromMap(doc.data()));
+    }
+    setState(() {
+      departaments = temp;
+    });
+  }
+
 
   Widget _buildModal() {
     return Container(
@@ -187,6 +206,7 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                             () {
                               if (isValid) {
                                 isLoading = true;
+                                refresh();
                               }
                             },
                           );
@@ -265,37 +285,42 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                     topRight: Radius.circular(20))),
             child: Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-              child: ListView.builder(
-                itemCount: listDepartaments.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    color: const Color.fromARGB(255, 55, 55, 56),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.purple,
-                        backgroundImage:
-                            NetworkImage(listDepartaments[index].imageUrl),
-                        child:
-                            Text(listDepartaments[index].name.substring(0, 3)),
-                      ),
-                      title: Text(listDepartaments[index].name),
-                      subtitle: Text(listDepartaments[index].description),
-                      hoverColor: Colors.deepOrange,
-                      onTap: () {
-                        debugPrint(
-                            ' Indice Departamento ${listDepartaments[index].name.toString()} $index');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ListActivityScreen(
-                                departaments: listDepartaments[index],
-                                index: index),
-                          ),
-                        );
-                      },
-                    ),
-                  );
+              child: RefreshIndicator(
+                onRefresh: () async{
+                  return refresh();
                 },
+                child: ListView.builder(
+                  itemCount: departaments.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      color: const Color.fromARGB(255, 55, 55, 56),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.purple,
+                          backgroundImage:
+                              NetworkImage(departaments[index].imageUrl),
+                          child:
+                              Text(departaments[index].name.substring(0, 3)),
+                        ),
+                        title: Text(departaments[index].name),
+                        subtitle: Text(departaments[index].description),
+                        hoverColor: Colors.deepOrange,
+                        onTap: () {
+                          debugPrint(
+                              ' Indice Departamento ${departaments[index].name.toString()} $index');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ListActivityScreen(
+                                  departaments: departaments[index],
+                                  index: index),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -311,7 +336,7 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                 backgroundColor: Colors.amber.withOpacity(0.0),
                 barrierColor: Colors.black.withOpacity(0.8),
                 isScrollControlled: true,
-                constraints:  BoxConstraints(
+                constraints: BoxConstraints(
                   minWidth: 900,
                   maxWidth: 950,
                   maxHeight: scaleFactor * 72,
