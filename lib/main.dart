@@ -40,11 +40,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
   options: DefaultFirebaseOptions.currentPlatform,
 );
-FirebaseFirestore.instance.collection('client').doc().set({
-  'name': 'Lucicleide',
-  'phone': '84988975886',
-  'email': 'cleidinha_amore@gmail.com'
-});
+
 }
 
 class MyApp extends StatefulWidget {
