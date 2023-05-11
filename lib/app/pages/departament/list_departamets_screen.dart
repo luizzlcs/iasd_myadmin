@@ -49,13 +49,12 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
     QuerySnapshot<Map<String, dynamic>> sanpshot =
         await firestore.collection('departaments').get();
     for (var doc in sanpshot.docs) {
-      temp.add(Departaments.fromMap(doc.data()));
+      temp.add(Departaments.fromMap(doc.data(), id: doc.id));
     }
     setState(() {
       departaments = temp;
     });
   }
-
 
   Widget _buildModal() {
     return Container(
@@ -286,7 +285,7 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
             child: Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
               child: RefreshIndicator(
-                onRefresh: () async{
+                onRefresh: () async {
                   return refresh();
                 },
                 child: ListView.builder(
@@ -299,15 +298,16 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                           backgroundColor: Colors.purple,
                           backgroundImage:
                               NetworkImage(departaments[index].imageUrl),
-                          child:
-                              Text(departaments[index].name.substring(0, 3)),
+                          child: Text(departaments[index].name.substring(0, 3)),
                         ),
                         title: Text(departaments[index].name),
                         subtitle: Text(departaments[index].description),
                         hoverColor: Colors.deepOrange,
                         onTap: () {
                           debugPrint(
-                              ' Indice Departamento ${departaments[index].name.toString()} $index');
+                            ' Departamento: ${departaments[index].name.toString()} Indix: $index ID: ${departaments[index].id}',
+                          );
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(

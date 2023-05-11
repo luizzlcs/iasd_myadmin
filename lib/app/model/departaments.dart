@@ -28,7 +28,7 @@ class Departaments with ChangeNotifier {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
+    
     result.addAll({'name': name});
     result.addAll({'description': description});
     result.addAll({'imageUrl': imageUrl});
@@ -37,9 +37,9 @@ class Departaments with ChangeNotifier {
     return result;
   }
 
-  factory Departaments.fromMap(Map<String, dynamic> map) {
+  factory Departaments.fromMap(Map<String, dynamic> map, {String? id}) {
     return Departaments(
-      id: map['id'] ?? '',
+      id: id,
       name: map['name'] ?? '',
       description: map['description'] ?? '',
       imageUrl: map['imageUrl'] ?? '',

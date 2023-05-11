@@ -25,6 +25,36 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
 
   List disposable = [];
   bool isLoading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    for (var disposables in disposable) {
+      disposables.dispose();
+    }
+  }
+
+  void refresh() async {
+    List<Activity> temp = [];
+    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
+        .collection('departaments')
+        .doc(widget.departaments.id)
+        .collection('activity')
+        .get();
+
+    for (var x in snapshot.docs) {
+      return debugPrint('RETORNAR TODAS AS ATIVIDADES: ${x.data()}');
+    }
+    for (var doc in snapshot.docs) {
+      temp.add(Activity.fromMap(doc.data()));
+      
+    }
+
+    setState(() {
+      activities = temp;
+    });
+  }
+
   void createType(context) {
     final isDark = Provider.of<AppTheme>(context, listen: false).isDark();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -39,169 +69,146 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
     disposable.add(nameRoute);
     disposable.add(selectIcon);
 
-    void refresh() async {
-      List<Activity> temp = [];
-      QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
-          .collection('departaments')
-          .doc(widget.departaments.id)
-          .collection('activity')
-          .get();
-
-      for (var doc in snapshot.docs) {
-        temp.add(Activity.fromMap(doc.data()));
-      }
-      setState(() {
-        activities = temp;
-      });
-    }
-
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            scrollable: true,
-            title: const Text('Cadastra nova página de atividade'),
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TextFormField(
-                      autofocus: true,
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(nameRoute);
-                      },
-                      controller: nameActivityEC,
-                      keyboardType: TextInputType.text,
-                      decoration: const InputDecoration(
-                        labelText: 'Nome da atividade',
-                        icon: Icon(Icons.data_exploration),
-                      ),
-                      validator: (values) {
-                        final String value = values ?? '';
-                        if (value.trim().isEmpty) {
-                          return 'O campo deve ser prenchido.';
-                        }
-                        return null;
-                      },
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          title: const Text('Cadastra nova página de atividade'),
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    autofocus: true,
+                    onFieldSubmitted: (_) {
+                      FocusScope.of(context).requestFocus(nameRoute);
+                    },
+                    controller: nameActivityEC,
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome da atividade',
+                      icon: Icon(Icons.data_exploration),
                     ),
-                    TextFormField(
-                      focusNode: nameRoute,
-                      controller: nameRouteEC,
-                      decoration: const InputDecoration(
-                        labelText: 'Rota da pagina',
-                        icon: Icon(Icons.apps_outage),
-                      ),
-                      validator: (values) {
-                        final String value = values ?? '';
-                        if (value.trim().isEmpty) {
-                          return 'O campo deve ser prenchido.';
-                        }
-                        return null;
-                      },
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).requestFocus(selectIcon),
+                    validator: (values) {
+                      final String value = values ?? '';
+                      if (value.trim().isEmpty) {
+                        return 'O campo deve ser prenchido.';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    focusNode: nameRoute,
+                    controller: nameRouteEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Rota da pagina',
+                      icon: Icon(Icons.apps_outage),
                     ),
-                    const Padding(padding: EdgeInsets.all(5)),
-                    StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) {
-                      return Column(children: [
-                        const Padding(padding: EdgeInsets.all(5)),
-                        selectedIcon != null
-                            ? Icon(selectedIcon, color: Colors.deepOrange)
-                            : const Text('Selecione um ícone'),
-                        const Padding(padding: EdgeInsets.all(5)),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                              focusNode: selectIcon,
-                              onPressed: () async {
-                                final IconData? result = await showIconPicker(
-                                    isDark: isDark,
-                                    context: context,
-                                    defalutIcon: selectedIcon);
-                                setState(() {
-                                  selectedIcon = result;
-                                });
-                              },
-                              child: const Text('Selecionar icone')),
-                        ),
-                      ]);
-                    }),
-                  ],
-                ),
+                    validator: (values) {
+                      final String value = values ?? '';
+                      if (value.trim().isEmpty) {
+                        return 'O campo deve ser prenchido.';
+                      }
+                      return null;
+                    },
+                    onFieldSubmitted: (_) =>
+                        FocusScope.of(context).requestFocus(selectIcon),
+                  ),
+                  const Padding(padding: EdgeInsets.all(5)),
+                  StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                    return Column(children: [
+                      const Padding(padding: EdgeInsets.all(5)),
+                      selectedIcon != null
+                          ? Icon(selectedIcon, color: Colors.deepOrange)
+                          : const Text('Selecione um ícone'),
+                      const Padding(padding: EdgeInsets.all(5)),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                            focusNode: selectIcon,
+                            onPressed: () async {
+                              final IconData? result = await showIconPicker(
+                                  isDark: isDark,
+                                  context: context,
+                                  defalutIcon: selectedIcon);
+                              setState(() {
+                                selectedIcon = result;
+                              });
+                            },
+                            child: const Text('Selecionar icone')),
+                      ),
+                    ]);
+                  }),
+                ],
               ),
             ),
-            actions: [
-              StatefulBuilder(
-                builder: (context, setState) {
-                  return isLoading
-                      ? const CircularProgressIndicator()
-                      : TextButton(
-                          child: const Text("Salvar"),
-                          onPressed: () async {
-                            final isValid =
-                                formKey.currentState?.validate() ?? false;
-                            if (isValid) {
-                              selectedIcon ??= Icons.fact_check;
-                              final newActivities = Activity(
-                                name: nameActivityEC.text,
-                                page: nameRouteEC.text,
-                                icon: selectedIcon,
-                              );
+          ),
+          actions: [
+            StatefulBuilder(
+              builder: (context, setState) {
+                return isLoading
+                    ? const CircularProgressIndicator()
+                    : TextButton(
+                        child: const Text("Salvar"),
+                        onPressed: () async {
+                          final isValid =
+                              formKey.currentState?.validate() ?? false;
+                          if (isValid) {
+                            selectedIcon ??= Icons.fact_check;
+                            final newActivities = Activity(
+                              name: nameActivityEC.text,
+                              page: nameRouteEC.text,
+                              icon: selectedIcon,
+                            );
 
-                              // Se o formulário for válido HABILITA o CircularProgressIndicator
-                              setState(() {
-                                if (isValid) isLoading = true;
-                              });
-                              FirebaseFirestore firestore =
-                                  FirebaseFirestore.instance;
-                              await firestore
-                                  .collection('departaments')
-                                  .doc(widget.departaments.id)
-                                  .collection('activity')
-                                  .add(newActivities.toMap());
+                            // Se o formulário for válido HABILITA o CircularProgressIndicator
+                            setState(() {
+                              if (isValid) isLoading = true;
+                            });
+                            FirebaseFirestore firestore =
+                                FirebaseFirestore.instance;
+                            await firestore
+                                .collection('departaments')
+                                .doc(widget.departaments.id)
+                                .collection('activity')
+                                .add(newActivities.toMap());
 
-                              Provider.of<DepartamentsController>(context,
-                                      listen: false)
-                                  .addActivity(newActivities, widget.index);
-                              selectedIcon = null;
+                            Provider.of<DepartamentsController>(context,
+                                    listen: false)
+                                .addActivity(newActivities, widget.index);
+                            selectedIcon = null;
 
-                              // Se o formulário for válido DESABILITA o CircularProgressIndicator
-                              Navigator.pop(context);
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
-                          });
-                },
-              ),
-              TextButton(
-                  child: const Text("Calcelar"),
-                  onPressed: () async {
-                    selectedIcon = null;
-                    Navigator.pop(context);
-                  })
-            ],
-          );
-        });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    for (var disposables in disposable) {
-      disposables.dispose();
-    }
+                            // Se o formulário for válido DESABILITA o CircularProgressIndicator
+                            Navigator.pop(context);
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        });
+              },
+            ),
+            TextButton(
+                child: const Text("Calcelar"),
+                onPressed: () async {
+                  selectedIcon = null;
+                  Navigator.pop(context);
+                })
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final isDesktop = Responsive.isDesktop(context);
-    final listActivities =
-        Provider.of<DepartamentsController>(context).departament;
+    /* final listActivities =
+        Provider.of<DepartamentsController>(context).departament; */
     final isDark = Provider.of<AppTheme>(
       context,
     ).isDark();
@@ -300,12 +307,15 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                                         color: Colors.amber,
                                         borderRadius:
                                             BorderRadius.circular(100)),
-                                    child: Icon(activities[index].icon),
+                                    child: Icon(activities[0].icon),
                                   ),
-                                  title: Text(activities[index].name),
+                                  title: Text(activities[0].name),
                                   subtitle: Text(activities[index].page),
                                   hoverColor: Colors.deepOrange,
                                   onTap: () {
+                                    activities.forEach((element) {
+                                      print(' IMPRIMINDO ADIVIDADES: $element');
+                                    });
                                     Provider.of<DepartamentsController>(context,
                                             listen: false)
                                         .removActivity(
@@ -337,6 +347,14 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
               child: FloatingActionButton(
                 child: const Icon(Icons.add),
                 onPressed: () {
+                  refresh();
+                  debugPrint('CONTANDO ATIVIDADES ${activities.length}');
+                  debugPrint(
+                      'DEP ID: ${widget.departaments.id} DEP NAME: ${widget.departaments.name}');
+                  /* for (var element in activities) {
+                    debugPrint(
+                        'ID: {$element.id} NOME CATIVITE: ${element.name}');
+                  } */
                   createType(context);
                 },
               ),
