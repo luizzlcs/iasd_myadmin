@@ -41,15 +41,17 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
         .doc(widget.departaments.id)
         .collection('activity')
         .get();
-
+    /* print(snapshot.docs.map((e) => e.data()).toList());
     for (var x in snapshot.docs) {
       return debugPrint('RETORNAR TODAS AS ATIVIDADES: ${x.data()}');
     }
     for (var doc in snapshot.docs) {
       temp.add(Activity.fromMap(doc.data()));
       
-    }
-
+    } */
+    var tempo = snapshot.docs.map((e) =>  e.data()).toList();
+  //temp = tempo.map((e) =>).toList();
+   print(temp);
     setState(() {
       activities = temp;
     });
@@ -307,9 +309,9 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                                         color: Colors.amber,
                                         borderRadius:
                                             BorderRadius.circular(100)),
-                                    child: Icon(activities[0].icon),
+                                    child: Icon(activities[index].icon),
                                   ),
-                                  title: Text(activities[0].name),
+                                  title: Text(activities[index].name),
                                   subtitle: Text(activities[index].page),
                                   hoverColor: Colors.deepOrange,
                                   onTap: () {
