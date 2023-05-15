@@ -8,23 +8,15 @@ class Departaments with ChangeNotifier {
   final String name;
   final String description;
   final String imageUrl;
-  List<Activity> activity = [];
 
   Departaments({
      this.id,
     required this.name,
     required this.description,
     required this.imageUrl,
-    required this.activity,
   });
 
-  void updateActivity(Activity activities) {
-    int index = activity.indexWhere((d) => d.id == activities);
-    if (index >= 0) {
-      activity[index] = activities;
-      notifyListeners();
-    }
-  }
+
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -32,7 +24,6 @@ class Departaments with ChangeNotifier {
     result.addAll({'name': name});
     result.addAll({'description': description});
     result.addAll({'imageUrl': imageUrl});
-    result.addAll({'activity': activity.map((x) => x.toMap()).toList()});
   
     return result;
   }
@@ -43,7 +34,6 @@ class Departaments with ChangeNotifier {
       name: map['name'] ?? '',
       description: map['description'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
-      activity: List<Activity>.from(map['activity']?.map((x) => Activity.fromMap(x))),
     );
   }
 
