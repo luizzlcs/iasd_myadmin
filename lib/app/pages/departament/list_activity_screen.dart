@@ -27,6 +27,12 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
   bool isLoading = false;
 
   @override
+  void initState() {
+    refresh();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     super.dispose();
     for (var disposables in disposable) {
@@ -41,17 +47,12 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
         .doc(widget.departaments.id)
         .collection('activity')
         .get();
-    /* print(snapshot.docs.map((e) => e.data()).toList());
-    for (var x in snapshot.docs) {
-      return debugPrint('RETORNAR TODAS AS ATIVIDADES: ${x.data()}');
-    }
+
     for (var doc in snapshot.docs) {
-      temp.add(Activity.fromMap(doc.data()));
-      
-    } */
-    var tempo = snapshot.docs.map((e) =>  e.data()).toList();
-  //temp = tempo.map((e) =>).toList();
-   print(temp);
+      Activity activity = Activity.fromMap(doc.data());
+      temp.add(activity);
+    }
+
     setState(() {
       activities = temp;
     });
@@ -168,10 +169,12 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                               icon: selectedIcon,
                             );
 
-                            // Se o formulário for válido HABILITA o CircularProgressIndicator
+                            // Se o formulário for válido HABILITA o CircularProgressIndicator passando
+                            // o isLoading para true.
                             setState(() {
                               if (isValid) isLoading = true;
                             });
+
                             FirebaseFirestore firestore =
                                 FirebaseFirestore.instance;
                             await firestore
@@ -179,16 +182,11 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                                 .doc(widget.departaments.id)
                                 .collection('activity')
                                 .add(newActivities.toMap());
-
-                            Provider.of<DepartamentsController>(context,
-                                    listen: false)
-                                .addActivity(newActivities, widget.index);
-                            selectedIcon = null;
-
                             // Se o formulário for válido DESABILITA o CircularProgressIndicator
                             Navigator.pop(context);
+                            refresh();
                             setState(() {
-                              isLoading = false;
+                              if (isValid) isLoading = false;
                             });
                           }
                         });
@@ -349,14 +347,6 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
               child: FloatingActionButton(
                 child: const Icon(Icons.add),
                 onPressed: () {
-                  refresh();
-                  debugPrint('CONTANDO ATIVIDADES ${activities.length}');
-                  debugPrint(
-                      'DEP ID: ${widget.departaments.id} DEP NAME: ${widget.departaments.name}');
-                  /* for (var element in activities) {
-                    debugPrint(
-                        'ID: {$element.id} NOME CATIVITE: ${element.name}');
-                  } */
                   createType(context);
                 },
               ),
