@@ -213,23 +213,19 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                           Departaments newDepartaments = Departaments(
                             name: name,
                             description: descricao,
-                            imageUrl: image,
-                            activity: [
-                              Activity(
-                                name: 'Home',
-                                page: '/dashBoard',
-                                icon: Icons.home,
-                              ),
-                            ],
+                            imageUrl: image,                            
                           );
 
                           final firestore = FirebaseFirestore.instance;
-
+                          
                           var query =
                               await firestore.collection('departaments').add(
                                     newDepartaments.toMap(),
                                   );
                           newDepartaments.id = query.id;
+                          final data = {'name': 'Home', 'page': '/dashBoard', 'icon': '58136'};
+                          var queryActivity = await firestore.collection('departaments').doc(query.id).collection('activity').add(data);
+                          
                           debugPrint(
                               'COLLECTION: ${query.parent.path} ID: ${query.id}');
 
@@ -265,9 +261,6 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
   @override
   Widget build(BuildContext context) {
     final double scaleFactor = MediaQuery.of(context).size.height / 100;
-    final listDepartaments =
-        Provider.of<DepartamentsController>(context, listen: true).departament;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de Departamentos'),
