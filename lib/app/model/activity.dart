@@ -31,10 +31,11 @@ class Activity {
   }
 
   factory Activity.fromMap(Map<String, dynamic> map) {
+    int iconCode = map['icon'] is int ? map['icon'] : int.tryParse(map['icon'] ?? '');
     return Activity(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
-      icon: map['icon'] != null ? IconData(map['icon'], fontFamily: 'MaterialIcons') : null,
+      icon: iconCode != null ? IconData(iconCode, fontFamily: 'MaterialIcons') : null,
       page: map['page'] ?? '',
     );
   }
