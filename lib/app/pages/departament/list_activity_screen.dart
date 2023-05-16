@@ -9,10 +9,10 @@ import '../../core/util/responsive.dart';
 import 'controllers/departaments_controller.dart';
 
 class ListActivityScreen extends StatefulWidget {
-  final Departaments departaments;
+  Departaments departaments;
   final int index;
 
-  const ListActivityScreen(
+  ListActivityScreen(
       {required this.departaments, required this.index, super.key});
 
   @override
@@ -21,14 +21,14 @@ class ListActivityScreen extends StatefulWidget {
 
 class _ListActivityScreenState extends State<ListActivityScreen> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  List<Activity> activities = [];
+  List<Activity> listActivities = [];
 
   List disposable = [];
   bool isLoading = false;
 
   @override
   void initState() {
-    refresh();
+    getActivities(widget.departaments);
     super.initState();
   }
 
@@ -40,23 +40,16 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
     }
   }
 
-  void refresh() async {
+  void getActivities(Departaments depart) async {
     List<Activity> temp = [];
-    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
-        .collection('departaments')
-        .doc(widget.departaments.id)
-        .collection('activity')
-        .get();
-
-    for (var doc in snapshot.docs) {
-      Activity activity = Activity.fromMap(doc.data());
-      temp.add(activity);
-    }
+    temp.addAll(depart.activity);
 
     setState(() {
-      activities = temp;
+      listActivities = temp;
     });
   }
+
+
 
   void createType(context) {
     final isDark = Provider.of<AppTheme>(context, listen: false).isDark();
@@ -177,17 +170,20 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
 
                             FirebaseFirestore firestore =
                                 FirebaseFirestore.instance;
+                            Map<String, dynamic> activityData =
+                                newActivities.toMap();
                             await firestore
                                 .collection('departaments')
                                 .doc(widget.departaments.id)
-                                .collection('activity')
-                                .add(newActivities.toMap());
+                                .update({
+                              'activity': FieldValue.arrayUnion([activityData])
+                            });
                             // Se o formulário for válido DESABILITA o CircularProgressIndicator
                             Navigator.pop(context);
-                            refresh();
                             setState(() {
                               if (isValid) isLoading = false;
                             });
+                            getActivities(widget.departaments);
                           }
                         });
               },
@@ -207,8 +203,7 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
   @override
   Widget build(BuildContext context) {
     final isDesktop = Responsive.isDesktop(context);
-    /* final listActivities =
-        Provider.of<DepartamentsController>(context).departament; */
+   
     final isDark = Provider.of<AppTheme>(
       context,
     ).isDark();
@@ -292,7 +287,7 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListView.builder(
-                            itemCount: activities.length,
+                            itemCount: listActivities.length,
                             itemBuilder: (context, index) {
                               return Card(
                                 shadowColor: Colors.black,
@@ -307,25 +302,13 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                                         color: Colors.amber,
                                         borderRadius:
                                             BorderRadius.circular(100)),
-                                    child: Icon(activities[index].icon),
+                                    child: Icon(listActivities[index].icon),
                                   ),
-                                  title: Text(activities[index].name),
-                                  subtitle: Text(activities[index].page),
+                                  title: Text(listActivities[index].name),
+                                  subtitle: Text(listActivities[index].page),
                                   hoverColor: Colors.deepOrange,
-                                  onTap: () {
-                                    activities.forEach((element) {
-                                      print(' IMPRIMINDO ADIVIDADES: $element');
-                                    });
-                                    Provider.of<DepartamentsController>(context,
-                                            listen: false)
-                                        .removActivity(
-                                            departamentIndex: widget.index,
-                                            activityIdex: index);
-                                    debugPrint(
-                                        'Index Departamento: ${widget.index}');
-                                    debugPrint('Index atividade: $index');
-                                    setState(() {});
-                                  },
+                                  onTap: () {}
+                                    
                                 ),
                               );
                             },
