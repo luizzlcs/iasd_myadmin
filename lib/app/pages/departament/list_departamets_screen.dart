@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:iasd_myadmin/app/pages/departament/controllers/departaments_controller.dart';
-import 'package:provider/provider.dart';
 import '../../model/activity.dart';
 import '../../model/departaments.dart';
 import 'list_activity_screen.dart';
@@ -241,11 +239,7 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                               }
                             },
                           );
-                          Provider.of<DepartamentsController>(context,
-                                  listen: false)
-                              .addDepartaments(newDepartaments);
                           Navigator.of(context).pop();
-
                           return;
                         }
                       },
@@ -265,9 +259,6 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
   @override
   Widget build(BuildContext context) {
     final double scaleFactor = MediaQuery.of(context).size.height / 100;
-    final listDepartaments =
-        Provider.of<DepartamentsController>(context, listen: true).departament;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista de Departamentos'),
