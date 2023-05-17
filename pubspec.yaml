@@ -36,6 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   uuid: ^3.0.7
+  loading_animation_widget: ^1.2.0+4
   cloud_firestore: ^4.5.3
   firebase_core: ^2.10.0
   provider: ^6.0.5
@@ -54,8 +55,8 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/app/icon.png"
-    background_color: "#004AAD"
-    theme_color: "#004AAD"
+    background_color: "#D9D9D9"
+    theme_color: "#D9D9D9"
   windows:
     generate: true
     image_path: "assets/app/icon.png"
@@ -65,7 +66,7 @@ flutter_launcher_icons:
     image_path: "assets/app/icon.png"
 
 flutter_native_splash:
-    color: "#004AAD"
+    color: "#D9D9D9"
     image: "assets/app/splash.png"
     android: true
     ios: true
