@@ -7,6 +7,7 @@ import 'package:iasd_myadmin/app/exceptions/auth_exception.dart';
 import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 import 'package:iasd_myadmin/app/core/global/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -196,7 +197,10 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
           Hero(
             tag: "login_btn",
             child: _isLoading
-                ? const CircularProgressIndicator()
+                ? LoadingAnimationWidget.fourRotatingDots(
+                    color: Colors.white.withOpacity(0.5),
+                    size: 120,
+                  )
                 : ElevatedButton(
                     focusNode: _buttonLoginFocus,
                     style: ElevatedButton.styleFrom(

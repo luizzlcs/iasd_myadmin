@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../model/activity.dart';
 import '../../model/departaments.dart';
 import 'list_activity_screen.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ListDepartamentScreen extends StatefulWidget {
   const ListDepartamentScreen({Key? key}) : super(key: key);
@@ -279,39 +280,45 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                 onRefresh: () async {
                   return refresh();
                 },
-                child: ListView.builder(
-                  itemCount: departaments.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      color: const Color.fromARGB(255, 55, 55, 56),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.purple,
-                          backgroundImage:
-                              NetworkImage(departaments[index].imageUrl),
-                          child: Text(departaments[index].name.substring(0, 3)),
-                        ),
-                        title: Text(departaments[index].name),
-                        subtitle: Text(departaments[index].description),
-                        hoverColor: Colors.deepOrange,
-                        onTap: () {
-                          debugPrint(
-                            ' Departamento: ${departaments[index].name.toString()} Indix: $index ID: ${departaments[index].id}',
-                          );
+                child: (departaments.isEmpty)
+                    ? Center(
+                      child: LoadingAnimationWidget.fourRotatingDots(
+                          color: Colors.white.withOpacity(0.5), size: 120),
+                    )
+                    : ListView.builder(
+                        itemCount: departaments.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            color: const Color.fromARGB(255, 55, 55, 56),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.purple,
+                                backgroundImage:
+                                    NetworkImage(departaments[index].imageUrl),
+                                child: Text(
+                                    departaments[index].name.substring(0, 3)),
+                              ),
+                              title: Text(departaments[index].name),
+                              subtitle: Text(departaments[index].description),
+                              hoverColor: Colors.deepOrange,
+                              onTap: () {
+                                debugPrint(
+                                  ' Departamento: ${departaments[index].name.toString()} Indix: $index ID: ${departaments[index].id}',
+                                );
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ListActivityScreen(
-                                  departaments: departaments[index],
-                                  index: index),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ListActivityScreen(
+                                        departaments: departaments[index],
+                                        index: index),
+                                  ),
+                                );
+                              },
                             ),
                           );
                         },
                       ),
-                    );
-                  },
-                ),
               ),
             ),
           ),

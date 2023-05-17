@@ -1,9 +1,7 @@
-//TODO Volta aqui para implementar os métodos do firestore para fazer uso pelo provider.
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/model/activity.dart';
-import 'package:iasd_myadmin/app/data/dummy_data.dart';
 import 'package:iasd_myadmin/app/model/departaments.dart';
 
 class DepartamentsController with ChangeNotifier {
