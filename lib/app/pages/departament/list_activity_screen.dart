@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../core/ui/components/icon_picker.dart';
 import '../../core/ui/themes/app_theme.dart';
 import '../../core/util/responsive.dart';
-import 'controllers/departaments_controller.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ListActivityScreen extends StatefulWidget {
   Departaments departaments;
@@ -20,6 +20,7 @@ class ListActivityScreen extends StatefulWidget {
 }
 
 class _ListActivityScreenState extends State<ListActivityScreen> {
+  GlobalKey<State> globalKey = GlobalKey<State>();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<Activity> listActivities = [];
 
@@ -28,7 +29,7 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
 
   @override
   void initState() {
-    getActivities(widget.departaments);
+    getData();
     super.initState();
   }
 
@@ -40,16 +41,29 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
     }
   }
 
-  void getActivities(Departaments depart) async {
-    List<Activity> temp = [];
-    temp.addAll(depart.activity);
+  void getData() async {
+    List<Activity> matrizData = [];
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await firestore
+        .collection('departaments')
+        .doc(widget.departaments.id)
+        .get();
+
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data()!;
+      if (data.containsKey('activity')) {
+        matrizData = List<Activity>.from(
+          data['activity'].map(
+            (item) => Activity.fromMap(item),
+          ),
+        );
+      }
+    }
 
     setState(() {
-      listActivities = temp;
+      listActivities = matrizData;
     });
   }
-
-
 
   void createType(context) {
     final isDark = Provider.of<AppTheme>(context, listen: false).isDark();
@@ -148,7 +162,10 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
             StatefulBuilder(
               builder: (context, setState) {
                 return isLoading
-                    ? const CircularProgressIndicator()
+                    ? LoadingAnimationWidget.fourRotatingDots(
+                        color: Colors.white,
+                        size: 60,
+                      )
                     : TextButton(
                         child: const Text("Salvar"),
                         onPressed: () async {
@@ -183,7 +200,7 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                             setState(() {
                               if (isValid) isLoading = false;
                             });
-                            getActivities(widget.departaments);
+                            getData();
                           }
                         });
               },
@@ -200,10 +217,34 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
     );
   }
 
+  dialog(){
+    return showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text('Tem certeza'),
+            content: const Text('Quer remover os itens do carrinho?'),
+            actions: [
+              TextButton(
+                child: const Text('Sim'),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+              TextButton(
+                child: const Text('Não'),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              )
+            ],
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDesktop = Responsive.isDesktop(context);
-   
+
     final isDark = Provider.of<AppTheme>(
       context,
     ).isDark();
@@ -279,43 +320,69 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      constraints: const BoxConstraints(maxWidth: 900),
-                      child: Card(
-                        shadowColor: Colors.black,
-                        elevation: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            itemCount: listActivities.length,
-                            itemBuilder: (context, index) {
-                              return Card(
-                                shadowColor: Colors.black,
-                                elevation: 9,
-                                color: const Color.fromARGB(255, 130, 131, 134),
-                                surfaceTintColor: Colors.amber[200],
-                                child: ListTile(
-                                  leading: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        color: Colors.amber,
-                                        borderRadius:
-                                            BorderRadius.circular(100)),
-                                    child: Icon(listActivities[index].icon),
-                                  ),
-                                  title: Text(listActivities[index].name),
-                                  subtitle: Text(listActivities[index].page),
-                                  hoverColor: Colors.deepOrange,
-                                  onTap: () {}
-                                    
+                    child: (listActivities.isEmpty)
+                        ? LoadingAnimationWidget.fourRotatingDots(
+                            color: Colors.white.withOpacity(0.5), size: 120)
+                        : Container(
+                            constraints: const BoxConstraints(maxWidth: 900),
+                            child: Card(
+                              shadowColor: Colors.black,
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListView.builder(
+                                  itemCount: listActivities.length,
+                                  itemBuilder: (context, index) {
+                                    return Card(
+                                      shadowColor: Colors.black,
+                                      elevation: 9,
+                                      color: const Color.fromARGB(
+                                          255, 130, 131, 134),
+                                      surfaceTintColor: Colors.amber[200],
+                                      child: Dismissible(
+                                        key: ValueKey(listActivities),
+                                        direction: DismissDirection.endToStart,
+                                        background: Container(
+                                          alignment: Alignment.centerRight,
+                                          padding:
+                                              const EdgeInsets.only(right: 20),
+                                          color: Colors.red,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 4),
+                                          child: const Icon(
+                                            Icons.delete,
+                                            color: Colors.white,
+                                            size: 40,
+                                          ),
+                                        ),
+                                        onDismissed: (context) {},
+                                        child: ListTile(
+                                            leading: Container(
+                                              width: 50,
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.amber,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100)),
+                                              child: Icon(
+                                                  listActivities[index].icon),
+                                            ),
+                                            title: Text(
+                                                listActivities[index].name),
+                                            subtitle: Text(
+                                                listActivities[index].page),
+                                            hoverColor: Colors.deepOrange,
+                                            onTap: () {
+                                              //TODO Implementatar aqui o dismisible, remove!
+                                            }),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
