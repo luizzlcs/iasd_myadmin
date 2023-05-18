@@ -259,68 +259,121 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double scaleFactor = MediaQuery.of(context).size.height / 100;
+    final double scaleFactorHeight = MediaQuery.of(context).size.height / 100;
+    final double scaleFactorWidth = MediaQuery.of(context).size.width / 100;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lista de Departamentos'),
-      ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16, top: 16),
-        child: Center(
-          child: Container(
-            constraints: const BoxConstraints(minWidth: 900, maxWidth: 950),
-            decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 138, 137, 138),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20))),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  return refresh();
-                },
-                child: (departaments.isEmpty)
-                    ? Center(
-                      child: LoadingAnimationWidget.fourRotatingDots(
-                          color: Colors.white.withOpacity(0.5), size: 120),
-                    )
-                    : ListView.builder(
-                        itemCount: departaments.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            color: const Color.fromARGB(255, 55, 55, 56),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.purple,
-                                backgroundImage:
-                                    NetworkImage(departaments[index].imageUrl),
-                                child: Text(
-                                    departaments[index].name.substring(0, 3)),
-                              ),
-                              title: Text(departaments[index].name),
-                              subtitle: Text(departaments[index].description),
-                              hoverColor: Colors.deepOrange,
-                              onTap: () {
-                                debugPrint(
-                                  ' Departamento: ${departaments[index].name.toString()} Indix: $index ID: ${departaments[index].id}',
-                                );
-
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ListActivityScreen(
-                                        departaments: departaments[index],
-                                        index: index),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
+        padding: const EdgeInsets.only(
+          left: 16.0,
+          right: 16,
+          top: 40,
+        ),
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: scaleFactorHeight * 300,
+            minWidth: scaleFactorWidth * 100,
+            maxWidth: scaleFactorWidth * 100,
+          ),
+          decoration: const BoxDecoration(
+              color: Color.fromARGB(255, 138, 137, 138),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: scaleFactorWidth * 100,
+                height: scaleFactorHeight * 7,
+                decoration: const BoxDecoration(
+                  color: Colors.deepPurple,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(21),
+                    topRight: Radius.circular(21),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 30,
                       ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Lista de Departaments',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 16,
+                ),
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    return refresh();
+                  },
+                  child: (departaments.isEmpty)
+                      ? Center(
+                          child: LoadingAnimationWidget.fourRotatingDots(
+                              color: Colors.white.withOpacity(0.5), size: 120),
+                        )
+                      : SizedBox(
+                          height: scaleFactorHeight * 79,
+                          width: scaleFactorWidth * 100,
+                          child: ListView.builder(
+                            itemCount: departaments.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                color: const Color.fromARGB(255, 55, 55, 56),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundColor: Colors.purple,
+                                    backgroundImage: NetworkImage(
+                                        departaments[index].imageUrl),
+                                    child: Text(departaments[index]
+                                        .name
+                                        .substring(0, 3)),
+                                  ),
+                                  title: Text(departaments[index].name),
+                                  subtitle:
+                                      Text(departaments[index].description),
+                                  hoverColor: Colors.deepOrange,
+                                  onTap: () {
+                                    debugPrint(
+                                      ' Departamento: ${departaments[index].name.toString()} Indix: $index ID: ${departaments[index].id}',
+                                    );
+        
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ListActivityScreen(
+                                                departaments:
+                                                    departaments[index],
+                                                index: index),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -337,7 +390,7 @@ class _ListDepartamentScreenState extends State<ListDepartamentScreen> {
                 constraints: BoxConstraints(
                   minWidth: 900,
                   maxWidth: 950,
-                  maxHeight: scaleFactor * 72,
+                  maxHeight: scaleFactorHeight * 72,
                 ),
                 context: context,
                 builder: (BuildContext context) {
