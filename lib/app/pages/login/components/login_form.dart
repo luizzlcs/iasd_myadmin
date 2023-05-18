@@ -71,6 +71,13 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
     );
   }
 
+  Widget loadingAnimated() {
+    return LoadingAnimationWidget.fourRotatingDots(
+      color: Colors.white.withOpacity(0.5),
+      size: 120,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Auth auth = Provider.of(context, listen: false);
@@ -116,6 +123,9 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
               onFieldSubmitted: (_) async {
                 if (_formKey.currentState!.validate()) {
                   try {
+                    setState(() {
+                      _isLoading = true;
+                    });
                     if (isLogin != true) {
                       await auth.singUp(_emailEC.text, _passwordEC.text);
                     } else {
@@ -125,9 +135,15 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                     Navigator.of(context)
                         .pushReplacementNamed(AppRoutes.dashBoard);
                   } on AuthException catch (error) {
+                    setState(() {
+                      _isLoading = false;
+                    });
                     _showErrorDialog(error.toString());
                   } catch (error) {
                     _showErrorDialog('ocorreu um erro inesperado');
+                    setState(() {
+                      _isLoading = false;
+                    });
                   }
                 }
                 FocusScope.of(context).requestFocus(_buttonLoginFocus);
@@ -188,8 +204,11 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                       ? const Icon(Icons.check, color: Colors.green)
                       : IconButton(
                           onPressed: () => _confirmPasswordEC.clear(),
-                          icon: const Icon(Icons.close,
-                              color: Color.fromARGB(255, 117, 40, 34))),
+                          icon: const Icon(
+                            Icons.close,
+                            color: Color.fromARGB(255, 117, 40, 34),
+                          ),
+                        ),
                 ),
               ),
             ),
@@ -197,10 +216,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
           Hero(
             tag: "login_btn",
             child: _isLoading
-                ? LoadingAnimationWidget.fourRotatingDots(
-                    color: Colors.white.withOpacity(0.5),
-                    size: 120,
-                  )
+                ? loadingAnimated()
                 : ElevatedButton(
                     focusNode: _buttonLoginFocus,
                     style: ElevatedButton.styleFrom(
@@ -221,8 +237,14 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                               .pushReplacementNamed(AppRoutes.dashBoard);
                         } on AuthException catch (error) {
                           _showErrorDialog(error.toString());
+                          setState(() {
+                            _isLoading = false;
+                          });
                         } catch (error) {
                           _showErrorDialog('ocorreu um erro inesperado');
+                          setState(() {
+                            _isLoading = false;
+                          });
                         }
                       }
                     },
