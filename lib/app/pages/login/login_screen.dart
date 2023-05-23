@@ -24,8 +24,8 @@ class LoginScreen extends StatelessWidget {
                 ? const AppBarMobile()
                 : const AppBarWeb(),
           ),
-          
-          endDrawer: (constraints.maxWidth <650) ?  const AppDrawerLogin(): null,
+          endDrawer:
+              (constraints.maxWidth < 650) ? const AppDrawerLogin() : null,
           body: Background(
             child: SingleChildScrollView(
               child: Responsive(
@@ -68,9 +68,7 @@ class MobileLoginScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Provider.of<ControllerAlthLogin>(context).isLogin()
-            ? const LoginScreenTopImage()
-            : const SignUpScreenTopImage(),
+        const LoginScreenTopImage(),
         Row(
           children: const [
             Spacer(),

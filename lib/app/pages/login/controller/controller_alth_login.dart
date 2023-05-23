@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 
 enum AuthMode { signup, login }
 
 class ControllerAlthLogin with ChangeNotifier {
   var authMode = AuthMode.login;
 
-  isLogin() => authMode == AuthMode.login;
-  isSignup() => authMode == AuthMode.signup;
+  bool isLogin() => authMode == AuthMode.login;
+  bool isSignup() => authMode == AuthMode.signup;
 
   swichAlthMode() {
     if (isLogin() == true) {

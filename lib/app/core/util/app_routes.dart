@@ -6,4 +6,5 @@ class AppRoutes {
   static const listDepartament = '/listDepartament';
   static const pageConstrution = '/pageConstrution';
   static const pefilUser = '/perfilUser';
+  static const signUpScreen = '/signUpScreen';
 }

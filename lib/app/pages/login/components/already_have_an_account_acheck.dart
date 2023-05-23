@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/core/global/constants.dart';
 import 'package:provider/provider.dart';
-
 
 class AlreadyHaveAnAccountCheck extends StatelessWidget {
   final Function? press;
@@ -27,6 +27,14 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
           onPressed: () {
             Provider.of<ControllerAlthLogin>(context, listen: false)
                 .swichAlthMode();
+            bool isLogin =
+                Provider.of<ControllerAlthLogin>(context, listen: false)
+                    .isLogin();
+            isLogin
+                ? Navigator.of(context)
+                    .pushReplacementNamed(AppRoutes.login)
+                : Navigator.of(context)
+                    .pushReplacementNamed(AppRoutes.signUpScreen);
           },
           child: Text(isLogin ? 'CRIAR CONTA' : 'FAZER LOGIN'),
         ),

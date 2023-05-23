@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'app/pages/dashboard/components/scren_user_data.dart';
+import 'app/pages/login/sign_up_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/pages/departament/controllers/departaments_controller.dart';
@@ -65,6 +66,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.listDepartament: (_) => const ListDepartamentScreen(),
           AppRoutes.pageConstrution: (_) => const PageConstrution(),
           AppRoutes.pefilUser: (_) => const ScrenUserData(),
+          AppRoutes.signUpScreen: (_) => const SignUpScreen(),
         },
       ),
     );

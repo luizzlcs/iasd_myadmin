@@ -3,15 +3,13 @@ import 'package:iasd_myadmin/app/pages/login/components/background.dart';
 import 'package:iasd_myadmin/app/pages/login/components/app_bar/app_bar_mobile.dart';
 import 'package:iasd_myadmin/app/pages/login/components/app_bar/app_bar_web.dart';
 import 'package:iasd_myadmin/app/pages/login/components/app_bar/app_drawer_login.dart';
+import 'package:iasd_myadmin/app/pages/login/components/sign_up_form.dart';
 import 'package:iasd_myadmin/app/pages/login/components/sing_up_top_image.dart';
-import 'package:iasd_myadmin/app/pages/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/core/util/responsive.dart';
-import 'package:provider/provider.dart';
 import 'components/login_form.dart';
-import 'components/login_screen_top_image.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +22,16 @@ class LoginScreen extends StatelessWidget {
                 ? const AppBarMobile()
                 : const AppBarWeb(),
           ),
-          
-          endDrawer: (constraints.maxWidth <650) ?  const AppDrawerLogin(): null,
+          endDrawer:
+              (constraints.maxWidth < 650) ? const AppDrawerLogin() : null,
           body: Background(
             child: SingleChildScrollView(
               child: Responsive(
-                mobile: const MobileLoginScreen(),
+                mobile: const MobileSignUpScreen(),
                 desktop: Row(
                   children: [
-                    Expanded(
-                      child: Provider.of<ControllerAlthLogin>(context).isLogin()
-                          ? const LoginScreenTopImage()
-                          : const SignUpScreenTopImage(),
+                    const Expanded(
+                      child: SignUpScreenTopImage(),
                     ),
                     Expanded(
                       child: Row(
@@ -59,8 +55,8 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class MobileLoginScreen extends StatelessWidget {
-  const MobileLoginScreen({
+class MobileSignUpScreen extends StatelessWidget {
+  const MobileSignUpScreen({
     Key? key,
   }) : super(key: key);
   @override
@@ -68,15 +64,13 @@ class MobileLoginScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Provider.of<ControllerAlthLogin>(context).isLogin()
-            ? const LoginScreenTopImage()
-            : const SignUpScreenTopImage(),
+        const SignUpScreenTopImage(),
         Row(
           children: const [
             Spacer(),
             Expanded(
               flex: 8,
-              child: LoginForm(),
+              child: SignUpForm(),
             ),
             Spacer(),
           ],

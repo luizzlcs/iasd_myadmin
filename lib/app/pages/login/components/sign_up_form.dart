@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/pages/login/components/already_have_an_account_acheck.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/controller_alth_login.dart';
@@ -8,42 +9,54 @@ import 'package:iasd_myadmin/app/core/global/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
+class _SignUpFormState extends State<SignUpForm> with ValidationFormLogin {
   final FocusNode _emailFocus = FocusNode();
-  final FocusNode _buttonLoginFocus = FocusNode();
+  final FocusNode _passwordConfirm = FocusNode();
+  final FocusNode _buttonCreateCountFocus = FocusNode();
+  bool _passwordsMatch = false;
   bool _obscureText = true;
   bool _isLoading = false;
   final FocusNode _loginFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
   final _emailEC = TextEditingController();
   final _passwordEC = TextEditingController();
+  final _confirmPasswordEC = TextEditingController();
 
   @override
   void initState() {
     Future.delayed(const Duration(milliseconds: 100), () {
       _loginFocus.requestFocus();
     });
+    _passwordEC.addListener(_checkPasswordsMatch);
+    _confirmPasswordEC.addListener(_checkPasswordsMatch);
     super.initState();
   }
 
   @override
   void dispose() {
+    _buttonCreateCountFocus.dispose();
+    _passwordConfirm.dispose();
     _loginFocus.dispose();
     _emailEC.dispose();
     _passwordEC.dispose();
+    _confirmPasswordEC.dispose();
     super.dispose();
   }
 
-  
+  void _checkPasswordsMatch() {
+    setState(() {
+      _passwordsMatch = _passwordEC.text == _confirmPasswordEC.text;
+    });
+  }
 
   void _showErrorDialog(String msg) {
     showDialog(
@@ -68,32 +81,22 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
     );
   }
 
-  Future<void> registerUser() async {
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: _emailEC.text,
-      password: _passwordEC.text,
-    );
+  void pageLogin() {
+    Navigator.of(context).pushReplacementNamed(AppRoutes.login);
   }
 
-  void pageDashBoard() {
-    Navigator.of(context).pushReplacementNamed(AppRoutes.dashBoard);
-  }
-
-  void snackBar(
-      {required Widget menssage,
-      required String text,
-      required VoidCallback onPressed}) {
+  void snackBar({required Widget menssage}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: const Duration(seconds: 5),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         content: menssage,
-        action: SnackBarAction(label: text, onPressed: onPressed),
+        duration: const Duration(seconds: 10),
+        backgroundColor: Colors.deepOrange,
+        showCloseIcon: true,
       ),
     );
   }
 
-  Future<void> loginUser() async {
+  Future<void> registerUser() async {
     if (_formKey.currentState!.validate()) {
       try {
         setState(() {
@@ -101,64 +104,56 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
         });
 
         final credential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailEC.text.trim(),
           password: _passwordEC.text.trim(),
         );
 
-        if (credential != null && credential.user?.emailVerified == true) {
-          pageDashBoard();
-        } else {
+        credential.user?.sendEmailVerification();
+        pageLogin();
+        {
           setState(() {
             _isLoading = false;
           });
 
           snackBar(
-            menssage: const Text('O e-mail digitado ainda não foi confirmado, verifique sua caixa de e-mail!'),
-            text: 'Reenviar confirmação',
-            onPressed: () {
-              credential.user?.sendEmailVerification();
-            },
+            menssage: const Text(
+                'Foi enviado um e-mail de confirmação, verifique sua caixa de e-mail'),
           );
         }
       } on FirebaseAuthException catch (e) {
+        if (e.code == 'operation-not-allowed') {
+          setState(() {
+            _isLoading = false;
+          });
+          _showErrorDialog(
+              'Já existe uma conta com este e-mail, só que está desabilitada, contate o administrador do MyAdmin7!');
+        } else if (e.code == 'email-already-in-use') {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+        _showErrorDialog(
+            'Já existe uma conta com o endereço de e-mail informado!');
         if (e.code == 'invalid-email') {
           setState(() {
             _isLoading = false;
           });
-        }
-        _showErrorDialog('O formato de e-mail digitado não está correto!');
-        if (e.code == 'user-not-found') {
+          _showErrorDialog(
+              'O endereço de e-mail informado não é válido, verifique se existe algum caracte fora do padrão de e-mail!');
+        } else if (e.code == 'weak-password') {
           setState(() {
             _isLoading = false;
           });
-          _showErrorDialog('Usuário não encontrado!');
-        } else if (e.code == 'wrong-password') {
-          setState(() {
-            _isLoading = false;
-          });
-          _showErrorDialog('Parece que a senha não está correta!');
-        } else if (e.code == 'user-disabled') {
-          setState(() {
-            _isLoading = false;
-          });
-          _showErrorDialog('O e-mail fornecido está desabilitado!');
+          _showErrorDialog('Você precisa digitar pelo menos 6 caracteres!');
         }
       }
     }
   }
 
-  Future<void> signInUser() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailEC.text,
-      password: _passwordEC.text,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    // final Auth auth = Provider.of(context, listen: false);
-    final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
+    // final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
 
     return Form(
       key: _formKey,
@@ -199,8 +194,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
               controller: _passwordEC,
               focusNode: _emailFocus,
               onFieldSubmitted: (_) async {
-                FocusScope.of(context).requestFocus(_buttonLoginFocus);
-                loginUser();
+                FocusScope.of(context).requestFocus(_passwordConfirm);              
               },
               validator: (value) {
                 if (isValidPassword(value)) {
@@ -208,7 +202,7 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                 }
                 return 'Você precisa digitar no minimo 6 caracteres';
               },
-              textInputAction: TextInputAction.done,
+              textInputAction: TextInputAction.next,
               obscureText: _obscureText,
               decoration: InputDecoration(
                 hintText: "Sua senha",
@@ -229,18 +223,58 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
               ),
             ),
           ),
+          if (Provider.of<ControllerAlthLogin>(context).isSignup())
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+              child: TextFormField(
+                controller: _confirmPasswordEC,
+                focusNode: _passwordConfirm,
+                validator: (value) {
+                  if (isValidPasswordCofirmation(value, _passwordEC.text)) {
+                    debugPrint('PASSWORD: ${_passwordEC.text}');
+                    debugPrint('CONFIRMAÇÃO: $value');
+                    return null;
+                  }
+                  debugPrint('PASSWORD: ${_passwordEC.text}');
+                  debugPrint('CONFIRMAÇÃO: $value');
+                  return 'As senhas são diferentes';
+                },
+                textInputAction: TextInputAction.done,
+                obscureText: true,
+                decoration: InputDecoration(
+                  hintText: "Confirme sua senha",
+                  prefixIcon: const Padding(
+                    padding: EdgeInsets.all(defaultPadding),
+                    child: Icon(Icons.lock),
+                  ),
+                  suffixIcon: _passwordsMatch
+                      ? const Icon(Icons.check, color: Colors.green)
+                      : IconButton(
+                          onPressed: () => _confirmPasswordEC.clear(),
+                          icon: const Icon(
+                            Icons.close,
+                            color: Color.fromARGB(255, 117, 40, 34),
+                          ),
+                        ),
+                ),
+                onFieldSubmitted: (value){
+                  FocusScope.of(context).requestFocus(_buttonCreateCountFocus);
+                  registerUser();
+                },
+              ),
+            ),
           const SizedBox(height: defaultPadding),
           _isLoading
               ? loadingAnimated()
               : ElevatedButton(
-                  focusNode: _buttonLoginFocus,
+                  focusNode: _buttonCreateCountFocus,
                   style:
                       ElevatedButton.styleFrom(fixedSize: const Size(250, 40)),
                   onPressed: () async {
-                    loginUser();
+                    registerUser();
                   },
                   child: Text(
-                    'Login'.toUpperCase(),
+                    'Criar conta'.toUpperCase(),
                   ),
                 ),
           const SizedBox(height: defaultPadding),
