@@ -38,6 +38,7 @@ dependencies:
   uuid: ^3.0.7
   loading_animation_widget: ^1.2.0+4
   cloud_firestore: ^4.5.3
+  firebase_auth: ^4.6.1
   firebase_core: ^2.10.0
   provider: ^6.0.5
   flutter_svg: ^2.0.4

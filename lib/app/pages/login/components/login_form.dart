@@ -1,13 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/pages/login/components/already_have_an_account_acheck.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/validation_form_login.dart';
-import 'package:iasd_myadmin/app/model/auth.dart';
 import 'package:iasd_myadmin/app/exceptions/auth_exception.dart';
 import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 import 'package:iasd_myadmin/app/core/global/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import '../../../exceptions/firebase_login_exception.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -78,9 +80,88 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
     );
   }
 
+  Future<void> registerUser() async {
+    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: _emailEC.text,
+      password: _passwordEC.text,
+    );
+  }
+
+  void pageDashBoard() {
+    Navigator.of(context).pushReplacementNamed(AppRoutes.dashBoard);
+  }
+
+  void snackBar(
+      {required Widget menssage,
+      required String text,
+      required VoidCallback onPressed}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: menssage,
+        action: SnackBarAction(label: text, onPressed: onPressed),
+      ),
+    );
+  }
+
+  Future<void> loginUser() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+        final credential =
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailEC.text,
+          password: _passwordEC.text,
+        );
+
+        if (credential != null && credential.user?.emailVerified == true) {
+          pageDashBoard();
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+
+          snackBar(
+            menssage: const Text('O e-mail digitado ainda não foi confirmado!'),
+            text: 'Reenviar ',
+            onPressed: () {
+              credential.user?.sendEmailVerification();
+            },
+          );
+        }
+      }
+      on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          setState(() {
+          _isLoading = false;
+        });
+          _showErrorDialog('Usuário não encontrado!');
+        } else if (e.code == 'wrong-password') {
+          setState(() {
+          _isLoading = false;
+        });
+         _showErrorDialog('Parece que a senha não está correta!');
+        }else if(e.code == 'user-disabled'){
+          setState(() {
+          _isLoading = false;
+        });
+          _showErrorDialog('O e-mail fornecido está desabilitado!');
+        }
+      } 
+    }
+  }
+
+  Future<void> signInUser() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailEC.text,
+      password: _passwordEC.text,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Auth auth = Provider.of(context, listen: false);
+    // final Auth auth = Provider.of(context, listen: false);
     final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
 
     return Form(
@@ -121,31 +202,6 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
               controller: _passwordEC,
               focusNode: _emailFocus,
               onFieldSubmitted: (_) async {
-                if (_formKey.currentState!.validate()) {
-                  try {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    if (isLogin != true) {
-                      await auth.singUp(_emailEC.text, _passwordEC.text);
-                    } else {
-                      await auth.login(_emailEC.text, _passwordEC.text);
-                    }
-                    if (!mounted) return;
-                    Navigator.of(context)
-                        .pushReplacementNamed(AppRoutes.dashBoard);
-                  } on AuthException catch (error) {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    _showErrorDialog(error.toString());
-                  } catch (error) {
-                    _showErrorDialog('ocorreu um erro inesperado');
-                    setState(() {
-                      _isLoading = false;
-                    });
-                  }
-                }
                 FocusScope.of(context).requestFocus(_buttonLoginFocus);
               },
               validator: (value) {
@@ -228,13 +284,16 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
                             _isLoading = true;
                           });
                           if (isLogin != true) {
-                            await auth.singUp(_emailEC.text, _passwordEC.text);
+                            //TODO implement here!
+                            // await auth.singUp(_emailEC.text, _passwordEC.text);
+                            registerUser();
                           } else {
-                            await auth.login(_emailEC.text, _passwordEC.text);
+                            loginUser();
+                            /* Navigator.of(context)
+                              .pushReplacementNamed(AppRoutes.dashBoard); */
+                            // await auth.login(_emailEC.text, _passwordEC.text);
                           }
                           if (!mounted) return;
-                          Navigator.of(context)
-                              .pushReplacementNamed(AppRoutes.dashBoard);
                         } on AuthException catch (error) {
                           _showErrorDialog(error.toString());
                           setState(() {
