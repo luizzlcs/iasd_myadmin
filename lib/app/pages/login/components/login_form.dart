@@ -126,8 +126,8 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
           setState(() {
             _isLoading = false;
           });
-        }
         _showErrorDialog('O formato de e-mail digitado não está correto!');
+        }
         if (e.code == 'user-not-found') {
           setState(() {
             _isLoading = false;
