@@ -5,4 +5,5 @@ class AppRoutes {
   static const navegacao = '/navegacao';
   static const listDepartament = '/listDepartament';
   static const pageConstrution = '/pageConstrution';
+  static const pefilUser = '/perfilUser';
 }
