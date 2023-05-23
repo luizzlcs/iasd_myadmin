@@ -1,10 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'app/pages/dashboard/components/scren_user_data.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/pages/departament/controllers/departaments_controller.dart';
 import 'package:iasd_myadmin/app/pages/secretaria/navegacao.dart';
 import 'package:iasd_myadmin/app/pages/secretaria/secretary_screen.dart';
-import 'package:iasd_myadmin/app/model/auth.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/pages/login/login_screen.dart';
 import 'package:iasd_myadmin/app/core/ui/themes/app_theme.dart';
@@ -27,9 +27,7 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (context) => AppTheme(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => Auth(),
-        ),
+        
       ],
       child: const MyApp(),
       
@@ -66,6 +64,7 @@ class _MyAppState extends State<MyApp> {
           AppRoutes.navegacao: (_) => const Navegacao(),
           AppRoutes.listDepartament: (_) => const ListDepartamentScreen(),
           AppRoutes.pageConstrution: (_) => const PageConstrution(),
+          AppRoutes.pefilUser: (_) => const ScrenUserData(),
         },
       ),
     );
