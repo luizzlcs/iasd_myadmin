@@ -271,7 +271,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           FloatingActionButton(
             onPressed: () async {
-              Navigator.of(context).pushNamed(AppRoutes.pefilUser);
+              Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.pefilUser, (route) => false,);
               // showCustomDialog(context);
             },
             child: const Icon(Icons.format_align_center),
