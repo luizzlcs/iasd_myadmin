@@ -48,12 +48,11 @@ class _GridDepartamentsState extends State<GridDepartaments> {
     final isDark = Provider.of<AppTheme>(context).isDark();
     return (departaments.isEmpty)
         ? Center(
-          child: LoadingAnimationWidget.fourRotatingDots(
-
+            child: LoadingAnimationWidget.fourRotatingDots(
               color: Colors.white.withOpacity(0.5),
               size: 150,
             ),
-        )
+          )
         : GridView.builder(
             padding: const EdgeInsets.all(defaultPadding),
             itemCount: departaments.length,
@@ -194,8 +193,9 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                                   : scaleFactor * 8.2,
                             ),
                             child: Container(
-                              height:
-                                  isDesktop ? scaleFactor * 3 : scaleFactor * 5,
+                              height: isDesktop
+                                  ? scaleFactor * 3
+                                  : scaleFactor * 5,
                               width: isDesktop
                                   ? scaleFactor * 13
                                   : scaleFactor * 20,
