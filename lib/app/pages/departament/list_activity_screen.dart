@@ -222,7 +222,7 @@ class _ListActivityScreenState extends State<ListActivityScreen> {
           context: context,
           builder: (_) => AlertDialog(
             title: const Text('Tem certeza'),
-            content: const Text('Quer remover os itens do carrinho?'),
+            content: const Text('Quer remover os itens?'),
             actions: [
               TextButton(
                 child: const Text('Sim'),
