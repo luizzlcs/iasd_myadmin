@@ -32,10 +32,10 @@ class LoginScreen extends StatelessWidget {
                 mobile: const MobileLoginScreen(),
                 desktop: Row(
                   children: [
-                    Expanded(
-                      child: Provider.of<ControllerAlthLogin>(context).isLogin()
-                          ? const LoginScreenTopImage()
-                          : const SignUpScreenTopImage(),
+                    const Expanded(
+                      child: 
+                          LoginScreenTopImage()
+                          
                     ),
                     Expanded(
                       child: Row(

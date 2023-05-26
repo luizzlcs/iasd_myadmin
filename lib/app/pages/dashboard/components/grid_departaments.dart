@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/model/departaments.dart';
@@ -212,13 +213,11 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                                 padding: isDesktop
                                     ? const EdgeInsets.only(top: 7)
                                     : const EdgeInsets.only(top: 2),
-                                child: Text(
+                                child: AutoSizeText(
                                   depart.name,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: isDesktop
-                                          ? scaleFactor * 1.3
-                                          : scaleFactor * 2.7),
+                                  style: const TextStyle(fontSize: 18),
+                                  maxLines: 2,
+                                  
                                   textAlign: TextAlign.center,
                                 ),
                               ),

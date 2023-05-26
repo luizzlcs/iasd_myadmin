@@ -17,6 +17,7 @@ import 'app/pages/departament/list_departamets_screen.dart';
 
 Future<void> main() async {
   runApp(
+    
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
