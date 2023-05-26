@@ -30,18 +30,29 @@ class _ScrenUserDataState extends State<ScrenUserData> {
   final FocusNode _nameFocus = FocusNode();
 
   final user = FirebaseAuth.instance.currentUser;
+  String name = '';
+  String email = '';
+  String uid = '';
+  String imageUrl = '';
+  Object emailVerified = '';
+
+  @override
+  void initState() {
+    name = user?.displayName ?? 'Sem nome';
+    email = user?.email ?? 'Sem e-mail';
+    uid = user?.uid ?? 'Sem identificador único';
+    imageUrl = user?.photoURL ??
+        'https://tm.ibxk.com.br/2017/06/22/22100428046161.jpg';
+    emailVerified = user?.emailVerified ?? 'Sem verficado?';
+    _nameEC.text = name;
+    _emailEC.text = email;
+    super.initState();
+  }
+
   final FirebaseStorage storage = FirebaseStorage.instance;
 
   @override
   Widget build(BuildContext context) {
-    var name = user?.displayName ?? 'Sem nome';
-    var email = user?.email ?? 'Sem e-mail';
-    var uid = user?.uid ?? 'Sem identificador único';
-    var photoURL = user?.photoURL;
-    var emailVerified = user?.emailVerified ?? 'Sem verficado?';
-    _nameEC.text = name;
-    _emailEC.text = email;
-
     Future<UploadTask> upload(String path) async {
       try {
         String ref = 'imagens/img-${DateTime.now().toString()}.jpeg';
@@ -69,15 +80,12 @@ class _ScrenUserDataState extends State<ScrenUserData> {
           } else if (snapshot.state == TaskState.success) {
             final photoRef = snapshot.ref;
             final photoUrl = await photoRef.getDownloadURL();
-            await user?.updatePhotoURL(photoUrl);
             setState(() {
               uploadFile = photoUrl;
+              imageUrl = photoUrl;
               uploadin = false;
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => const ScrenUserData(),
-              ));
-              
             });
+            await user?.updatePhotoURL(photoUrl);
           }
         });
 
@@ -85,6 +93,26 @@ class _ScrenUserDataState extends State<ScrenUserData> {
           imageFile = File(pickedFile.path);
         });
       }
+    }
+
+    void returnPage() {
+      Navigator.pop(context);
+    }
+
+    void clearUrl() async {
+      setState(() {
+        imageUrl = '';
+      });
+      await user?.updatePhotoURL(null);
+    }
+
+    void updateLogin() async {
+      setState(() {
+        name = _nameEC.text;
+        email = _emailEC.text;
+      });
+      await user?.updateDisplayName(_nameEC.text);
+      await user?.updateEmail(_emailEC.text);
     }
 
     void showOpcoesBottomSheet() {
@@ -101,7 +129,7 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                     backgroundColor: Colors.grey[200],
                     child: Center(
                       child: Icon(
-                        Icons.scanner,
+                        Icons.photo_library_outlined,
                         color: Colors.grey[500],
                       ),
                     ),
@@ -121,7 +149,7 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                     backgroundColor: Colors.grey[200],
                     child: Center(
                       child: Icon(
-                        Icons.camera_alt,
+                        Icons.camera,
                         color: Colors.grey[500],
                       ),
                     ),
@@ -141,8 +169,8 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                     backgroundColor: Colors.grey[200],
                     child: Center(
                       child: Icon(
-                        Icons.image_outlined,
-                        color: Colors.grey[500],
+                        Icons.remove_circle_outline,
+                        color: Colors.red[500],
                       ),
                     ),
                   ),
@@ -152,12 +180,33 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
-                    // Tornar a foto null
-                    setState(() {
-                      imageFile = null;
-                    });
+                    clearUrl();
                   },
                 ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    imageDialogin() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: const Color.fromARGB(0, 255, 255, 255),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            elevation: 0,
+            title: Column(
+              children: [
+                SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: Image.network(fit: BoxFit.cover, imageUrl),
+                )
               ],
             ),
           );
@@ -270,15 +319,9 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                     fontSize: 14,
                   ),
                 ),
-                onPressed: ()async {
-                  await user?.updateDisplayName(_nameEC.text);
-                  await user?.updateEmail(_emailEC.text);
-
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => const ScrenUserData(),
-                    ),
-                  );
+                onPressed: () {
+                  updateLogin();
+                  returnPage();
                 },
               ),
             ],
@@ -318,11 +361,15 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                               color: Colors.blue.withOpacity(0.5),
                               size: 120,
                             )
-                          : CircleAvatar(
-                              radius: 65,
-                              backgroundColor: Colors.grey[400],
-                              backgroundImage: NetworkImage(photoURL ??
-                                  'https://tm.ibxk.com.br/2017/06/22/22100428046161.jpg'),
+                          : GestureDetector(
+                              onTap: () {
+                                imageDialogin();
+                              },
+                              child: CircleAvatar(
+                                radius: 65,
+                                backgroundColor: Colors.grey[400],
+                                backgroundImage: NetworkImage(imageUrl),
+                              ),
                             ),
                     ),
                     Positioned(
@@ -450,7 +497,3 @@ class _ScrenUserDataState extends State<ScrenUserData> {
     );
   }
 }
-      
-     
-  
-
