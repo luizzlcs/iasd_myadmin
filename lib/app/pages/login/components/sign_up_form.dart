@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/pages/login/components/already_have_an_account_acheck.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/controller_alth_login.dart';
@@ -151,6 +150,7 @@ class _SignUpFormState extends State<SignUpForm> with ValidationFormLogin {
     }
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     // final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
@@ -194,7 +194,7 @@ class _SignUpFormState extends State<SignUpForm> with ValidationFormLogin {
               controller: _passwordEC,
               focusNode: _emailFocus,
               onFieldSubmitted: (_) async {
-                FocusScope.of(context).requestFocus(_passwordConfirm);              
+                FocusScope.of(context).requestFocus(_passwordConfirm);
               },
               validator: (value) {
                 if (isValidPassword(value)) {
@@ -257,7 +257,7 @@ class _SignUpFormState extends State<SignUpForm> with ValidationFormLogin {
                           ),
                         ),
                 ),
-                onFieldSubmitted: (value){
+                onFieldSubmitted: (value) {
                   FocusScope.of(context).requestFocus(_buttonCreateCountFocus);
                   registerUser();
                 },
@@ -277,6 +277,14 @@ class _SignUpFormState extends State<SignUpForm> with ValidationFormLogin {
                     'Criar conta'.toUpperCase(),
                   ),
                 ),
+          const SizedBox(
+            height: 15,
+          ),
+          ElevatedButton(
+              onPressed: () {
+               
+              },
+              child: const Text('Google')),
           const SizedBox(height: defaultPadding),
           AlreadyHaveAnAccountCheck(
             press: () {},
