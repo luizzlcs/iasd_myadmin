@@ -37,7 +37,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> loginOut() async {
     await FirebaseAuth.instance.signOut();
-    debugPrint('Abrindo página');
+    
   }
 
   void createType(context) async {
@@ -150,6 +150,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
+    var name = user?.displayName ?? 'Sem nome';
+    var email = user?.email ?? 'Sem e-mail';
+    var photoURL = user?.photoURL ?? 'Sem número de telefone';
     final isDark = Provider.of<AppTheme>(context, listen: false).isDark();
     return Scaffold(
       appBar: AppBar(
@@ -157,12 +162,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Text('Painel Administrativo'),
         ),
         actions: [
-          const CircleAvatar(
+           CircleAvatar(
+            maxRadius: 25,
             backgroundImage: ResizeImage(
-                NetworkImage(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwmc918DMjmBUacqi3u-YdsSta_LMyow19hDiwIxRrgZEwkbkUfZLB1tw2FTwz-CI1rQ8&usqp=CAU'),
-                width: 160,
-                height: 160),
+                NetworkImage(photoURL.toString()),
+                width: 90,
+                height: 90),
           ),
           PopupMenuButton(
             itemBuilder: (context) => [
@@ -252,6 +257,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           FloatingActionButton(
             onPressed: () async {
+              Navigator.of(context).pushNamed('/bottomBar');
               final user = await FirebaseAuth.instance.currentUser;
               if (user != null) {
                 // Name, email address, and profile photo URL

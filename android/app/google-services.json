@@ -15,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "845731035159-b551egkcsoiso6hlm03hv9vcampct6ct.apps.googleusercontent.com",
+          "client_id": "845731035159-eikmijjml5bpu7liak2bs09psdla8c3o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -30,6 +30,13 @@
             {
               "client_id": "845731035159-b551egkcsoiso6hlm03hv9vcampct6ct.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "845731035159-3n3svd1roqhenn9tesv7q34vvsdk3u8d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.iasdMyadmin"
+              }
             }
           ]
         }
@@ -44,7 +51,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "845731035159-b551egkcsoiso6hlm03hv9vcampct6ct.apps.googleusercontent.com",
+          "client_id": "845731035159-s1q3osq1k0qjo1p0enp0kgev8qevheiq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.iasd_myadmin",
+            "certificate_hash": "f1416af0aeae3e37d6eb6b4655a97e448d9b22f9"
+          }
+        },
+        {
+          "client_id": "845731035159-eikmijjml5bpu7liak2bs09psdla8c3o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -59,6 +74,13 @@
             {
               "client_id": "845731035159-b551egkcsoiso6hlm03hv9vcampct6ct.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "845731035159-3n3svd1roqhenn9tesv7q34vvsdk3u8d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.iasdMyadmin"
+              }
             }
           ]
         }
