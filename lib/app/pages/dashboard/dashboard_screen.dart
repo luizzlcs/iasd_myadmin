@@ -38,6 +38,58 @@ class _DashboardScreenState extends State<DashboardScreen> {
     await FirebaseAuth.instance.signOut();
   }
 
+  void exitDialog() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            elevation: 4,
+            title: const Text(
+              'Deseja sair do sistema?',
+              style: TextStyle(
+                color: Colors.deepPurpleAccent,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: const Text(
+                  'Não',
+                  style: TextStyle(
+                    color: Colors.purple,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: const Text(
+                  'Sim',
+                  style: TextStyle(
+                    color: Colors.purple,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      AppRoutes.login, (route) => false);
+                  logOut();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
   void createType(context) async {
     final isDark = Provider.of<AppTheme>(context, listen: false).isDark();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -49,58 +101,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     disposable.add(namePersonEC);
     disposable.add(emailEC);
     disposable.add(nameRoute);
-
-    exitDialogin() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          elevation: 4,
-          title: const Text(
-            'Deseja sair do sistema?',
-            style: TextStyle(
-              color: Colors.deepPurpleAccent,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: const Text(
-                'Não',
-                style: TextStyle(
-                  color: Colors.purple,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: const Text(
-                'Sim',
-                style: TextStyle(
-                  color: Colors.purple,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                      AppRoutes.login, (route) => false);
-                  logOut();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
     showDialog(
       context: context,
@@ -302,13 +302,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       drawer: const AppDrawer(),
       body: const GridDepartaments(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          logOut();
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            AppRoutes.login,
-            (route) => false,
-          );
-          // showCustomDialog(context);
+        onPressed: (){
+          exitDialog();
+          
         },
         child: const Icon(Icons.settings_power_outlined),
       ),
