@@ -9,54 +9,6 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  youDialogin() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          elevation: 4,
-          title: const Text(
-            'Deseja sair do sistema?',
-            style: TextStyle(
-              color: Colors.deepPurpleAccent,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: const Text(
-                'Não',
-                style: TextStyle(
-                  color: Colors.purple,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: const Text(
-                'Sim',
-                style: TextStyle(
-                  color: Colors.purple,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
-              ),
-              onPressed: () async {},
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -65,14 +17,6 @@ class _AppDrawerState extends State<AppDrawer> {
         children: [
           AppBar(
             title: const Text('Seja Bem Vindo!'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  youDialogin();
-                },
-                child: const Text('Editar'),
-              )
-            ],
             automaticallyImplyLeading: false,
           ),
           const Divider(),
