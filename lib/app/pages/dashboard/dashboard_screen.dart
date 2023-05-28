@@ -8,8 +8,6 @@ import 'package:iasd_myadmin/app/core/util/controller_theme.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
-import 'components/dialogo_user_data.dart';
-
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -31,13 +29,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       }
     });
   }
-  void openPage(BuildContext context){
+
+  void openPage(BuildContext context) {
     Navigator.of(context).pushNamed(AppRoutes.pefilUser);
   }
 
-  Future<void> loginOut() async {
+  Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
-    
   }
 
   void createType(context) async {
@@ -51,6 +49,58 @@ class _DashboardScreenState extends State<DashboardScreen> {
     disposable.add(namePersonEC);
     disposable.add(emailEC);
     disposable.add(nameRoute);
+
+    exitDialogin() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          elevation: 4,
+          title: const Text(
+            'Deseja sair do sistema?',
+            style: TextStyle(
+              color: Colors.deepPurpleAccent,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text(
+                'Não',
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Sim',
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                      AppRoutes.login, (route) => false);
+                  logOut();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
     showDialog(
       context: context,
@@ -162,16 +212,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Text('Painel Administrativo'),
         ),
         actions: [
-           CircleAvatar(
+          CircleAvatar(
             maxRadius: 25,
-            backgroundImage: ResizeImage(
-                NetworkImage(photoURL.toString()),
-                width: 90,
-                height: 90),
+            backgroundImage: ResizeImage(NetworkImage(photoURL.toString()),
+                width: 90, height: 90),
           ),
           PopupMenuButton(
             itemBuilder: (context) => [
               PopupMenuItem(
+                onTap: () {
+                  changeBrightness();
+                },
                 value: 1,
                 child: brightness == 1
                     ? Row(
@@ -194,11 +245,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
               ),
               PopupMenuItem(
-                onTap: (){
-                  // showCustomDialog(context);
-                  openPage(context);
-                  print('não sei o que está acontecendo');
-                },
                 value: 2,
                 child: Row(
                   children: [
@@ -238,12 +284,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onSelected: (value) {
               setState(() {
                 if (value == 1) {
-                  Provider.of<AppTheme>(context, listen: false).chandMode();
+                  Provider.of<AppTheme>(context, listen: false).changMode();
                   ControllerTheme.instance.changeTheme();
                 } else if (value == 4) {
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       AppRoutes.login, (route) => false);
-                  loginOut();
+                  logOut();
+                } else if (value == 2) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      AppRoutes.pefilUser, (route) => false);
                 }
               });
             },
@@ -252,37 +301,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       drawer: const AppDrawer(),
       body: const GridDepartaments(),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          FloatingActionButton(
-            onPressed: () async {
-              Navigator.of(context).pushNamed('/bottomBar');
-              final user = await FirebaseAuth.instance.currentUser;
-              if (user != null) {
-                // Name, email address, and profile photo URL
-                final name = user.displayName;
-                final email = user.email;
-                final photoUrl = user.photoURL;
-                debugPrint('NOME:$name');
-                debugPrint('E-MAIL:$email');
-
-                
-                debugPrint('${user.emailVerified}');
-
-                final uid = user.uid;
-              }
-            },
-            child: const Icon(Icons.add),
-          ),
-          FloatingActionButton(
-            onPressed: () async {
-              Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.pefilUser, (route) => false,);
-              // showCustomDialog(context);
-            },
-            child: const Icon(Icons.format_align_center),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          logOut();
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            AppRoutes.login,
+            (route) => false,
+          );
+          // showCustomDialog(context);
+        },
+        child: const Icon(Icons.settings_power_outlined),
       ),
     );
   }
