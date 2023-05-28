@@ -45,7 +45,7 @@ class AppTheme with ChangeNotifier {
     ),
   );
 
-  void chandMode() {
+  void changMode() {
     if (_myTheme == _darkTheme) {
       _myTheme = _lightTheme;
     } else {
