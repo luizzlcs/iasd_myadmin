@@ -39,59 +39,58 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void exitDialog() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          elevation: 4,
+          title: const Text(
+            'Deseja sair do sistema?',
+            style: TextStyle(
+              color: Colors.deepPurpleAccent,
+              fontWeight: FontWeight.w500,
             ),
-            elevation: 4,
-            title: const Text(
-              'Deseja sair do sistema?',
-              style: TextStyle(
-                color: Colors.deepPurpleAccent,
-                fontWeight: FontWeight.w500,
+          ),
+          actions: [
+            TextButton(
+              child: const Text(
+                'Não',
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
               ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-            actions: [
-              TextButton(
-                child: const Text(
-                  'Não',
-                  style: TextStyle(
-                    color: Colors.purple,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
+            TextButton(
+              child: const Text(
+                'Sim',
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
                 ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
               ),
-              TextButton(
-                child: const Text(
-                  'Sim',
-                  style: TextStyle(
-                    color: Colors.purple,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                ),
-                onPressed: () async {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      AppRoutes.login, (route) => false);
-                  logOut();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
+              onPressed: () async {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
+                logOut();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void createType(context) async {
-    final isDark = Provider.of<AppTheme>(context, listen: false).isDark();
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     TextEditingController namePersonEC = TextEditingController();
     TextEditingController emailEC = TextEditingController();
@@ -152,7 +151,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Padding(padding: EdgeInsets.all(5)),
                   StatefulBuilder(
                       builder: (BuildContext context, StateSetter setState) {
-                    return Column(children: []);
+                    return Column(children: const []);
                   }),
                 ],
               ),
@@ -202,9 +201,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
 
-    var name = user?.displayName ?? 'Sem nome';
-    var email = user?.email ?? 'Sem e-mail';
-    var photoURL = user?.photoURL ?? 'Sem número de telefone';
+    var photoURL = user?.photoURL ??
+        'https://tm.ibxk.com.br/2017/06/22/22100428046161.jpg';
     final isDark = Provider.of<AppTheme>(context, listen: false).isDark();
     return Scaffold(
       appBar: AppBar(
@@ -213,9 +211,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: [
           CircleAvatar(
-            maxRadius: 25,
-            backgroundImage: ResizeImage(NetworkImage(photoURL.toString()),
-                width: 90, height: 90),
+            radius: 30,
+            backgroundColor: Colors.white,
+            child: CircleAvatar(
+              maxRadius: 25,
+              backgroundImage: ResizeImage(NetworkImage(photoURL.toString()),
+                  width: 90, height: 90),
+            ),
           ),
           PopupMenuButton(
             itemBuilder: (context) => [
@@ -302,9 +304,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       drawer: const AppDrawer(),
       body: const GridDepartaments(),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: () {
           exitDialog();
-          
         },
         child: const Icon(Icons.settings_power_outlined),
       ),
