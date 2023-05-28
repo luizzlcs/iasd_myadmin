@@ -303,14 +303,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       drawer: const AppDrawer(),
       body: const GridDepartaments(),
-      floatingActionButton: Positioned(
-        bottom: 150,
-        child: FloatingActionButton(
-          onPressed: () {
-            exitDialog();
-          },
-          child: const Icon(Icons.settings_power_outlined),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          exitDialog();
+        },
+        child: const Icon(Icons.settings_power_outlined),
       ),
     );
   }
