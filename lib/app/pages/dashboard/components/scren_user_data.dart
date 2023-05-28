@@ -252,16 +252,13 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_nameFocus);
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "Nome",
-                    prefixIcon: const Padding(
+                    prefixIcon: Padding(
                       padding: EdgeInsets.all(5),
                       child: Icon(Icons.person),
                     ),
-                    suffixIcon: IconButton(
-                      onPressed: () => _nameEC.clear(),
-                      icon: const Icon(Icons.backspace),
-                    ),
+                    
                   ),
                 ),
                 TextFormField(
@@ -282,16 +279,13 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_emailFocus);
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "Seu e-mail",
-                    prefixIcon: const Padding(
+                    prefixIcon: Padding(
                       padding: EdgeInsets.all(5),
                       child: Icon(Icons.email),
                     ),
-                    suffixIcon: IconButton(
-                      onPressed: () => _emailEC.clear(),
-                      icon: const Icon(Icons.backspace),
-                    ),
+                    
                   ),
                 ),
               ],
@@ -301,7 +295,7 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                 child: const Text(
                   'Cancelar',
                   style: TextStyle(
-                    color: Colors.purple,
+                    color: Color.fromARGB(255, 200, 199, 201),
                     fontWeight: FontWeight.w500,
                     fontSize: 14,
                   ),
@@ -314,7 +308,7 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                 child: const Text(
                   'Salvar',
                   style: TextStyle(
-                    color: Colors.purple,
+                    color: Color.fromARGB(255, 200, 199, 201),
                     fontWeight: FontWeight.w500,
                     fontSize: 14,
                   ),
@@ -401,32 +395,16 @@ class _ScrenUserDataState extends State<ScrenUserData> {
               child: Column(
                 children: [
                   const SizedBox(height: 14),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Chip(
-                        padding: const EdgeInsets.all(15),
-                        backgroundColor: Colors.black,
-                        label: Text(
-                          name,
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      CircleAvatar(
-                          backgroundColor: Colors.black.withOpacity(0.5),
-                          child: IconButton(
-                            onPressed: () {
-                              youDialogin();
-                            },
-                            icon: const Icon(
-                              Icons.edit_note_outlined,
-                              color: Color.fromARGB(255, 245, 241, 6),
-                            ),
-                          ))
-                    ],
+                  Chip(
+                    padding: const EdgeInsets.all(15),
+                    backgroundColor: Colors.black,
+                    label: Text(
+                      name,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
                   ),
                   const SizedBox(height: 5),
                   Row(
@@ -446,15 +424,7 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                       const SizedBox(
                         width: 5,
                       ),
-                      CircleAvatar(
-                          backgroundColor: Colors.black.withOpacity(0.5),
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.edit_note_outlined,
-                              color: Color.fromARGB(255, 245, 241, 6),
-                            ),
-                          ))
+                      
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -481,6 +451,12 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                           ),
                     ),
                   ),
+                  const SizedBox(
+                     height: 45,                     
+                  ),
+                  ElevatedButton(onPressed: (){
+                    youDialogin();
+                  }, child: const Text('Editar'))
                 ],
               ),
             ),
