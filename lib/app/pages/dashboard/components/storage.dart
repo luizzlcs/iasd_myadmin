@@ -25,7 +25,7 @@ Future<void> main() async {
 
   await FirebaseStorage.instance.useStorageEmulator(emulatorHost, 9199);
 
-  runApp(StorageExampleApp());
+  runApp(const StorageExampleApp());
 }
 
 /// Enum representing the upload task types the example app supports.
@@ -44,7 +44,7 @@ enum UploadType {
 ///
 /// Returns a [MaterialApp].
 class StorageExampleApp extends StatelessWidget {
-  StorageExampleApp({Key? key}) : super(key: key);
+  const StorageExampleApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

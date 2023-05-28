@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 import 'package:image_picker/image_picker.dart';
@@ -65,13 +66,12 @@ class _ScrenUserDataState extends State<ScrenUserData> {
 
   @override
   Widget build(BuildContext context) {
-    Future<UploadTask> upload(String path) async {
+    Future<UploadTask> upload(Uint8List path) async {
       try {
         String ref = 'imagens/img-${DateTime.now().toString()}.jpeg';
         final storageRef = FirebaseStorage.instance.ref();
-        return storageRef.child(ref).putFile(
-              File(path),
-            );
+        return Future.value(storageRef.child(ref).putData(path,
+      SettableMetadata(contentType: 'image/jpeg'))); 
       } on FirebaseException catch (e) {
         throw Exception('Erro no upload: ${e.code}');
       }
@@ -81,17 +81,20 @@ class _ScrenUserDataState extends State<ScrenUserData> {
       final XFile? pickedFile = await imagePicker.pickImage(source: source);
 
       if (pickedFile != null) {
-        UploadTask task = await upload(pickedFile.path);
+        Uint8List imageData = await XFile(pickedFile.path).readAsBytes();
+        UploadTask task = await upload(imageData);
+        debugPrint('->>>>>>>  ${task.snapshot.ref.getDownloadURL()}');
 
         task.snapshotEvents.listen((TaskSnapshot snapshot) async {
           if (snapshot.state == TaskState.running) {
             setState(() {
-              uploadin = true;
+              uploadin = true;  
               total = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             });
           } else if (snapshot.state == TaskState.success) {
             final photoRef = snapshot.ref;
             final photoUrl = await photoRef.getDownloadURL();
+            debugPrint('->>>>>>>  ${photoUrl}');
             setState(() {
               uploadFile = photoUrl;
               imageUrl = photoUrl;
@@ -118,17 +121,12 @@ class _ScrenUserDataState extends State<ScrenUserData> {
       await user?.updatePhotoURL(null);
     }
 
-   
-
-    
-
     void updateLogin() async {
       setState(() {
         name = _nameEC.text;
         email = _emailEC.text;
       });
       if (user?.email != _emailEC.text || user?.displayName != _nameEC.text) {
-      
         snackBar(
           menssage: const Text(
             'Os dados foram alterados com sucesso!',

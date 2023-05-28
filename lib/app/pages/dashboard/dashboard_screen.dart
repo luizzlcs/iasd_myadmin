@@ -211,10 +211,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: [
           CircleAvatar(
-            radius: 30,
+            radius: 25,
             backgroundColor: Colors.white,
             child: CircleAvatar(
-              maxRadius: 25,
+              radius: 22,
               backgroundImage: ResizeImage(NetworkImage(photoURL.toString()),
                   width: 90, height: 90),
             ),
@@ -303,11 +303,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       drawer: const AppDrawer(),
       body: const GridDepartaments(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          exitDialog();
-        },
-        child: const Icon(Icons.settings_power_outlined),
+      floatingActionButton: Positioned(
+        bottom: 150,
+        child: FloatingActionButton(
+          onPressed: () {
+            exitDialog();
+          },
+          child: const Icon(Icons.settings_power_outlined),
+        ),
       ),
     );
   }
