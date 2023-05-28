@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,17 @@ class _ScrenUserDataState extends State<ScrenUserData> {
     _nameEC.text = name;
     _emailEC.text = email;
     super.initState();
+  }
+
+  void snackBar({required Widget menssage}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: menssage,
+        duration: const Duration(seconds: 10),
+        backgroundColor: Colors.green[900],
+        showCloseIcon: true,
+      ),
+    );
   }
 
   final FirebaseStorage storage = FirebaseStorage.instance;
@@ -106,11 +118,26 @@ class _ScrenUserDataState extends State<ScrenUserData> {
       await user?.updatePhotoURL(null);
     }
 
+   
+
+    
+
     void updateLogin() async {
       setState(() {
         name = _nameEC.text;
         email = _emailEC.text;
       });
+      if (user?.email != _emailEC.text || user?.displayName != _nameEC.text) {
+      
+        snackBar(
+          menssage: const Text(
+            'Os dados foram alterados com sucesso!',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        );
+      }
       await user?.updateDisplayName(_nameEC.text);
       await user?.updateEmail(_emailEC.text);
     }
@@ -258,7 +285,6 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                       padding: EdgeInsets.all(5),
                       child: Icon(Icons.person),
                     ),
-                    
                   ),
                 ),
                 TextFormField(
@@ -285,9 +311,19 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                       padding: EdgeInsets.all(5),
                       child: Icon(Icons.email),
                     ),
-                    
                   ),
                 ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Text(
+                  'Ao alterar o endereço de e-mail você será deslogado para fazer uma nova autenticação.',
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.yellow),
+                  maxLines: 4,
+                )
               ],
             ),
             actions: [
@@ -424,7 +460,6 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                       const SizedBox(
                         width: 5,
                       ),
-                      
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -452,11 +487,13 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                     ),
                   ),
                   const SizedBox(
-                     height: 45,                     
+                    height: 45,
                   ),
-                  ElevatedButton(onPressed: (){
-                    youDialogin();
-                  }, child: const Text('Editar'))
+                  ElevatedButton(
+                      onPressed: () {
+                        youDialogin();
+                      },
+                      child: const Text('Editar'))
                 ],
               ),
             ),
