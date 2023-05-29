@@ -38,6 +38,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
     await FirebaseAuth.instance.signOut();
   }
 
+  imageDialogin(String url) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: const Color.fromARGB(0, 255, 255, 255),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            elevation: 0,
+            title: Column(
+              children: [
+                SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: Image.network(fit: BoxFit.cover, url.toString()),
+                )
+              ],
+            ),
+          );
+        },
+      );
+    }
+
   void exitDialog() {
     showDialog(
       context: context,
@@ -55,12 +79,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               fontWeight: FontWeight.w500,
             ),
           ),
+          content: const SizedBox(
+             height: 30,
+          ),
           actions: [
             TextButton(
               child: const Text(
                 'Não',
                 style: TextStyle(
-                  color: Colors.purple,
+                  color: Color.fromARGB(255, 40, 37, 41),
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
                 ),
@@ -73,7 +100,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: const Text(
                 'Sim',
                 style: TextStyle(
-                  color: Colors.purple,
+                  color: Color.fromARGB(255, 40, 37, 41),
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
                 ),
@@ -210,13 +237,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Text('Painel Administrativo'),
         ),
         actions: [
-          CircleAvatar(
-            radius: 25,
-            backgroundColor: Colors.white,
+          GestureDetector(
+            onTap: ()=> imageDialogin(photoURL),
             child: CircleAvatar(
-              radius: 22,
-              backgroundImage: ResizeImage(NetworkImage(photoURL.toString()),
-                  width: 90, height: 90),
+              radius: 25,
+              backgroundColor: Colors.white,
+              child: CircleAvatar(
+                radius: 22,
+                backgroundImage: ResizeImage(NetworkImage(photoURL.toString()),
+                    width: 90, height: 90),
+              ),
             ),
           ),
           PopupMenuButton(

@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -8,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:iasd_myadmin/app/core/util/email_validator_util.dart'
     as email_valid;
-
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ScrenUserData extends StatefulWidget {
@@ -26,6 +24,7 @@ class _ScrenUserDataState extends State<ScrenUserData> {
   int decimalPlaces = 2;
   String uploadFile = '';
 
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController _emailEC = TextEditingController();
   final FocusNode _emailFocus = FocusNode();
   final TextEditingController _nameEC = TextEditingController();
@@ -37,9 +36,12 @@ class _ScrenUserDataState extends State<ScrenUserData> {
   String uid = '';
   String imageUrl = '';
   Object emailVerified = '';
+  var dateTime = '';
+  
 
   @override
   void initState() {
+    dateTime = user?.metadata.toString()?? '';
     name = user?.displayName ?? 'Sem nome';
     email = user?.email ?? 'Sem e-mail';
     uid = user?.uid ?? 'Sem identificador único';
@@ -70,8 +72,9 @@ class _ScrenUserDataState extends State<ScrenUserData> {
       try {
         String ref = 'imagens/img-${DateTime.now().toString()}.jpeg';
         final storageRef = FirebaseStorage.instance.ref();
-        return Future.value(storageRef.child(ref).putData(path,
-      SettableMetadata(contentType: 'image/jpeg'))); 
+        return Future.value(storageRef
+            .child(ref)
+            .putData(path, SettableMetadata(contentType: 'image/jpeg')));
       } on FirebaseException catch (e) {
         throw Exception('Erro no upload: ${e.code}');
       }
@@ -88,13 +91,13 @@ class _ScrenUserDataState extends State<ScrenUserData> {
         task.snapshotEvents.listen((TaskSnapshot snapshot) async {
           if (snapshot.state == TaskState.running) {
             setState(() {
-              uploadin = true;  
+              uploadin = true;
               total = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             });
           } else if (snapshot.state == TaskState.success) {
             final photoRef = snapshot.ref;
             final photoUrl = await photoRef.getDownloadURL();
-            debugPrint('->>>>>>>  ${photoUrl}');
+            debugPrint('->>>>>>>  $photoUrl');
             setState(() {
               uploadFile = photoUrl;
               imageUrl = photoUrl;
@@ -135,9 +138,14 @@ class _ScrenUserDataState extends State<ScrenUserData> {
             ),
           ),
         );
+        debugPrint('alterando NOME');
+        await user?.updateDisplayName(_nameEC.text);
       }
-      await user?.updateDisplayName(_nameEC.text);
-      await user?.updateEmail(_emailEC.text);
+      if (user?.email != _emailEC.text) {
+        await user?.updateEmail(_emailEC.text);
+        await user?.sendEmailVerification();
+        debugPrint('alterando email');
+      }
     }
 
     void showOpcoesBottomSheet() {
@@ -249,80 +257,83 @@ class _ScrenUserDataState extends State<ScrenUserData> {
               borderRadius: BorderRadius.circular(20),
             ),
             elevation: 4,
-            title: Column(
-              children: [
-                const Text(
-                  'Alterando os dados da conta!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: _nameEC,
-                  focusNode: _nameFocus,
-                  validator: (value) {
-                    final values = value ?? '';
-                    if (values.isNotEmpty && values.length >= 4) {
-                      return null;
-                    }
-                    return 'O nome precisa ter pelomenos 4 caracteres!';
-                  },
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  onSaved: (name) {},
-                  onFieldSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(_nameFocus);
-                  },
-                  decoration: const InputDecoration(
-                    hintText: "Nome",
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.all(5),
-                      child: Icon(Icons.person),
+            title: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  const Text(
+                    'Alterando os dados da conta!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                ),
-                TextFormField(
-                  controller: _emailEC,
-                  focusNode: _emailFocus,
-                  validator: (value) {
-                    final values = value ?? '';
-                    final values2 =
-                        values.trim().replaceAll(RegExp(r'\s+$'), '');
-                    if (email_valid.isValid(values2)) {
-                      return null;
-                    }
-                    return 'O email não é válido';
-                  },
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  onSaved: (email) {},
-                  onFieldSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(_emailFocus);
-                  },
-                  decoration: const InputDecoration(
-                    hintText: "Seu e-mail",
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.all(5),
-                      child: Icon(Icons.email),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _nameEC,
+                    focusNode: _nameFocus,
+                    validator: (value) {
+                      final values = value ?? '';
+                      if (values.isNotEmpty && values.length >= 4) {
+                        return null;
+                      }
+                      return 'O nome precisa ter pelomenos 4 caracteres!';
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    onSaved: (name) {},
+                    onFieldSubmitted: (_) {
+                      FocusScope.of(context).requestFocus(_nameFocus);
+                    },
+                    decoration: const InputDecoration(
+                      hintText: "Nome",
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Icon(Icons.person),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  'Ao alterar o endereço de e-mail você será deslogado para fazer uma nova autenticação.',
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.yellow),
-                  maxLines: 4,
-                )
-              ],
+                  TextFormField(
+                    controller: _emailEC,
+                    focusNode: _emailFocus,
+                    validator: (value) {
+                      final values = value ?? '';
+                      final values2 =
+                          values.trim().replaceAll(RegExp(r'\s+$'), '');
+                      if (email_valid.isValid(values2)) {
+                        return null;
+                      }
+                      return 'O email não é válido';
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    onSaved: (email) {},
+                    onFieldSubmitted: (_) {
+                      FocusScope.of(context).requestFocus(_emailFocus);
+                    },
+                    decoration: const InputDecoration(
+                      hintText: "Seu e-mail",
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Icon(Icons.email),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const Text(
+                    'Caso tenha alterado o e-mail de acesso, no próximo login você precisará fazer a confirmação de e-mail.',
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.yellow),
+                    maxLines: 4,
+                  )
+                ],
+              ),
             ),
             actions: [
               TextButton(
@@ -348,8 +359,11 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                   ),
                 ),
                 onPressed: () {
-                  updateLogin();
-                  returnPage();
+                  final isValid = formKey.currentState?.validate() ?? false;
+                  if (isValid) {
+                    updateLogin();
+                    returnPage();
+                  }
                 },
               ),
             ],
@@ -437,6 +451,7 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
+                  
                   const SizedBox(
                     width: 5,
                   ),
@@ -485,7 +500,19 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                     ),
                   ),
                   const SizedBox(
-                    height: 45,
+                    height: 15,
+                  ),
+                  Chip(
+                    
+                    padding: const EdgeInsets.all(15),
+                    backgroundColor: Colors.black,
+                    label: Text(
+                      dateTime,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
                   ),
                   ElevatedButton(
                       onPressed: () {

@@ -50,6 +50,7 @@ dependencies:
   http: ^0.13.5
   flutter_native_splash: ^2.2.19
   flutter_launcher_icons: ^0.13.1
+  firebase_storage_web: ^3.6.1
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
@@ -61,21 +62,11 @@ flutter_launcher_icons:
     image_path: "assets/app/icon.png"
     background_color: "#D9D9D9"
     theme_color: "#D9D9D9"
-  windows:
-    generate: true
-    image_path: "assets/app/icon.png"
-    icon_size: 48 # min:48, max:256, default: 48
-  macos:
-    generate: true
-    image_path: "assets/app/icon.png"
-
 flutter_native_splash:
     color: "#D9D9D9"
     image: "assets/app/splash.png"
     android: true
     ios: true
-    windows: true
-    macos: true
     web: true
     
 
