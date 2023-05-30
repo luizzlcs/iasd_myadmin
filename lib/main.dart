@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'app/pages/dashboard/components/not_found_page.dart';
 import 'app/pages/dashboard/components/scren_user_data.dart';
 import 'app/pages/login/sign_up_screen.dart';
 import 'firebase_options.dart';
@@ -18,7 +18,6 @@ import 'app/pages/departament/list_departamets_screen.dart';
 
 Future<void> main() async {
   runApp(
-    
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -30,17 +29,14 @@ Future<void> main() async {
         ChangeNotifierProvider(
           create: (context) => AppTheme(),
         ),
-        
       ],
       child: const MyApp(),
-      
     ),
   );
 
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
-
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -60,20 +56,30 @@ class _MyAppState extends State<MyApp> {
         title: 'MyAdmin7',
         theme: Provider.of<AppTheme>(context).myTheme,
         debugShowCheckedModeBanner: false,
-        initialRoute: '/' ,
+        initialRoute: '/',
         onGenerateRoute: (settings) {
-          switch(settings.name){
-            case AppRoutes.login: return MaterialPageRoute(builder: (_) => const LoginScreen());
-                     
-          case AppRoutes.dashBoard: return MaterialPageRoute(builder:(_) => const DashboardScreen());
-          case AppRoutes.secretaria: return MaterialPageRoute(builder:(_) => const SecretaryScreen());
-          case AppRoutes.navegacao: return MaterialPageRoute(builder: (_) => const Navegacao());
-          case AppRoutes.listDepartament:return MaterialPageRoute(builder: (_) => const ListDepartamentScreen());
-          case AppRoutes.pageConstrution: return MaterialPageRoute(builder:(_) => const PageConstrution());
-          case AppRoutes.pefilUser:return MaterialPageRoute(builder: (_) => const ScrenUserData());
-          case AppRoutes.signUpScreen:return MaterialPageRoute(builder: (_) => const SignUpScreen());
-          default : return MaterialPageRoute(builder:(_) => const LoginScreen());
-        }},
+          switch (settings.name) {
+            case AppRoutes.login:
+              return MaterialPageRoute(builder: (_) => const LoginScreen());
+            case AppRoutes.dashBoard:
+              return MaterialPageRoute(builder: (_) => const DashboardScreen());
+            case AppRoutes.secretaria:
+              return MaterialPageRoute(builder: (_) => const SecretaryScreen());
+            case AppRoutes.navegacao:
+              return MaterialPageRoute(builder: (_) => const Navegacao());
+            case AppRoutes.listDepartament:
+              return MaterialPageRoute(
+                  builder: (_) => const ListDepartamentScreen());
+            case AppRoutes.pageConstrution:
+              return MaterialPageRoute(builder: (_) => const PageConstrution());
+            case AppRoutes.pefilUser:
+              return MaterialPageRoute(builder: (_) => const ScrenUserData());
+            case AppRoutes.signUpScreen:
+              return MaterialPageRoute(builder: (_) => const SignUpScreen());
+            default:
+              return MaterialPageRoute(builder: (_) => const NotFoundPage());
+          }
+        },
       ),
     );
   }
