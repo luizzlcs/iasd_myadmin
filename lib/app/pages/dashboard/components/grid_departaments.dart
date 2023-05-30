@@ -3,11 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/model/departaments.dart';
 import 'package:iasd_myadmin/app/core/ui/themes/app_theme.dart';
-import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 import 'package:iasd_myadmin/app/core/global/constants.dart';
 import 'package:iasd_myadmin/app/core/util/responsive.dart';
 import 'package:provider/provider.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'departaments_pages.dart';
 
 class GridDepartaments extends StatefulWidget {
   const GridDepartaments({super.key});
@@ -43,7 +43,6 @@ class _GridDepartamentsState extends State<GridDepartaments> {
   Widget build(BuildContext context) {
     final dimension = MediaQuery.of(context).size.width;
     final double scaleFactor = dimension / 100;
-    // final departament = Provider.of<DepartamentsController>(context);
 
     final isDesktop = Responsive.isDesktop(context);
     final isDark = Provider.of<AppTheme>(context).isDark();
@@ -59,6 +58,7 @@ class _GridDepartamentsState extends State<GridDepartaments> {
             itemCount: departaments.length,
             itemBuilder: (context, index) {
               Departaments depart = departaments[index];
+
               final bool isUrlNull = depart.imageUrl.isEmpty;
               return Ink(
                 decoration: BoxDecoration(
@@ -81,8 +81,13 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                   highlightColor: Colors.blue,
                   borderRadius: BorderRadius.circular(200),
                   onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(AppRoutes.secretaria, arguments: depart);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DepartamentsPages(),
+                        settings: RouteSettings(arguments: depart),
+                      ),
+                    );
                   },
                   child: Stack(children: [
                     Column(
@@ -194,9 +199,8 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                                   : scaleFactor * 8.2,
                             ),
                             child: Container(
-                              height: isDesktop
-                                  ? scaleFactor * 3
-                                  : scaleFactor * 5,
+                              height:
+                                  isDesktop ? scaleFactor * 3 : scaleFactor * 5,
                               width: isDesktop
                                   ? scaleFactor * 13
                                   : scaleFactor * 20,
@@ -217,7 +221,6 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                                   depart.name,
                                   style: const TextStyle(fontSize: 18),
                                   maxLines: 2,
-                                  
                                   textAlign: TextAlign.center,
                                 ),
                               ),
