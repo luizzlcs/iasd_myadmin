@@ -43,6 +43,7 @@ class NotFoundPage extends StatelessWidget {
                 ],
               ),
             ),
+            TextButton(onPressed: ()=> Navigator.pop(context), child: const Text('Voltar'))
           ],
         ),
       ),
