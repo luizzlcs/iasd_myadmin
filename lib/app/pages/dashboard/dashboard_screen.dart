@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iasd_myadmin/app/pages/dashboard/components/app_drawer.dart';
 import 'package:iasd_myadmin/app/pages/dashboard/components/grid_departaments.dart';
 import 'package:iasd_myadmin/app/core/ui/themes/app_theme.dart';
@@ -7,6 +8,7 @@ import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 import 'package:iasd_myadmin/app/core/util/controller_theme.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:new_keyboard_shortcuts/keyboard_shortcuts.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -39,28 +41,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   imageDialogin(String url) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: const Color.fromARGB(0, 255, 255, 255),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            elevation: 0,
-            title: Column(
-              children: [
-                SizedBox(
-                  width: 300,
-                  height: 300,
-                  child: Image.network(fit: BoxFit.cover, url.toString()),
-                )
-              ],
-            ),
-          );
-        },
-      );
-    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color.fromARGB(0, 255, 255, 255),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          elevation: 0,
+          title: Column(
+            children: [
+              SizedBox(
+                width: 300,
+                height: 300,
+                child: Image.network(fit: BoxFit.cover, url.toString()),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   void exitDialog() {
     showDialog(
@@ -73,43 +75,83 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           elevation: 4,
           title: const Text(
-            'Deseja sair do sistema?',
+            'Deslogar',
             style: TextStyle(
-              color: Colors.deepPurpleAccent,
+              fontSize: 22,
+              color: Color.fromARGB(255, 40, 3, 141),
               fontWeight: FontWeight.w500,
+              shadows: [
+                Shadow(
+                    color: Colors.black12,
+                    blurRadius: 0.0,
+                    offset: Offset.infinite),
+                Shadow(color: Colors.deepOrange),
+                Shadow(
+                    color: Colors.deepPurple,
+                    blurRadius: 0.0,
+                    offset: Offset.infinite),
+              ],
             ),
           ),
-          content: const SizedBox(
-             height: 30,
+          content: const Text(
+            'Tem certeza que deseja sair?',
+            style: TextStyle(color: Color.fromARGB(255, 79, 186, 248)),
           ),
           actions: [
-            TextButton(
-              child: const Text(
-                'Não',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 40, 37, 41),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
+            KeyBoardShortcuts(
+              keysToPress: {LogicalKeyboardKey.keyN},
+              onKeysPressed: () => Navigator.of(context).pop(),
+              child: TextButton(
+                child: RichText(
+                  text: const TextSpan(
+                    text: '',
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'N',
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 40, 37, 41),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(text: 'ão'),
+                    ],
+                  ),
                 ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
             ),
-            TextButton(
-              child: const Text(
-                'Sim',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 40, 37, 41),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
-              ),
-              onPressed: () async {
+            KeyBoardShortcuts(
+              keysToPress: {LogicalKeyboardKey.keyS},
+              onKeysPressed: () {
                 Navigator.of(context)
                     .pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
                 logOut();
               },
+              child: TextButton(
+                child: RichText(
+                  text: const TextSpan(text: '', children: [
+                    TextSpan(
+                      text: 'S',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 40, 37, 41),
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'im',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 40, 37, 41),
+                      ),
+                    ),
+                  ]),
+                ),
+                onPressed: () async {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      AppRoutes.login, (route) => false);
+                  logOut();
+                },
+              ),
             ),
           ],
         );
@@ -238,7 +280,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: [
           GestureDetector(
-            onTap: ()=> imageDialogin(photoURL),
+            onTap: () => imageDialogin(photoURL),
             child: CircleAvatar(
               radius: 25,
               backgroundColor: Colors.white,
@@ -333,11 +375,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       drawer: const AppDrawer(),
       body: const GridDepartaments(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          exitDialog();
-        },
-        child: const Icon(Icons.settings_power_outlined),
+      floatingActionButton: KeyBoardShortcuts(
+        keysToPress: {LogicalKeyboardKey.keyS},
+        onKeysPressed: () => exitDialog(),
+        child: FloatingActionButton(
+          onPressed: () {
+            exitDialog();
+          },
+          child: const Icon(Icons.settings_power_outlined),
+        ),
       ),
     );
   }
