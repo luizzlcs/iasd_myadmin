@@ -10,23 +10,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_launcher_icons/main.dart';
 import 'package:image_picker/image_picker.dart';
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    // options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  final emulatorHost =
-      (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
-          ? '10.0.2.2'
-          : 'localhost';
-
-  await FirebaseStorage.instance.useStorageEmulator(emulatorHost, 9199);
-
-  runApp(const StorageExampleApp());
-}
 
 /// Enum representing the upload task types the example app supports.
 enum UploadType {
@@ -43,27 +28,11 @@ enum UploadType {
 /// The entry point of the application.
 ///
 /// Returns a [MaterialApp].
-class StorageExampleApp extends StatelessWidget {
-  const StorageExampleApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Storage Example App',
-      theme: ThemeData.dark(),
-      // Disable the banner to make the "+" button more visible.
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: TaskManager(),
-      ),
-    );
-  }
-}
 
 /// A StatefulWidget which keeps track of the current uploaded files.
 class TaskManager extends StatefulWidget {
   // ignore: public_member_api_docs
-  TaskManager({Key? key}) : super(key: key);
+  const TaskManager({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -73,6 +42,7 @@ class TaskManager extends StatefulWidget {
 
 class _TaskManager extends State<TaskManager> {
   List<UploadTask> _uploadTasks = [];
+  String imageUrl = 'https://firebasestorage.googleapis.com/v0/b/iasd-admin.appspot.com/o/image%2Fpng%2F2023-06-01%2015%3A50%3A55.633%20EU%20ACREDITO%20-%20UNIDADE%20NO%20CORPO%20DE%20CRISTO.png?alt=media&token=5fed92dd-7c46-4e6d-ba1d-6feed6fc2d4e&_gl=1*vm8oom*_ga*MTM4NTkxNjE4Ny4xNjc5MTc3NTk5*_ga_CW55HF8NVT*MTY4NTY0NTU4NC43Ny4xLjE2ODU2NDU2ODQuMC4wLjA.';
 
   /// The user selects a file, and the task is added to the list.
   Future<UploadTask?> uploadFile(XFile? file) async {
@@ -87,10 +57,9 @@ class _TaskManager extends State<TaskManager> {
     }
 
     UploadTask uploadTask;
-    
 
-   DateTime data = DateTime.now();
- 
+    DateTime data = DateTime.now();
+
     // Create a Reference to the file
 
     Reference ref = FirebaseStorage.instance
@@ -98,12 +67,13 @@ class _TaskManager extends State<TaskManager> {
         .child('${file.mimeType}')
         .child('/$data ${file.name}');
 
-   
     final metadata = SettableMetadata(
       contentType: '${file.mimeType}',
       customMetadata: {'picked-file-path': file.path},
     );
+  var url = ref.getDownloadURL;
 
+  debugPrint('Url de referência? $url');
     if (kIsWeb) {
       uploadTask = ref.putData(await file.readAsBytes(), metadata);
     } else {
@@ -243,9 +213,11 @@ class _TaskManager extends State<TaskManager> {
           : ListView.builder(
               itemCount: _uploadTasks.length,
               itemBuilder: (context, index) => UploadTaskListTile(
+                url: imageUrl,
                 task: _uploadTasks[index],
                 onDismissed: () => _removeTaskAtIndex(index),
                 onDownloadLink: () async {
+                  print('>>> Url storage: $imageUrl');
                   return _downloadLink(_uploadTasks[index].snapshot.ref);
                 },
                 onDownload: () async {
@@ -264,13 +236,17 @@ class _TaskManager extends State<TaskManager> {
 /// Displays the current state of a single UploadTask.
 class UploadTaskListTile extends StatelessWidget {
   // ignore: public_member_api_docs
-  const UploadTaskListTile({
-    Key? key,
-    required this.task,
-    required this.onDismissed,
-    required this.onDownload,
-    required this.onDownloadLink,
-  }) : super(key: key);
+  UploadTaskListTile(
+      {Key? key,
+      required this.task,
+      required this.onDismissed,
+      required this.onDownload,
+      required this.onDownloadLink,
+      required this.url})
+      : super(key: key);
+
+  //Parâmetro de recebimento da url
+  String url;
 
   /// The [UploadTask].
   final UploadTask /*!*/ task;
@@ -324,6 +300,14 @@ class UploadTaskListTile extends StatelessWidget {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                const SizedBox(height: 10),
+                CircleAvatar(
+                  backgroundColor: Colors.white.withOpacity(0.5),
+                  radius: 50,
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(url),
+                  ),
+                ),
                 if (state == TaskState.running)
                   IconButton(
                     icon: const Icon(Icons.pause),
