@@ -9,10 +9,14 @@ class Testes extends StatelessWidget {
        return Scaffold(
            appBar: AppBar(title: const Text(''),),
            body: Center(
-             child: Container(
-              width: 300,
-              height: 300,
-              color: Colors.blue,
+             child: Column(
+               children: [
+                 Container(
+                  width: 300,
+                  height: 300,
+                  color: Colors.blue,
+                 ),
+               ],
              ),
            ),
        );
