@@ -93,10 +93,9 @@ class _TaskManager extends State<TaskManager> {
  
     // Create a Reference to the file
 
-    Reference ref2 = FirebaseStorage.instance.ref();
     Reference ref = FirebaseStorage.instance
         .ref()
-        .child('flutter-tests')
+        .child('${file.mimeType}')
         .child('/$data ${file.name}');
 
    
