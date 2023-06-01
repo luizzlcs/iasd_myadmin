@@ -384,15 +384,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+
+            FloatingActionButton(
+              backgroundColor: Colors.green[700],
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>  const Testes()//const TaskManager(),
+                ));
+              },
+              
+              child: const Icon(
+                Icons.table_rows,
+                color: Colors.black,
+              ),
+            ),
             FloatingActionButton(
               backgroundColor: Colors.amber[700],
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>  TaskManager(),
+                  builder: (context) =>  const TaskManager(),
                 ));
               },
+              
               child: const Icon(
-                Icons.settings_power_outlined,
+                Icons.image_search,
                 color: Colors.black,
               ),
             ),
