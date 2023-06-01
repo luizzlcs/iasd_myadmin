@@ -6,9 +6,12 @@ import 'package:iasd_myadmin/app/pages/dashboard/components/grid_departaments.da
 import 'package:iasd_myadmin/app/core/ui/themes/app_theme.dart';
 import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 import 'package:iasd_myadmin/app/core/util/controller_theme.dart';
+import 'package:iasd_myadmin/app/pages/dashboard/testes.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:new_keyboard_shortcuts/keyboard_shortcuts.dart';
+
+import 'components/storage.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -378,11 +381,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
       floatingActionButton: KeyBoardShortcuts(
         keysToPress: {LogicalKeyboardKey.keyS},
         onKeysPressed: () => exitDialog(),
-        child: FloatingActionButton(
-          onPressed: () {
-            exitDialog();
-          },
-          child: const Icon(Icons.settings_power_outlined),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            FloatingActionButton(
+              backgroundColor: Colors.amber[700],
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>  TaskManager(),
+                ));
+              },
+              child: const Icon(
+                Icons.settings_power_outlined,
+                color: Colors.black,
+              ),
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                exitDialog();
+              },
+              child: const Icon(Icons.settings_power_outlined),
+            ),
+          ],
         ),
       ),
     );

@@ -87,15 +87,21 @@ class _TaskManager extends State<TaskManager> {
     }
 
     UploadTask uploadTask;
+    
 
+   DateTime data = DateTime.now();
+ 
     // Create a Reference to the file
+
+    Reference ref2 = FirebaseStorage.instance.ref();
     Reference ref = FirebaseStorage.instance
         .ref()
         .child('flutter-tests')
-        .child('/some-image.jpg');
+        .child('/$data ${file.name}');
 
+   
     final metadata = SettableMetadata(
-      contentType: 'image/jpeg',
+      contentType: '${file.mimeType}',
       customMetadata: {'picked-file-path': file.path},
     );
 
