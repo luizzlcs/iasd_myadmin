@@ -5,12 +5,10 @@
 import 'dart:async';
 import 'dart:io' as io;
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_launcher_icons/main.dart';
 import 'package:image_picker/image_picker.dart';
 
 /// Enum representing the upload task types the example app supports.
@@ -42,7 +40,8 @@ class TaskManager extends StatefulWidget {
 
 class _TaskManager extends State<TaskManager> {
   List<UploadTask> _uploadTasks = [];
-  String imageUrl = 'https://firebasestorage.googleapis.com/v0/b/iasd-admin.appspot.com/o/image%2Fpng%2F2023-06-01%2015%3A50%3A55.633%20EU%20ACREDITO%20-%20UNIDADE%20NO%20CORPO%20DE%20CRISTO.png?alt=media&token=5fed92dd-7c46-4e6d-ba1d-6feed6fc2d4e&_gl=1*vm8oom*_ga*MTM4NTkxNjE4Ny4xNjc5MTc3NTk5*_ga_CW55HF8NVT*MTY4NTY0NTU4NC43Ny4xLjE2ODU2NDU2ODQuMC4wLjA.';
+  String imageUrl = '';
+  //'https://firebasestorage.googleapis.com/v0/b/iasd-admin.appspot.com/o/image%2Fpng%2F2023-06-01%2015%3A50%3A55.633%20EU%20ACREDITO%20-%20UNIDADE%20NO%20CORPO%20DE%20CRISTO.png?alt=media&token=5fed92dd-7c46-4e6d-ba1d-6feed6fc2d4e&_gl=1*vm8oom*_ga*MTM4NTkxNjE4Ny4xNjc5MTc3NTk5*_ga_CW55HF8NVT*MTY4NTY0NTU4NC43Ny4xLjE2ODU2NDU2ODQuMC4wLjA.';
 
   /// The user selects a file, and the task is added to the list.
   Future<UploadTask?> uploadFile(XFile? file) async {
@@ -71,9 +70,7 @@ class _TaskManager extends State<TaskManager> {
       contentType: '${file.mimeType}',
       customMetadata: {'picked-file-path': file.path},
     );
-  var url = ref.getDownloadURL;
 
-  debugPrint('Url de referência? $url');
     if (kIsWeb) {
       uploadTask = ref.putData(await file.readAsBytes(), metadata);
     } else {
