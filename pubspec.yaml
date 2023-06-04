@@ -50,7 +50,9 @@ dependencies:
   http: ^0.13.5
   flutter_native_splash: ^2.2.19
   flutter_launcher_icons: ^0.13.1
+  intl: ^0.18.1
   firebase_storage_web: ^3.6.2
+  new_keyboard_shortcuts: ^0.1.4
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true

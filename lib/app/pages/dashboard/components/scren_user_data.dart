@@ -8,6 +8,7 @@ import 'dart:io';
 import 'package:iasd_myadmin/app/core/util/email_validator_util.dart'
     as email_valid;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:intl/intl.dart';
 
 class ScrenUserData extends StatefulWidget {
   const ScrenUserData({Key? key}) : super(key: key);
@@ -36,12 +37,13 @@ class _ScrenUserDataState extends State<ScrenUserData> {
   String uid = '';
   String imageUrl = '';
   Object emailVerified = '';
-  var dateTime = '';
-  
+  DateTime? dateTime = DateTime.now();
+  DateTime? lastSignIn = DateTime.now();
 
   @override
   void initState() {
-    dateTime = user?.metadata.toString()?? '';
+    dateTime = user?.metadata.creationTime;
+    lastSignIn = user?.metadata.lastSignInTime;
     name = user?.displayName ?? 'Sem nome';
     email = user?.email ?? 'Sem e-mail';
     uid = user?.uid ?? 'Sem identificador único';
@@ -447,11 +449,10 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                     padding: const EdgeInsets.all(15),
                     backgroundColor: Colors.black,
                     label: Text(
-                      name,
+                      'Nome: $name',
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
-                  
                   const SizedBox(
                     width: 5,
                   ),
@@ -463,7 +464,7 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                         padding: const EdgeInsets.all(15),
                         backgroundColor: Colors.black,
                         label: Text(
-                          email,
+                          'E-mail: $email',
                           style:
                               Theme.of(context).textTheme.titleSmall?.copyWith(
                                     color: Colors.white,
@@ -480,10 +481,8 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                     padding: const EdgeInsets.all(15),
                     backgroundColor: Colors.black,
                     label: Text(
-                      uid,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: Colors.white,
-                          ),
+                      'Data de criação: ${dateTime.toString().substring(0, 19)}',
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -491,28 +490,12 @@ class _ScrenUserDataState extends State<ScrenUserData> {
                     padding: const EdgeInsets.all(15),
                     backgroundColor: Colors.black,
                     label: Text(
-                      (emailVerified == true)
-                          ? 'O e-mail foi confirmado: SIM'
-                          : 'O e-mail foi confirmado: NÃO',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: Colors.white,
-                          ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Chip(
-                    
-                    padding: const EdgeInsets.all(15),
-                    backgroundColor: Colors.black,
-                    label: Text(
-                      dateTime,
+                      'Último acesso: ${lastSignIn.toString().substring(0, 19)}',
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 5,
                   ),
                   ElevatedButton(
                       onPressed: () {
