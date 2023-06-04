@@ -378,47 +378,47 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       drawer: const AppDrawer(),
       body: const GridDepartaments(),
-      floatingActionButton: KeyBoardShortcuts(
-        keysToPress: {LogicalKeyboardKey.keyS},
-        onKeysPressed: () => exitDialog(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
 
-            FloatingActionButton(
-              backgroundColor: Colors.green[700],
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>  const Testes()//const TaskManager(),
-                ));
-              },
-              
-              child: const Icon(
-                Icons.table_rows,
-                color: Colors.black,
-              ),
+          FloatingActionButton(
+            backgroundColor: Colors.green[700],
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>  const Testes()//const TaskManager(),
+              ));
+            },
+            
+            child: const Icon(
+              Icons.table_rows,
+              color: Colors.black,
             ),
-            FloatingActionButton(
-              backgroundColor: Colors.amber[700],
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>  const TaskManager(),
-                ));
-              },
-              
-              child: const Icon(
-                Icons.image_search,
-                color: Colors.black,
-              ),
+          ),
+          FloatingActionButton(
+            backgroundColor: Colors.amber[700],
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>  const TaskManager(),
+              ));
+            },
+            
+            child: const Icon(
+              Icons.image_search,
+              color: Colors.black,
             ),
-            FloatingActionButton(
+          ),
+          KeyBoardShortcuts(
+            keysToPress:{LogicalKeyboardKey.keyS},
+            onKeysPressed: () => exitDialog(),
+            child: FloatingActionButton(
               onPressed: () {
                 exitDialog();
               },
               child: const Icon(Icons.settings_power_outlined),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
