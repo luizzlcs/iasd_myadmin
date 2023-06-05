@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:iasd_myadmin/app/core/ui/helpers/messages.dart';
 import 'package:iasd_myadmin/app/pages/login/components/already_have_an_account_acheck.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/validation_form_login.dart';
@@ -17,7 +18,8 @@ class LoginForm extends StatefulWidget {
   State<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
+class _LoginFormState extends State<LoginForm>
+    with ValidationFormLogin, Messagens {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _buttonLoginFocus = FocusNode();
   bool _obscureText = true;
@@ -41,24 +43,6 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
     _emailEC.dispose();
     _passwordEC.dispose();
     super.dispose();
-  }
-
-  
-
-  void _showErrorDialog(String msg) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Ocorreu um erro!'),
-        content: Text(msg),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).maybePop(),
-            child: const Text('Fechar'),
-          )
-        ],
-      ),
-    );
   }
 
   Widget loadingAnimated() {
@@ -114,7 +98,8 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
           });
 
           snackBar(
-            menssage: const Text('O e-mail digitado ainda não foi confirmado, verifique sua caixa de e-mail!'),
+            menssage: const Text(
+                'O e-mail digitado ainda não foi confirmado, verifique sua caixa de e-mail!'),
             text: 'Reenviar confirmação',
             onPressed: () {
               credential.user?.sendEmailVerification();
@@ -126,23 +111,25 @@ class _LoginFormState extends State<LoginForm> with ValidationFormLogin {
           setState(() {
             _isLoading = false;
           });
-        _showErrorDialog('O formato de e-mail digitado não está correto!');
+          showInfo('O formato de e-mail digitado não está correto!');
         }
         if (e.code == 'user-not-found') {
           setState(() {
             _isLoading = false;
           });
-          _showErrorDialog('Usuário não encontrado!');
+          showError(
+            'Usuário não encontrado!',
+          );
         } else if (e.code == 'wrong-password') {
           setState(() {
             _isLoading = false;
           });
-          _showErrorDialog('Parece que a senha não está correta!');
+          showWarning('Parece que a senha não está correta!');
         } else if (e.code == 'user-disabled') {
           setState(() {
             _isLoading = false;
           });
-          _showErrorDialog('O e-mail fornecido está desabilitado!');
+          showInfo('O e-mail fornecido está desabilitado!');
         }
       }
     }
