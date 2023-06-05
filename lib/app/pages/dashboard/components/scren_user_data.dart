@@ -2,14 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:iasd_myadmin/app/core/ui/helpers/messages.dart';
 import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:iasd_myadmin/app/core/util/email_validator_util.dart'
     as email_valid;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:intl/intl.dart';
-
 class ScrenUserData extends StatefulWidget {
   const ScrenUserData({Key? key}) : super(key: key);
 
@@ -17,7 +16,7 @@ class ScrenUserData extends StatefulWidget {
   State<ScrenUserData> createState() => _ScrenUserDataState();
 }
 
-class _ScrenUserDataState extends State<ScrenUserData> {
+class _ScrenUserDataState extends State<ScrenUserData> with Messagens {
   final imagePicker = ImagePicker();
   File? imageFile;
   bool uploadin = false;
@@ -53,17 +52,6 @@ class _ScrenUserDataState extends State<ScrenUserData> {
     _nameEC.text = name;
     _emailEC.text = email;
     super.initState();
-  }
-
-  void snackBar({required Widget menssage}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: menssage,
-        duration: const Duration(seconds: 10),
-        backgroundColor: Colors.green[900],
-        showCloseIcon: true,
-      ),
-    );
   }
 
   final FirebaseStorage storage = FirebaseStorage.instance;
@@ -132,14 +120,8 @@ class _ScrenUserDataState extends State<ScrenUserData> {
         email = _emailEC.text;
       });
       if (user?.email != _emailEC.text || user?.displayName != _nameEC.text) {
-        snackBar(
-          menssage: const Text(
-            'Os dados foram alterados com sucesso!',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        );
+        showSuccess('Os dados foram alterados com sucesso!');
+
         debugPrint('alterando NOME');
         await user?.updateDisplayName(_nameEC.text);
       }
