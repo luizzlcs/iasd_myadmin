@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:iasd_myadmin/app/core/ui/helpers/messages.dart';
 import 'package:iasd_myadmin/app/pages/login/components/already_have_an_account_acheck.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/validation_form_login.dart';
@@ -17,7 +18,8 @@ class SignUpForm extends StatefulWidget {
   State<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> with ValidationFormLogin {
+class _SignUpFormState extends State<SignUpForm>
+    with ValidationFormLogin, Messagens {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordConfirm = FocusNode();
   final FocusNode _buttonCreateCountFocus = FocusNode();
@@ -55,22 +57,6 @@ class _SignUpFormState extends State<SignUpForm> with ValidationFormLogin {
     setState(() {
       _passwordsMatch = _passwordEC.text == _confirmPasswordEC.text;
     });
-  }
-
-  void _showErrorDialog(String msg) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Ocorreu um erro!'),
-        content: Text(msg),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).maybePop(),
-            child: const Text('Fechar'),
-          )
-        ],
-      ),
-    );
   }
 
   Widget loadingAnimated() {
@@ -115,42 +101,39 @@ class _SignUpFormState extends State<SignUpForm> with ValidationFormLogin {
             _isLoading = false;
           });
 
-          snackBar(
-            menssage: const Text(
-                'Foi enviado um e-mail de confirmação, verifique sua caixa de e-mail'),
-          );
+          showInfo(
+              'Foi enviado um e-mail de confirmação, verifique sua caixa de e-mail');
         }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'operation-not-allowed') {
           setState(() {
             _isLoading = false;
           });
-          _showErrorDialog(
+          showInfo(
               'Já existe uma conta com este e-mail, só que está desabilitada, contate o administrador do MyAdmin7!');
         } else if (e.code == 'email-already-in-use') {
           setState(() {
             _isLoading = false;
           });
+          showInfo('Já existe uma conta com o endereço de e-mail informado!');
         }
-        _showErrorDialog(
-            'Já existe uma conta com o endereço de e-mail informado!');
+        
         if (e.code == 'invalid-email') {
           setState(() {
             _isLoading = false;
           });
-          _showErrorDialog(
+          showError(
               'O endereço de e-mail informado não é válido, verifique se existe algum caracte fora do padrão de e-mail!');
         } else if (e.code == 'weak-password') {
           setState(() {
             _isLoading = false;
           });
-          _showErrorDialog('Você precisa digitar pelo menos 6 caracteres!');
+          showError('Você precisa digitar pelo menos 6 caracteres!');
         }
       }
     }
   }
 
- 
   @override
   Widget build(BuildContext context) {
     // final isLogin = Provider.of<ControllerAlthLogin>(context).isLogin();
@@ -280,11 +263,7 @@ class _SignUpFormState extends State<SignUpForm> with ValidationFormLogin {
           const SizedBox(
             height: 15,
           ),
-          ElevatedButton(
-              onPressed: () {
-               
-              },
-              child: const Text('Google')),
+          ElevatedButton(onPressed: () {}, child: const Text('Google')),
           const SizedBox(height: defaultPadding),
           AlreadyHaveAnAccountCheck(
             press: () {},
