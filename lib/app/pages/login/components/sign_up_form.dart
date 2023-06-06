@@ -260,10 +260,7 @@ class _SignUpFormState extends State<SignUpForm>
                     'Criar conta'.toUpperCase(),
                   ),
                 ),
-          const SizedBox(
-            height: 15,
-          ),
-          ElevatedButton(onPressed: () {}, child: const Text('Google')),
+          
           const SizedBox(height: defaultPadding),
           AlreadyHaveAnAccountCheck(
             press: () {},
