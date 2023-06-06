@@ -6,7 +6,6 @@ import 'package:iasd_myadmin/app/pages/login/components/app_bar/app_drawer_login
 import 'package:iasd_myadmin/app/pages/login/components/sign_up_form.dart';
 import 'package:iasd_myadmin/app/pages/login/components/sing_up_top_image.dart';
 import 'package:iasd_myadmin/app/core/util/responsive.dart';
-import 'components/login_form.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
