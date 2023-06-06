@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iasd_myadmin/app/core/ui/helpers/messages.dart';
 import 'package:iasd_myadmin/app/pages/login/components/already_have_an_account_acheck.dart';
+import 'package:iasd_myadmin/app/pages/login/components/social_button.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/controller_alth_login.dart';
 import 'package:iasd_myadmin/app/pages/login/controller/validation_form_login.dart';
 import 'package:iasd_myadmin/app/core/util/app_routes.dart';
 import 'package:iasd_myadmin/app/core/global/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -231,9 +233,21 @@ class _LoginFormState extends State<LoginForm>
                   ),
                 ),
           const SizedBox(height: defaultPadding),
+          const SocialButton( ),
+          const SizedBox(height: defaultPadding),
           AlreadyHaveAnAccountCheck(
             press: () {},
           ),
+          const SizedBox(
+            height: 15,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              
+            },
+            child: const Text('Google'),
+          ),
+          
         ],
       ),
     );
