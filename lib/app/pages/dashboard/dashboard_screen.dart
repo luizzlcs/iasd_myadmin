@@ -10,8 +10,6 @@ import 'package:iasd_myadmin/app/pages/dashboard/testes.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:new_keyboard_shortcuts/keyboard_shortcuts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
 import 'components/storage.dart';
 
 class DashboardScreen extends StatefulWidget {
