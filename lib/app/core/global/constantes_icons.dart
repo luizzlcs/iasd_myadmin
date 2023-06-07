@@ -30,4 +30,5 @@ abstract class ImagesIasd {
   static const twitter = 'assets/icons/twitter.svg';
   static const unknown = 'assets/icons/unknown.svg';
   static const xdFile = 'assets/icons/xd_file.svg';
+  static const logoGoogle = 'assets/icons/google.svg';
 }
