@@ -10,7 +10,6 @@ import 'package:iasd_myadmin/app/core/global/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-
 class LoginForm extends StatefulWidget {
   const LoginForm({
     Key? key,
@@ -233,7 +232,7 @@ class _LoginFormState extends State<LoginForm>
                   ),
                 ),
           const SizedBox(height: defaultPadding),
-          const SocialButton( ),
+          const SocialButton(),
           const SizedBox(height: defaultPadding),
           AlreadyHaveAnAccountCheck(
             press: () {},
@@ -241,13 +240,6 @@ class _LoginFormState extends State<LoginForm>
           const SizedBox(
             height: 15,
           ),
-          ElevatedButton(
-            onPressed: () {
-              
-            },
-            child: const Text('Google'),
-          ),
-          
         ],
       ),
     );

@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:iasd_myadmin/app/core/global/constantes_icons.dart';
 import 'package:iasd_myadmin/app/core/ui/helpers/messages.dart';
-
 
 import '../../../core/util/app_routes.dart';
 
@@ -22,7 +23,7 @@ class _SocialButtonState extends State<SocialButton> with Messagens {
       GoogleAuthProvider googleProvider = GoogleAuthProvider();
       googleProvider
           .addScope('https://www.googleapis.com/auth/contacts.readonly');
-      googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
+      googleProvider.setCustomParameters({'login_hint': 'luizzlcs@gmail.com'});
 
       // Faça o login com o provedor Google e retorne a UserCredential
       return await FirebaseAuth.instance.signInWithPopup(googleProvider);
@@ -30,6 +31,7 @@ class _SocialButtonState extends State<SocialButton> with Messagens {
       // Ou use signInWithRedirect
       // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
     } else {
+      
       debugPrint('Logando no Android!');
       // Obtém os detalhes de autenticação da solicitação
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -86,7 +88,8 @@ class _SocialButtonState extends State<SocialButton> with Messagens {
     return SizedBox(
       child: Column(
         children: [
-          const Text('Logue também com:'),
+          const Text('________________ ou ________________'),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -105,28 +108,33 @@ class _SocialButtonState extends State<SocialButton> with Messagens {
                   });
                 },
                 splashColor: Colors.black,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                highlightColor: Colors.grey.withOpacity(0.5),
+                focusColor: Colors.grey.withOpacity(0.5),
                 child: SizedBox(
-                  width: 120,
-                  height: 50,
+                  width: 253,
+                  height: 45,
                   child: Card(
+                    color: Colors.green,
                     elevation: 4,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.lightbulb_outlined,
-                          color: Colors.green,
-                        ),
-                        Text(' Google')
-                      ],
+                    child: SizedBox(
+                      width: 253,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8,top:5.0, bottom: 5.0),
+                            child: SvgPicture.asset(ImagesIasd.logoGoogle),
+                          ),
+                          const Text('Logar como Google')
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text('ou'),
+
+              /* const Text('ou'),
               InkWell(
                 onTap: () {
                   signInWithFacebook().then((userCredential) {
@@ -160,7 +168,7 @@ class _SocialButtonState extends State<SocialButton> with Messagens {
               ),
               const SizedBox(
                 height: 10,
-              ),
+              ), */
             ],
           ),
         ],
