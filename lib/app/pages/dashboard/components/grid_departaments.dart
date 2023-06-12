@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:iasd_myadmin/app/core/ui/helpers/size_extensions.dart';
 import 'package:iasd_myadmin/app/model/departaments.dart';
 import 'package:iasd_myadmin/app/core/ui/themes/app_theme.dart';
 import 'package:iasd_myadmin/app/core/global/constants.dart';
@@ -66,13 +67,16 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                       ? Colors.white.withOpacity(0.2)
                       : Colors.black.withOpacity(0.5),
                   borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(
-                        isDesktop ? scaleFactor * 10 : scaleFactor * 14),
-                    topLeft: Radius.circular(
-                        isDesktop ? scaleFactor * 10 : scaleFactor * 14),
+                    topRight: Radius.circular(isDesktop
+                        ? context.percentWidth(.1)
+                        : context.percentWidth(.14)),
+                    topLeft: Radius.circular(isDesktop
+                        ? context.percentWidth(.1)
+                        : context.percentWidth(.14)),
                     bottomLeft: Radius.circular(scaleFactor * 0.5),
-                    bottomRight: Radius.circular(
-                        isDesktop ? scaleFactor * 10 : scaleFactor * 14),
+                    bottomRight: Radius.circular(isDesktop
+                        ? context.percentWidth(.1)
+                        : context.percentWidth(.14)),
                   ),
                 ),
                 child: InkWell(
@@ -103,25 +107,27 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                                         : const Color.fromARGB(
                                             255, 247, 245, 248),
                                     radius: isDesktop
-                                        ? scaleFactor * 8.5
-                                        : scaleFactor * 12.5,
+                                        ? context.percentWidth(.085)
+                                        : context.percentWidth(.125),
                                     child: Text(
                                       'MyAdmin7',
                                       style: TextStyle(
                                         fontSize: isDesktop
-                                            ? scaleFactor * 2
-                                            : scaleFactor * 5,
+                                            ? context.percentWidth(.02)
+                                            : context.percentWidth(.05),
                                       ),
                                     ),
                                   )
                                 : CircleAvatar(
                                     radius: isDesktop
-                                        ? scaleFactor * 8.5
-                                        : scaleFactor * 12.5,
+                                        ? context.percentWidth(.085)
+                                        : context.percentWidth(.125),
                                     backgroundImage: ResizeImage(
                                       NetworkImage(depart.imageUrl),
-                                      width: (scaleFactor * 0.60).toInt(),
-                                      height: (scaleFactor * 0.60).toInt(),
+                                      width:
+                                          (context.percentWidth(.006)).toInt(),
+                                      height:
+                                          (context.percentHeight(.006)).toInt(),
                                     ),
                                   ),
                           ),
@@ -134,41 +140,41 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                           child: Padding(
                             padding: EdgeInsets.only(
                               top: isDesktop
-                                  ? scaleFactor * 13
-                                  : scaleFactor * 17.7,
+                                  ? context.percentWidth(.13)
+                                  : context.percentWidth(.177),
                               right: isDesktop
-                                  ? scaleFactor * 15
-                                  : scaleFactor * 19,
+                                  ? context.percentWidth(.15)
+                                  : context.percentWidth(.19),
                             ),
                             child: Container(
                               height: isDesktop
-                                  ? scaleFactor * 2
-                                  : scaleFactor * 4.9,
+                                  ? context.percentWidth(.02)
+                                  : context.percentWidth(.049),
                               width: isDesktop
-                                  ? scaleFactor * 5
-                                  : scaleFactor * 10,
+                                  ? context.percentWidth(.05)
+                                  : context.percentWidth(.1),
                               decoration: BoxDecoration(
                                 color: Colors.deepPurple,
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(
                                     isDesktop
-                                        ? scaleFactor * 5
-                                        : scaleFactor * 3,
+                                        ? context.percentWidth(.05)
+                                        : context.percentWidth(.03),
                                   ),
                                   bottomLeft: Radius.circular(
                                     isDesktop
-                                        ? scaleFactor * 5
-                                        : scaleFactor * 3,
+                                        ? context.percentWidth(.05)
+                                        : context.percentWidth(.03),
                                   ),
                                   topRight: Radius.circular(
                                     isDesktop
-                                        ? scaleFactor * 5
-                                        : scaleFactor * 3,
+                                        ? context.percentWidth(.05)
+                                        : context.percentWidth(.03),
                                   ),
                                   bottomRight: Radius.circular(
                                     isDesktop
-                                        ? scaleFactor * 5
-                                        : scaleFactor * 3,
+                                        ? context.percentWidth(.05)
+                                        : context.percentWidth(.03),
                                   ),
                                 ),
                               ),
@@ -180,8 +186,8 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                                     Icons.edit_note_sharp,
                                     color: Colors.white,
                                     size: isDesktop
-                                        ? scaleFactor * 1.9
-                                        : scaleFactor * 3.5,
+                                        ? context.percentWidth(.019)
+                                        : context.percentWidth(.035),
                                   ),
                                 ),
                               ),
@@ -192,25 +198,25 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                           child: Padding(
                             padding: EdgeInsets.only(
                               top: isDesktop
-                                  ? scaleFactor * 0.35
-                                  : scaleFactor * 0.6,
+                                  ? context.percentWidth(.0035)
+                                  : context.percentWidth(.0006),
                               right: isDesktop
-                                  ? scaleFactor * 6
-                                  : scaleFactor * 8.2,
+                                  ? context.percentWidth(.06)
+                                  : context.percentWidth(.082),
                             ),
                             child: Container(
                               height:
-                                  isDesktop ? scaleFactor * 3 : scaleFactor * 5,
+                                  isDesktop ? context.percentWidth(.03) : context.percentWidth(.05),
                               width: isDesktop
-                                  ? scaleFactor * 13
-                                  : scaleFactor * 20,
-                              decoration: const BoxDecoration(
+                                  ? context.percentWidth(.13)
+                                  : context.percentWidth(.2),
+                              decoration:  BoxDecoration(
                                 color: Colors.deepPurple,
                                 borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(50),
-                                  topLeft: Radius.circular(5),
-                                  bottomLeft: Radius.circular(5),
-                                  topRight: Radius.circular(5),
+                                  bottomRight: Radius.circular(context.percentWidth(.5)),
+                                  topLeft: Radius.circular(context.percentWidth(.05)),
+                                  bottomLeft: Radius.circular(context.percentWidth(.05)),
+                                  topRight: Radius.circular(context.percentWidth(.05)),
                                 ),
                               ),
                               child: Padding(

@@ -98,7 +98,7 @@ class _SocialButtonState extends State<SocialButton> with Messagens {
                   signInWithGoogle().then((userCredential) {
                     // O usuário foi logado com sucesso, faça algo aqui
                     debugPrint(
-                        'Usuário logado com o google: ${userCredential?.user}');
+                        'Usuário logado com Sucesso!: ${userCredential?.user}');
                     pageDashBoard();
                     showSuccess(
                         'Parabén ${userCredential?.user?.displayName} você logou com sucesso!');
@@ -126,7 +126,7 @@ class _SocialButtonState extends State<SocialButton> with Messagens {
                             padding: const EdgeInsets.only(left: 8,top:5.0, bottom: 5.0),
                             child: SvgPicture.asset(ImagesIasd.logoGoogle),
                           ),
-                          const Text('Logar como Google')
+                          const Text('Logar com o Google')
                         ],
                       ),
                     ),
