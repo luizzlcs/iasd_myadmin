@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iasd_myadmin/app/core/ui/styles/colors_app.dart';
 import 'package:iasd_myadmin/app/pages/dashboard/components/app_drawer.dart';
 import 'package:iasd_myadmin/app/pages/dashboard/components/grid_departaments.dart';
 import 'package:iasd_myadmin/app/core/ui/themes/app_theme.dart';
@@ -394,7 +395,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           FloatingActionButton(
-            backgroundColor: Colors.amber[700],
+            backgroundColor: context.colors.secundary,
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>  const TaskManager(),
