@@ -205,29 +205,56 @@ class _GridDepartamentsState extends State<GridDepartaments> {
                                   : context.percentWidth(.082),
                             ),
                             child: Container(
-                              height:
-                                  isDesktop ? context.percentWidth(.03) : context.percentWidth(.05),
+                              height: isDesktop
+                                  ? context.percentWidth(.03)
+                                  : context.percentWidth(.05),
                               width: isDesktop
                                   ? context.percentWidth(.13)
                                   : context.percentWidth(.2),
-                              decoration:  BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: Colors.deepPurple,
                                 borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(context.percentWidth(.5)),
-                                  topLeft: Radius.circular(context.percentWidth(.05)),
-                                  bottomLeft: Radius.circular(context.percentWidth(.05)),
-                                  topRight: Radius.circular(context.percentWidth(.05)),
+                                  bottomRight:
+                                      Radius.circular(context.percentWidth(.5)),
+                                  topLeft: Radius.circular(
+                                      context.percentWidth(.05)),
+                                  bottomLeft: Radius.circular(
+                                      context.percentWidth(.05)),
+                                  topRight: Radius.circular(
+                                      context.percentWidth(.05)),
                                 ),
                               ),
                               child: Padding(
                                 padding: isDesktop
                                     ? const EdgeInsets.only(top: 7)
                                     : const EdgeInsets.only(top: 2),
-                                child: AutoSizeText(
-                                  depart.name,
-                                  style: const TextStyle(fontSize: 18),
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
+                                child: FittedBox(
+                                  // Reduz o o tamanho do texto para caber dentro do espaço disponível
+                                  fit: BoxFit.scaleDown,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                      right: 20,
+                                      bottom: 10,
+                                    ),
+                                    child: ConstrainedBox(
+                                      // Define o espaço que o texto irá ocupar
+                                      constraints: BoxConstraints(
+                                        maxWidth: isDesktop
+                                            ? context.percentWidth(.15)
+                                            : context.percentWidth(.6),
+                                      ),
+                                      child: Text(
+                                        depart.name,
+                                        style: const TextStyle(fontSize: 18),
+                                        softWrap:
+                                            true, // Habilita a quebra de linhas.
+                                        maxLines:
+                                            2, // Define o número máximo de quebra de linhas.
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
