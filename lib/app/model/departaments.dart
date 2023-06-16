@@ -18,14 +18,6 @@ class Departaments with ChangeNotifier {
     required this.activity,
   });
 
-  void updateActivity(Activity activities) {
-    int index = activity.indexWhere((d) => d.id == activities);
-    if (index >= 0) {
-      activity[index] = activities;
-      notifyListeners();
-    }
-  }
-
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
     
