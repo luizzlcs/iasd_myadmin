@@ -234,7 +234,7 @@ class _TaskManager extends State<TaskManager> {
 class UploadTaskListTile extends StatelessWidget {
   // ignore: public_member_api_docs
   UploadTaskListTile(
-      {Key? key,
+      {Key? key ,
       required this.task,
       required this.onDismissed,
       required this.onDownload,
